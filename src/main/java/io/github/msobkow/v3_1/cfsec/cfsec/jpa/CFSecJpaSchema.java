@@ -44,11 +44,14 @@ import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cflib.xml.CFLibXmlUtil;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 
+@Configurable
 public class CFSecJpaSchema
 	implements ICFSecSchema
 {
@@ -97,6 +100,9 @@ public class CFSecJpaSchema
 	protected ICFSecTSecGrpMembFactory factoryTSecGrpMemb;
 	protected ICFSecTenantFactory factoryTenant;
 
+
+	@Autowired
+	CFSecJpaSchemaService schemaService;
 
 	@Override
 	public int initClassMapEntries(int value) {
@@ -479,6 +485,7 @@ public class CFSecJpaSchema
 		ICFSecSchema.setBackingCFSec(schema);
 		schema.wireRecConstructors();
 	}
+
 
 	public CFSecJpaSchema() {
 
@@ -1002,165 +1009,6 @@ public class CFSecJpaSchema
 	}
 
 	public void bootstrapSchema() {
-		CFSecJpaSysCluster sysCluster;
-		CFLibDbKeyHash256 systemClusterID;
-		CFSecJpaCluster systemCluster;
-		CFSecJpaSecUser adminUser;
-		CFLibDbKeyHash256 adminUID;
-		CFSecJpaSecSession bootstrapSession;
-		CFLibDbKeyHash256 bootstrapSessionID;
-		CFSecJpaTenant systemTenant;
-		CFLibDbKeyHash256 systemTenantID;
-		ICFSecSysCluster[] sysClusters = getTableSysCluster().readAllDerived(null);
-		if (sysClusters != null && sysClusters.length == 1) {
-			sysCluster = (CFSecJpaSysCluster)(sysClusters[0]);
-			systemClusterID = sysCluster.getRequiredClusterId();
-			if(systemClusterID == null || systemClusterID.isNull()) {
-				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "systemClusterID");
-			}
-			systemCluster = (CFSecJpaCluster)(getTableCluster().readDerived(null, systemClusterID));
-			if (systemCluster == null) {
-				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "systemCluster");
-			}
-			adminUID = systemCluster.getCreatedByUserId();
-			if (adminUID == null || adminUID.isNull()) {
-				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "adminUID");
-			}
-			adminUser = (CFSecJpaSecUser)(getTableSecUser().readDerived(null, adminUID));
-			if( adminUser == null) {
-				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "adminUser");
-			}
-			systemTenant = (CFSecJpaTenant)(getTableTenant().readDerivedByUNameIdx(null, systemClusterID, "system"));
-			if( systemTenant == null) {
-				systemTenantID = null;
-				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "systemTenant");
-			}
-			else {
-				systemTenantID = systemTenant.getPKey();
-			}
-			bootstrapSession = (CFSecJpaSecSession)(getTableSecSession().readDerivedByStartIdx(null, adminUID, systemCluster.getCreatedAt()));
-			if (bootstrapSession == null) {
-				ICFSecSecSession[] sessions = getTableSecSession().readDerivedBySecUserIdx(null, adminUID);
-				if (sessions != null) {
-					for (ICFSecSecSession cursess: sessions) {
-						if (bootstrapSession == null || cursess.getRequiredStart().compareTo(bootstrapSession.getRequiredStart()) < 0) {
-							bootstrapSession = (CFSecJpaSecSession)cursess;
-						}
-					}
-				}
-				if (bootstrapSession == null) {
-					throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "bootstrapSession");
-				}
-			}
-			bootstrapSessionID = bootstrapSession.getPKey();
-		}
-		else {
-			sysCluster = null;
-			systemCluster = null;
-			systemClusterID = null;
-			adminUID = null;
-			adminUser = null;
-			bootstrapSession = null;
-			bootstrapSessionID = null;
-			systemTenant = null;
-			systemTenantID = null;
-		}
-		LocalDateTime now = LocalDateTime.now();
-		if (adminUID == null || adminUID.isNull()) {
-			adminUID = new CFLibDbKeyHash256(0);
-		}
-		if (bootstrapSessionID == null || bootstrapSessionID.isNull()) {
-			bootstrapSessionID = new CFLibDbKeyHash256(0);
-		}
-		if (systemClusterID == null || systemClusterID.isNull()) {
-			systemClusterID = new CFLibDbKeyHash256(0);
-		}
-		if (systemTenantID == null || systemTenantID.isNull()) {
-			systemTenantID = new CFLibDbKeyHash256(0);
-		}
-		if (ICFSecSchema.getSysClusterId() == null || ICFSecSchema.getSysClusterId().isNull()) {
-			ICFSecSchema.setSysClusterId(systemClusterID);
-		}
-		else if ( ! ICFSecSchema.getSysClusterId().equals( systemClusterID )) {
-			throw new CFLibInvalidArgumentException(getClass(), "bootstrapSchema", "Previously set system cluster id disagrees with new system cluster id", "Previously set system cluster id disagrees with new system cluster id");
-		}
-		if (ICFSecSchema.getSysTenantId() == null || ICFSecSchema.getSysTenantId().isNull()) {
-			ICFSecSchema.setSysTenantId(systemTenantID);
-		}
-		else if ( ! ICFSecSchema.getSysTenantId().equals( systemTenantID )) {
-			throw new CFLibInvalidArgumentException(getClass(), "bootstrapSchema", "Previously set system tenant id disagrees with new system tenant id", "Previously set system tenant id disagrees with new system tenant id");
-		}
-		if (ICFSecSchema.getSysAdminId() == null || ICFSecSchema.getSysAdminId().isNull()) {
-			ICFSecSchema.setSysAdminId(adminUID);
-		}
-		else if ( ! ICFSecSchema.getSysAdminId().equals( adminUID )) {
-			throw new CFLibInvalidArgumentException(getClass(), "bootstrapSchema", "Previously set system admin id disagrees with new system admin id", "Previously set system admin id disagrees with new system admin id");
-		}
-
-		String fqdn;
-		try {
-			InetAddress localHost = InetAddress.getLocalHost();
-			fqdn = localHost.getCanonicalHostName();
-		} catch (java.net.UnknownHostException e) {
-			fqdn = "localhost";
-		}
-		if (systemCluster == null) {
-			systemCluster = (CFSecJpaCluster)(getFactoryCluster().newRec());
-			systemCluster.setPKey(systemClusterID);
-			systemCluster.setCreatedByUserId(adminUID);
-			systemCluster.setUpdatedByUserId(adminUID);
-			systemCluster.setCreatedAt(now);
-			systemCluster.setUpdatedAt(now);
-			systemCluster.setRequiredFullDomName(fqdn);
-			systemCluster.setRequiredDescription("System cluster for " + fqdn);
-			systemCluster = (CFSecJpaCluster)(getTableCluster().createCluster(null, systemCluster));
-			systemClusterID = systemCluster.getPKey();
-		}
-		if (adminUser == null) {
-			adminUser = (CFSecJpaSecUser)(getFactorySecUser().newRec());
-			adminUser.setCreatedByUserId(adminUID);
-			adminUser.setUpdatedByUserId(adminUID);
-			adminUser.setCreatedAt(now);
-			adminUser.setUpdatedAt(now);
-			adminUser.setPKey(adminUID);
-			adminUser.setRequiredLoginId("sysadmin");
-			adminUser.setRequiredEMailAddress("sysadmin@" + fqdn);
-			adminUser.setRequiredPasswordHash(ICFSecSchema.getPasswordHash("ChangeOnInstall"));
-			adminUser = (CFSecJpaSecUser)(getTableSecUser().createSecUser(null, adminUser));
-			adminUID = adminUser.getPKey();
-		}
-		if (systemTenant == null) {
-			systemTenant = (CFSecJpaTenant)(getFactoryTenant().newRec());
-			systemTenant.setPKey(systemTenantID);
-			systemTenant.setCreatedByUserId(adminUID);
-			systemTenant.setUpdatedByUserId(adminUID);
-			systemTenant.setCreatedAt(now);
-			systemTenant.setUpdatedAt(now);
-			systemTenant.setRequiredContainerCluster(systemClusterID);
-			systemTenant.setRequiredTenantName("system");
-			systemTenant = (CFSecJpaTenant)(getTableTenant().createTenant(null, systemTenant));
-			systemTenantID = systemTenant.getPKey();
-		}
-		if (bootstrapSession == null) {
-			bootstrapSession = (CFSecJpaSecSession)(getFactorySecSession().newRec());
-			bootstrapSession.setPKey(bootstrapSessionID);
-			bootstrapSession.setRequiredContainerSecUser(adminUID);
-			bootstrapSession.setRequiredParentSecProxy(adminUID);
-			bootstrapSession.setOptionalSecDevName(null);
-			bootstrapSession.setRequiredStart(now);
-			bootstrapSession.setOptionalFinish(null);
-			bootstrapSession = (CFSecJpaSecSession)(getTableSecSession().createSecSession(null, bootstrapSession));
-			bootstrapSessionID = bootstrapSession.getPKey();
-		}
-		if (sysCluster == null) {
-			sysCluster = (CFSecJpaSysCluster)(getFactorySysCluster().newRec());
-			sysCluster.setRequiredContainerCluster(systemClusterID);
-			sysCluster = (CFSecJpaSysCluster)(getTableSysCluster().createSysCluster(null, sysCluster));
-		}
-		if (bootstrapSession.getOptionalFinish() == null) {
-			bootstrapSession.setOptionalFinish(LocalDateTime.now());
-			bootstrapSession = (CFSecJpaSecSession)(getTableSecSession().updateSecSession(null, bootstrapSession));
-		}
-
+		schemaService.bootstrapSchema();
 	}
 }
