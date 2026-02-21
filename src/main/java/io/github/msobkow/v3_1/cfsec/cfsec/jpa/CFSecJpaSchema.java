@@ -45,15 +45,20 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cflib.xml.CFLibXmlUtil;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.*;
 
 public class CFSecJpaSchema
-	implements ICFSecSchema
+	implements ICFSecSchema, ApplicationContextAware
 {
+	private ApplicationContext applicationContext = null;
+	private CFSecJpaSchemaService cfsecJpaSchemaService = null;
+
 	protected static ICFSecTablePerms tablePerms;
 	protected ICFSecClusterTable tableCluster;
 	protected ICFSecHostNodeTable tableHostNode;
@@ -99,8 +104,6 @@ public class CFSecJpaSchema
 	protected ICFSecTSecGrpMembFactory factoryTSecGrpMemb;
 	protected ICFSecTenantFactory factoryTenant;
 
-
-	protected CFSecJpaHooksSchema schemaHooks = null;
 
 	@Override
 	public int initClassMapEntries(int value) {
@@ -484,11 +487,33 @@ public class CFSecJpaSchema
 		schema.wireRecConstructors();
 	}
 
-	public CFSecJpaHooksSchema getSchemaHooks() {
-		if (schemaHooks == null) {
-			schemaHooks = new CFSecJpaHooksSchema();
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
+
+	public CFSecJpaSchemaService getJpaSchemaService() {
+		if ( cfsecJpaSchemaService == null ) {
+			if (applicationContext == null) {
+				throw new CFLibNullArgumentException(getClass(), "getJpaSchemaService", 0, "applicationContext");
+			}
+			try {
+				// Third alternative is scoped, which is a form of singleton as far as I'm aware as of 2026-02-21 -- mark.sobkow@gmail.com
+				if ((!applicationContext.isSingleton("cfsecJpaSchemaService")) && applicationContext.isPrototype("cfsecJpaSchemaService")) {
+					throw new CFLibNotImplementedYetException(getClass(), "getJpaSchemaService",
+						"Bean 'cfsecJpaSchemaService' is not a singleton",
+						"Bean 'cfsecJpaSchemaService' is not a singleton");
+				}
+				cfsecJpaSchemaService = (CFSecJpaSchemaService)(applicationContext.getBean("cfsecJpaSchemaService", CFSecJpaSchemaService.class));
+				if (cfsecJpaSchemaService == null) {
+					throw new CFLibNullArgumentException(getClass(), "getJpaSchemaService", 0, "applicationContext.getBean('cfsecJpaSchemaService', CFSecJpaSchemaService.class)");
+				}
+			}
+			catch (BeansException ex) {
+				throw new CFLibNullArgumentException(getClass(), "getJpaSchemaService", 0, "applicationContext.getBean('cfsecJpaSchemaService', CFSecJpaSchemaService.class)");
+			}
 		}
-		return( schemaHooks );
+		return( cfsecJpaSchemaService );
 	}
 
 
@@ -1014,6 +1039,6 @@ public class CFSecJpaSchema
 	}
 
 	public void bootstrapSchema() {
-		getSchemaHooks().getSchemaService().bootstrapSchema();
+		getJpaSchemaService().bootstrapSchema();
 	}
 }
