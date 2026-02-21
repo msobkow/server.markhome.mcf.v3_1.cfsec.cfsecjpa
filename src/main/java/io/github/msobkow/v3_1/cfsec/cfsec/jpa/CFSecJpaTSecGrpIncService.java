@@ -516,5 +516,4 @@ public class CFSecJpaTSecGrpIncService {
 	public void deleteByUIncludeIdx(ICFSecTSecGrpIncByUIncludeIdxKey key) {
 		cfsec31TSecGrpIncRepository.deleteByUIncludeIdx(key.getRequiredTenantId(), key.getRequiredTSecGroupId(), key.getRequiredIncludeGroupId());
 	}
-
 }

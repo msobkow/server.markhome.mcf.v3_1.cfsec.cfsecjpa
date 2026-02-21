@@ -133,7 +133,7 @@ public class CFSecJpaSchemaService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	protected void bootstrapSecurity() {
+	public void bootstrapSecurity() {
 		CFSecJpaSysCluster sysCluster;
 		CFLibDbKeyHash256 systemClusterID;
 		CFSecJpaCluster systemCluster;

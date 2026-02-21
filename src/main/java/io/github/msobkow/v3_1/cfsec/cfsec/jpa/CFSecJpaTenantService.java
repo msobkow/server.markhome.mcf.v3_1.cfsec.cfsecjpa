@@ -358,5 +358,4 @@ public class CFSecJpaTenantService {
 	public void deleteByUNameIdx(ICFSecTenantByUNameIdxKey key) {
 		cfsec31TenantRepository.deleteByUNameIdx(key.getRequiredClusterId(), key.getRequiredTenantName());
 	}
-
 }

@@ -619,5 +619,4 @@ public class CFSecJpaServiceService {
 	public void deleteByUHostPortIdx(ICFSecServiceByUHostPortIdxKey key) {
 		cfsec31ServiceRepository.deleteByUHostPortIdx(key.getRequiredClusterId(), key.getRequiredHostNodeId(), key.getRequiredHostPort());
 	}
-
 }

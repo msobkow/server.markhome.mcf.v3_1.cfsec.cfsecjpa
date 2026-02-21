@@ -436,5 +436,4 @@ public class CFSecJpaSecGroupService {
 	public void deleteByUNameIdx(ICFSecSecGroupByUNameIdxKey key) {
 		cfsec31SecGroupRepository.deleteByUNameIdx(key.getRequiredClusterId(), key.getRequiredName());
 	}
-
 }

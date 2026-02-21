@@ -510,5 +510,4 @@ public class CFSecJpaSecUserService {
 	public void deleteByDefDevIdx(ICFSecSecUserByDefDevIdxKey key) {
 		cfsec31SecUserRepository.deleteByDefDevIdx(key.getOptionalDfltDevUserId(), key.getOptionalDfltDevName());
 	}
-
 }

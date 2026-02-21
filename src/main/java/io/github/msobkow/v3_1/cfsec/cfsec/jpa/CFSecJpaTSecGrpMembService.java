@@ -516,5 +516,4 @@ public class CFSecJpaTSecGrpMembService {
 	public void deleteByUUserIdx(ICFSecTSecGrpMembByUUserIdxKey key) {
 		cfsec31TSecGrpMembRepository.deleteByUUserIdx(key.getRequiredTenantId(), key.getRequiredTSecGroupId(), key.getRequiredSecUserId());
 	}
-
 }

@@ -448,5 +448,4 @@ public class CFSecJpaHostNodeService {
 	public void deleteByHostNameIdx(ICFSecHostNodeByHostNameIdxKey key) {
 		cfsec31HostNodeRepository.deleteByHostNameIdx(key.getRequiredClusterId(), key.getRequiredHostName());
 	}
-
 }

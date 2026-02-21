@@ -436,5 +436,4 @@ public class CFSecJpaTSecGroupService {
 	public void deleteByUNameIdx(ICFSecTSecGroupByUNameIdxKey key) {
 		cfsec31TSecGroupRepository.deleteByUNameIdx(key.getRequiredTenantId(), key.getRequiredName());
 	}
-
 }

@@ -372,5 +372,4 @@ public class CFSecJpaSecDeviceService {
 	public void deleteByUserIdx(ICFSecSecDeviceByUserIdxKey key) {
 		cfsec31SecDeviceRepository.deleteByUserIdx(key.getRequiredSecUserId());
 	}
-
 }

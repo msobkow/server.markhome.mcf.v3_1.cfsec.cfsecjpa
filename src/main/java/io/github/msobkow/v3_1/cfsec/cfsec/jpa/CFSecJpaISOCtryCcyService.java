@@ -363,5 +363,4 @@ public class CFSecJpaISOCtryCcyService {
 	public void deleteByCcyIdx(ICFSecISOCtryCcyByCcyIdxKey key) {
 		cfsec31ISOCtryCcyRepository.deleteByCcyIdx(key.getRequiredISOCcyId());
 	}
-
 }

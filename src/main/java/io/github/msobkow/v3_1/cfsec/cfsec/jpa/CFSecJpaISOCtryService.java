@@ -345,5 +345,4 @@ public class CFSecJpaISOCtryService {
 	public void deleteByNameIdx(ICFSecISOCtryByNameIdxKey key) {
 		cfsec31ISOCtryRepository.deleteByNameIdx(key.getRequiredName());
 	}
-
 }

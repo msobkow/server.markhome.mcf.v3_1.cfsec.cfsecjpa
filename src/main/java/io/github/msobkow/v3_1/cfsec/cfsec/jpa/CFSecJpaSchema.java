@@ -45,13 +45,12 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cflib.xml.CFLibXmlUtil;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.*;
 
-@Configurable
 public class CFSecJpaSchema
 	implements ICFSecSchema
 {
@@ -101,8 +100,7 @@ public class CFSecJpaSchema
 	protected ICFSecTenantFactory factoryTenant;
 
 
-	@Autowired
-	CFSecJpaSchemaService schemaService;
+	protected CFSecJpaHooksSchema schemaHooks = null;
 
 	@Override
 	public int initClassMapEntries(int value) {
@@ -484,6 +482,13 @@ public class CFSecJpaSchema
 	public void setCFSecSchema(ICFSecSchema schema) {
 		ICFSecSchema.setBackingCFSec(schema);
 		schema.wireRecConstructors();
+	}
+
+	public CFSecJpaHooksSchema getSchemaHooks() {
+		if (schemaHooks == null) {
+			schemaHooks = new CFSecJpaHooksSchema();
+		}
+		return( schemaHooks );
 	}
 
 
@@ -1009,6 +1014,6 @@ public class CFSecJpaSchema
 	}
 
 	public void bootstrapSchema() {
-		schemaService.bootstrapSchema();
+		getSchemaHooks().getSchemaService().bootstrapSchema();
 	}
 }

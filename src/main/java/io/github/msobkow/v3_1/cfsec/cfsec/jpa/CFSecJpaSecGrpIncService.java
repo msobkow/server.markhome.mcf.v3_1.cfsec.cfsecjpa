@@ -516,5 +516,4 @@ public class CFSecJpaSecGrpIncService {
 	public void deleteByUIncludeIdx(ICFSecSecGrpIncByUIncludeIdxKey key) {
 		cfsec31SecGrpIncRepository.deleteByUIncludeIdx(key.getRequiredClusterId(), key.getRequiredSecGroupId(), key.getRequiredIncludeGroupId());
 	}
-
 }

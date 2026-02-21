@@ -268,5 +268,4 @@ public class CFSecJpaServiceTypeService {
 	public void deleteByUDescrIdx(ICFSecServiceTypeByUDescrIdxKey key) {
 		cfsec31ServiceTypeRepository.deleteByUDescrIdx(key.getRequiredDescription());
 	}
-
 }
