@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaSecDeviceTable database implementation for SecDevice
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaSecDeviceTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		else if (rec instanceof CFSecJpaSecDevice) {
 			CFSecJpaSecDevice jparec = (CFSecJpaSecDevice)rec;
-			CFSecJpaSecDevice created = secdeviceService.create(jparec);
+			CFSecJpaSecDevice created = jpaHooksSchema.getSecDeviceService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		else if (rec instanceof CFSecJpaSecDevice) {
 			CFSecJpaSecDevice jparec = (CFSecJpaSecDevice)rec;
-			CFSecJpaSecDevice updated = secdeviceService.update(jparec);
+			CFSecJpaSecDevice updated = jpaHooksSchema.getSecDeviceService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		if (rec instanceof CFSecJpaSecDevice) {
 			CFSecJpaSecDevice jparec = (CFSecJpaSecDevice)rec;
-			secdeviceService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getSecDeviceService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteSecDevice", "rec", rec, "CFSecJpaSecDevice");
@@ -236,7 +174,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		secdeviceService.deleteByIdIdx(argSecUserId,
+		jpaHooksSchema.getSecDeviceService().deleteByIdIdx(argSecUserId,
 		argDevName);
 	}
 
@@ -251,7 +189,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByIdIdx( ICFSecAuthorization Authorization,
 		ICFSecSecDevicePKey argKey )
 	{
-		secdeviceService.deleteByIdIdx(argKey.getRequiredSecUserId(),
+		jpaHooksSchema.getSecDeviceService().deleteByIdIdx(argKey.getRequiredSecUserId(),
 			argKey.getRequiredDevName());
 	}
 
@@ -269,7 +207,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		secdeviceService.deleteByNameIdx(argSecUserId,
+		jpaHooksSchema.getSecDeviceService().deleteByNameIdx(argSecUserId,
 		argDevName);
 	}
 
@@ -285,7 +223,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByNameIdx( ICFSecAuthorization Authorization,
 		ICFSecSecDeviceByNameIdxKey argKey )
 	{
-		secdeviceService.deleteByNameIdx(argKey.getRequiredSecUserId(),
+		jpaHooksSchema.getSecDeviceService().deleteByNameIdx(argKey.getRequiredSecUserId(),
 			argKey.getRequiredDevName());
 	}
 
@@ -300,7 +238,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByUserIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecUserId )
 	{
-		secdeviceService.deleteByUserIdx(argSecUserId);
+		jpaHooksSchema.getSecDeviceService().deleteByUserIdx(argSecUserId);
 	}
 
 
@@ -315,7 +253,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByUserIdx( ICFSecAuthorization Authorization,
 		ICFSecSecDeviceByUserIdxKey argKey )
 	{
-		secdeviceService.deleteByUserIdx(argKey.getRequiredSecUserId());
+		jpaHooksSchema.getSecDeviceService().deleteByUserIdx(argKey.getRequiredSecUserId());
 	}
 
 
@@ -333,7 +271,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public ICFSecSecDevice readDerived( ICFSecAuthorization Authorization,
 		ICFSecSecDevicePKey PKey )
 	{
-		return( secdeviceService.find(PKey) );
+		return( jpaHooksSchema.getSecDeviceService().find(PKey) );
 	}
 
 	/**
@@ -349,7 +287,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		return( secdeviceService.find(argSecUserId,
+		return( jpaHooksSchema.getSecDeviceService().find(argSecUserId,
 		argDevName) );
 	}
 
@@ -367,7 +305,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public ICFSecSecDevice lockDerived( ICFSecAuthorization Authorization,
 		ICFSecSecDevicePKey PKey )
 	{
-		return( secdeviceService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getSecDeviceService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -379,7 +317,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	 */
 	@Override
 	public ICFSecSecDevice[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaSecDevice> results = secdeviceService.findAll();
+		List<CFSecJpaSecDevice> results = jpaHooksSchema.getSecDeviceService().findAll();
 		ICFSecSecDevice[] retset = new ICFSecSecDevice[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecDevice cur: results) {
@@ -405,7 +343,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		return( secdeviceService.find(argSecUserId,
+		return( jpaHooksSchema.getSecDeviceService().find(argSecUserId,
 		argDevName) );
 	}
 
@@ -426,7 +364,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		return( secdeviceService.findByNameIdx(argSecUserId,
+		return( jpaHooksSchema.getSecDeviceService().findByNameIdx(argSecUserId,
 		argDevName) );
 	}
 
@@ -443,7 +381,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public ICFSecSecDevice[] readDerivedByUserIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecUserId )
 	{
-		List<CFSecJpaSecDevice> results = secdeviceService.findByUserIdx(argSecUserId);
+		List<CFSecJpaSecDevice> results = jpaHooksSchema.getSecDeviceService().findByUserIdx(argSecUserId);
 		ICFSecSecDevice[] retset = new ICFSecSecDevice[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecDevice cur: results) {

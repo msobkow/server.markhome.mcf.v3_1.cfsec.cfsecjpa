@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaClusterTable database implementation for Cluster
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaClusterTable implements ICFSecClusterTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaClusterTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 		}
 		else if (rec instanceof CFSecJpaCluster) {
 			CFSecJpaCluster jparec = (CFSecJpaCluster)rec;
-			CFSecJpaCluster created = clusterService.create(jparec);
+			CFSecJpaCluster created = jpaHooksSchema.getClusterService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 		}
 		else if (rec instanceof CFSecJpaCluster) {
 			CFSecJpaCluster jparec = (CFSecJpaCluster)rec;
-			CFSecJpaCluster updated = clusterService.update(jparec);
+			CFSecJpaCluster updated = jpaHooksSchema.getClusterService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 		}
 		if (rec instanceof CFSecJpaCluster) {
 			CFSecJpaCluster jparec = (CFSecJpaCluster)rec;
-			clusterService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getClusterService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteCluster", "rec", rec, "CFSecJpaCluster");
@@ -233,7 +171,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public void deleteClusterByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		clusterService.deleteByIdIdx(argKey);
+		jpaHooksSchema.getClusterService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -247,7 +185,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public void deleteClusterByUDomNameIdx( ICFSecAuthorization Authorization,
 		String argFullDomName )
 	{
-		clusterService.deleteByUDomNameIdx(argFullDomName);
+		jpaHooksSchema.getClusterService().deleteByUDomNameIdx(argFullDomName);
 	}
 
 
@@ -262,7 +200,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public void deleteClusterByUDomNameIdx( ICFSecAuthorization Authorization,
 		ICFSecClusterByUDomNameIdxKey argKey )
 	{
-		clusterService.deleteByUDomNameIdx(argKey.getRequiredFullDomName());
+		jpaHooksSchema.getClusterService().deleteByUDomNameIdx(argKey.getRequiredFullDomName());
 	}
 
 	/**
@@ -276,7 +214,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public void deleteClusterByUDescrIdx( ICFSecAuthorization Authorization,
 		String argDescription )
 	{
-		clusterService.deleteByUDescrIdx(argDescription);
+		jpaHooksSchema.getClusterService().deleteByUDescrIdx(argDescription);
 	}
 
 
@@ -291,7 +229,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public void deleteClusterByUDescrIdx( ICFSecAuthorization Authorization,
 		ICFSecClusterByUDescrIdxKey argKey )
 	{
-		clusterService.deleteByUDescrIdx(argKey.getRequiredDescription());
+		jpaHooksSchema.getClusterService().deleteByUDescrIdx(argKey.getRequiredDescription());
 	}
 
 
@@ -309,7 +247,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public ICFSecCluster readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( clusterService.find(PKey) );
+		return( jpaHooksSchema.getClusterService().find(PKey) );
 	}
 
 	/**
@@ -326,7 +264,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public ICFSecCluster lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( clusterService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getClusterService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -338,7 +276,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	 */
 	@Override
 	public ICFSecCluster[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaCluster> results = clusterService.findAll();
+		List<CFSecJpaCluster> results = jpaHooksSchema.getClusterService().findAll();
 		ICFSecCluster[] retset = new ICFSecCluster[results.size()];
 		int idx = 0;
 		for (CFSecJpaCluster cur: results) {
@@ -361,7 +299,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public ICFSecCluster readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argId )
 	{
-		return( clusterService.find(argId) );
+		return( jpaHooksSchema.getClusterService().find(argId) );
 	}
 
 	/**
@@ -378,7 +316,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public ICFSecCluster readDerivedByUDomNameIdx( ICFSecAuthorization Authorization,
 		String argFullDomName )
 	{
-		return( clusterService.findByUDomNameIdx(argFullDomName) );
+		return( jpaHooksSchema.getClusterService().findByUDomNameIdx(argFullDomName) );
 	}
 
 	/**
@@ -395,7 +333,7 @@ public class CFSecJpaClusterTable implements ICFSecClusterTable
 	public ICFSecCluster readDerivedByUDescrIdx( ICFSecAuthorization Authorization,
 		String argDescription )
 	{
-		return( clusterService.findByUDescrIdx(argDescription) );
+		return( jpaHooksSchema.getClusterService().findByUDescrIdx(argDescription) );
 	}
 
 	/**

@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaTenantTable database implementation for Tenant
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaTenantTable implements ICFSecTenantTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaTenantTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 		}
 		else if (rec instanceof CFSecJpaTenant) {
 			CFSecJpaTenant jparec = (CFSecJpaTenant)rec;
-			CFSecJpaTenant created = tenantService.create(jparec);
+			CFSecJpaTenant created = jpaHooksSchema.getTenantService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 		}
 		else if (rec instanceof CFSecJpaTenant) {
 			CFSecJpaTenant jparec = (CFSecJpaTenant)rec;
-			CFSecJpaTenant updated = tenantService.update(jparec);
+			CFSecJpaTenant updated = jpaHooksSchema.getTenantService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 		}
 		if (rec instanceof CFSecJpaTenant) {
 			CFSecJpaTenant jparec = (CFSecJpaTenant)rec;
-			tenantService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getTenantService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteTenant", "rec", rec, "CFSecJpaTenant");
@@ -233,7 +171,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public void deleteTenantByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		tenantService.deleteByIdIdx(argKey);
+		jpaHooksSchema.getTenantService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -247,7 +185,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public void deleteTenantByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		tenantService.deleteByClusterIdx(argClusterId);
+		jpaHooksSchema.getTenantService().deleteByClusterIdx(argClusterId);
 	}
 
 
@@ -262,7 +200,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public void deleteTenantByClusterIdx( ICFSecAuthorization Authorization,
 		ICFSecTenantByClusterIdxKey argKey )
 	{
-		tenantService.deleteByClusterIdx(argKey.getRequiredClusterId());
+		jpaHooksSchema.getTenantService().deleteByClusterIdx(argKey.getRequiredClusterId());
 	}
 
 	/**
@@ -279,7 +217,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 		CFLibDbKeyHash256 argClusterId,
 		String argTenantName )
 	{
-		tenantService.deleteByUNameIdx(argClusterId,
+		jpaHooksSchema.getTenantService().deleteByUNameIdx(argClusterId,
 		argTenantName);
 	}
 
@@ -295,7 +233,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public void deleteTenantByUNameIdx( ICFSecAuthorization Authorization,
 		ICFSecTenantByUNameIdxKey argKey )
 	{
-		tenantService.deleteByUNameIdx(argKey.getRequiredClusterId(),
+		jpaHooksSchema.getTenantService().deleteByUNameIdx(argKey.getRequiredClusterId(),
 			argKey.getRequiredTenantName());
 	}
 
@@ -314,7 +252,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public ICFSecTenant readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( tenantService.find(PKey) );
+		return( jpaHooksSchema.getTenantService().find(PKey) );
 	}
 
 	/**
@@ -331,7 +269,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public ICFSecTenant lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( tenantService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getTenantService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -343,7 +281,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	 */
 	@Override
 	public ICFSecTenant[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaTenant> results = tenantService.findAll();
+		List<CFSecJpaTenant> results = jpaHooksSchema.getTenantService().findAll();
 		ICFSecTenant[] retset = new ICFSecTenant[results.size()];
 		int idx = 0;
 		for (CFSecJpaTenant cur: results) {
@@ -366,7 +304,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public ICFSecTenant readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argId )
 	{
-		return( tenantService.find(argId) );
+		return( jpaHooksSchema.getTenantService().find(argId) );
 	}
 
 	/**
@@ -382,7 +320,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 	public ICFSecTenant[] readDerivedByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		List<CFSecJpaTenant> results = tenantService.findByClusterIdx(argClusterId);
+		List<CFSecJpaTenant> results = jpaHooksSchema.getTenantService().findByClusterIdx(argClusterId);
 		ICFSecTenant[] retset = new ICFSecTenant[results.size()];
 		int idx = 0;
 		for (CFSecJpaTenant cur: results) {
@@ -408,7 +346,7 @@ public class CFSecJpaTenantTable implements ICFSecTenantTable
 		CFLibDbKeyHash256 argClusterId,
 		String argTenantName )
 	{
-		return( tenantService.findByUNameIdx(argClusterId,
+		return( jpaHooksSchema.getTenantService().findByUNameIdx(argClusterId,
 		argTenantName) );
 	}
 

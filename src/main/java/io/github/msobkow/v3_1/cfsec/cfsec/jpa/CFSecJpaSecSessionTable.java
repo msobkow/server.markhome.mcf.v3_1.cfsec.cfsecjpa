@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaSecSessionTable database implementation for SecSession
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaSecSessionTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		}
 		else if (rec instanceof CFSecJpaSecSession) {
 			CFSecJpaSecSession jparec = (CFSecJpaSecSession)rec;
-			CFSecJpaSecSession created = secsessionService.create(jparec);
+			CFSecJpaSecSession created = jpaHooksSchema.getSecSessionService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		}
 		else if (rec instanceof CFSecJpaSecSession) {
 			CFSecJpaSecSession jparec = (CFSecJpaSecSession)rec;
-			CFSecJpaSecSession updated = secsessionService.update(jparec);
+			CFSecJpaSecSession updated = jpaHooksSchema.getSecSessionService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		}
 		if (rec instanceof CFSecJpaSecSession) {
 			CFSecJpaSecSession jparec = (CFSecJpaSecSession)rec;
-			secsessionService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getSecSessionService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteSecSession", "rec", rec, "CFSecJpaSecSession");
@@ -233,7 +171,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		secsessionService.deleteByIdIdx(argKey);
+		jpaHooksSchema.getSecSessionService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -247,7 +185,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionBySecUserIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecUserId )
 	{
-		secsessionService.deleteBySecUserIdx(argSecUserId);
+		jpaHooksSchema.getSecSessionService().deleteBySecUserIdx(argSecUserId);
 	}
 
 
@@ -262,7 +200,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionBySecUserIdx( ICFSecAuthorization Authorization,
 		ICFSecSecSessionBySecUserIdxKey argKey )
 	{
-		secsessionService.deleteBySecUserIdx(argKey.getRequiredSecUserId());
+		jpaHooksSchema.getSecSessionService().deleteBySecUserIdx(argKey.getRequiredSecUserId());
 	}
 
 	/**
@@ -279,7 +217,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argSecDevName )
 	{
-		secsessionService.deleteBySecDevIdx(argSecUserId,
+		jpaHooksSchema.getSecSessionService().deleteBySecDevIdx(argSecUserId,
 		argSecDevName);
 	}
 
@@ -295,7 +233,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionBySecDevIdx( ICFSecAuthorization Authorization,
 		ICFSecSecSessionBySecDevIdxKey argKey )
 	{
-		secsessionService.deleteBySecDevIdx(argKey.getRequiredSecUserId(),
+		jpaHooksSchema.getSecSessionService().deleteBySecDevIdx(argKey.getRequiredSecUserId(),
 			argKey.getOptionalSecDevName());
 	}
 
@@ -313,7 +251,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		CFLibDbKeyHash256 argSecUserId,
 		LocalDateTime argStart )
 	{
-		secsessionService.deleteByStartIdx(argSecUserId,
+		jpaHooksSchema.getSecSessionService().deleteByStartIdx(argSecUserId,
 		argStart);
 	}
 
@@ -329,7 +267,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionByStartIdx( ICFSecAuthorization Authorization,
 		ICFSecSecSessionByStartIdxKey argKey )
 	{
-		secsessionService.deleteByStartIdx(argKey.getRequiredSecUserId(),
+		jpaHooksSchema.getSecSessionService().deleteByStartIdx(argKey.getRequiredSecUserId(),
 			argKey.getRequiredStart());
 	}
 
@@ -347,7 +285,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		CFLibDbKeyHash256 argSecUserId,
 		LocalDateTime argFinish )
 	{
-		secsessionService.deleteByFinishIdx(argSecUserId,
+		jpaHooksSchema.getSecSessionService().deleteByFinishIdx(argSecUserId,
 		argFinish);
 	}
 
@@ -363,7 +301,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionByFinishIdx( ICFSecAuthorization Authorization,
 		ICFSecSecSessionByFinishIdxKey argKey )
 	{
-		secsessionService.deleteByFinishIdx(argKey.getRequiredSecUserId(),
+		jpaHooksSchema.getSecSessionService().deleteByFinishIdx(argKey.getRequiredSecUserId(),
 			argKey.getOptionalFinish());
 	}
 
@@ -378,7 +316,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionBySecProxyIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecProxyId )
 	{
-		secsessionService.deleteBySecProxyIdx(argSecProxyId);
+		jpaHooksSchema.getSecSessionService().deleteBySecProxyIdx(argSecProxyId);
 	}
 
 
@@ -393,7 +331,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public void deleteSecSessionBySecProxyIdx( ICFSecAuthorization Authorization,
 		ICFSecSecSessionBySecProxyIdxKey argKey )
 	{
-		secsessionService.deleteBySecProxyIdx(argKey.getOptionalSecProxyId());
+		jpaHooksSchema.getSecSessionService().deleteBySecProxyIdx(argKey.getOptionalSecProxyId());
 	}
 
 
@@ -411,7 +349,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public ICFSecSecSession readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( secsessionService.find(PKey) );
+		return( jpaHooksSchema.getSecSessionService().find(PKey) );
 	}
 
 	/**
@@ -428,7 +366,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public ICFSecSecSession lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( secsessionService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getSecSessionService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -440,7 +378,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	 */
 	@Override
 	public ICFSecSecSession[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaSecSession> results = secsessionService.findAll();
+		List<CFSecJpaSecSession> results = jpaHooksSchema.getSecSessionService().findAll();
 		ICFSecSecSession[] retset = new ICFSecSecSession[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecSession cur: results) {
@@ -463,7 +401,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public ICFSecSecSession readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecSessionId )
 	{
-		return( secsessionService.find(argSecSessionId) );
+		return( jpaHooksSchema.getSecSessionService().find(argSecSessionId) );
 	}
 
 	/**
@@ -479,7 +417,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public ICFSecSecSession[] readDerivedBySecUserIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecUserId )
 	{
-		List<CFSecJpaSecSession> results = secsessionService.findBySecUserIdx(argSecUserId);
+		List<CFSecJpaSecSession> results = jpaHooksSchema.getSecSessionService().findBySecUserIdx(argSecUserId);
 		ICFSecSecSession[] retset = new ICFSecSecSession[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecSession cur: results) {
@@ -504,7 +442,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argSecDevName )
 	{
-		List<CFSecJpaSecSession> results = secsessionService.findBySecDevIdx(argSecUserId,
+		List<CFSecJpaSecSession> results = jpaHooksSchema.getSecSessionService().findBySecDevIdx(argSecUserId,
 		argSecDevName);
 		ICFSecSecSession[] retset = new ICFSecSecSession[results.size()];
 		int idx = 0;
@@ -531,7 +469,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		CFLibDbKeyHash256 argSecUserId,
 		LocalDateTime argStart )
 	{
-		return( secsessionService.findByStartIdx(argSecUserId,
+		return( jpaHooksSchema.getSecSessionService().findByStartIdx(argSecUserId,
 		argStart) );
 	}
 
@@ -551,7 +489,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		CFLibDbKeyHash256 argSecUserId,
 		LocalDateTime argFinish )
 	{
-		List<CFSecJpaSecSession> results = secsessionService.findByFinishIdx(argSecUserId,
+		List<CFSecJpaSecSession> results = jpaHooksSchema.getSecSessionService().findByFinishIdx(argSecUserId,
 		argFinish);
 		ICFSecSecSession[] retset = new ICFSecSecSession[results.size()];
 		int idx = 0;
@@ -574,7 +512,7 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	public ICFSecSecSession[] readDerivedBySecProxyIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecProxyId )
 	{
-		List<CFSecJpaSecSession> results = secsessionService.findBySecProxyIdx(argSecProxyId);
+		List<CFSecJpaSecSession> results = jpaHooksSchema.getSecSessionService().findBySecProxyIdx(argSecProxyId);
 		ICFSecSecSession[] retset = new ICFSecSecSession[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecSession cur: results) {

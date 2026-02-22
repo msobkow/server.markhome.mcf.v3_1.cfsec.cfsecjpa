@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaISOLangTable database implementation for ISOLang
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaISOLangTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		else if (rec instanceof CFSecJpaISOLang) {
 			CFSecJpaISOLang jparec = (CFSecJpaISOLang)rec;
-			CFSecJpaISOLang created = isolangService.create(jparec);
+			CFSecJpaISOLang created = jpaHooksSchema.getISOLangService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		else if (rec instanceof CFSecJpaISOLang) {
 			CFSecJpaISOLang jparec = (CFSecJpaISOLang)rec;
-			CFSecJpaISOLang updated = isolangService.update(jparec);
+			CFSecJpaISOLang updated = jpaHooksSchema.getISOLangService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		if (rec instanceof CFSecJpaISOLang) {
 			CFSecJpaISOLang jparec = (CFSecJpaISOLang)rec;
-			isolangService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getISOLangService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteISOLang", "rec", rec, "CFSecJpaISOLang");
@@ -233,7 +171,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByIdIdx( ICFSecAuthorization Authorization,
 		Short argKey )
 	{
-		isolangService.deleteByIdIdx(argKey);
+		jpaHooksSchema.getISOLangService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -247,7 +185,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode3Idx( ICFSecAuthorization Authorization,
 		String argISO6392Code )
 	{
-		isolangService.deleteByCode3Idx(argISO6392Code);
+		jpaHooksSchema.getISOLangService().deleteByCode3Idx(argISO6392Code);
 	}
 
 
@@ -262,7 +200,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode3Idx( ICFSecAuthorization Authorization,
 		ICFSecISOLangByCode3IdxKey argKey )
 	{
-		isolangService.deleteByCode3Idx(argKey.getRequiredISO6392Code());
+		jpaHooksSchema.getISOLangService().deleteByCode3Idx(argKey.getRequiredISO6392Code());
 	}
 
 	/**
@@ -276,7 +214,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode2Idx( ICFSecAuthorization Authorization,
 		String argISO6391Code )
 	{
-		isolangService.deleteByCode2Idx(argISO6391Code);
+		jpaHooksSchema.getISOLangService().deleteByCode2Idx(argISO6391Code);
 	}
 
 
@@ -291,7 +229,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode2Idx( ICFSecAuthorization Authorization,
 		ICFSecISOLangByCode2IdxKey argKey )
 	{
-		isolangService.deleteByCode2Idx(argKey.getOptionalISO6391Code());
+		jpaHooksSchema.getISOLangService().deleteByCode2Idx(argKey.getOptionalISO6391Code());
 	}
 
 
@@ -309,7 +247,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang readDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( isolangService.find(PKey) );
+		return( jpaHooksSchema.getISOLangService().find(PKey) );
 	}
 
 	/**
@@ -326,7 +264,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang lockDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( isolangService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getISOLangService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -338,7 +276,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	 */
 	@Override
 	public ICFSecISOLang[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaISOLang> results = isolangService.findAll();
+		List<CFSecJpaISOLang> results = jpaHooksSchema.getISOLangService().findAll();
 		ICFSecISOLang[] retset = new ICFSecISOLang[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOLang cur: results) {
@@ -361,7 +299,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		short argISOLangId )
 	{
-		return( isolangService.find(argISOLangId) );
+		return( jpaHooksSchema.getISOLangService().find(argISOLangId) );
 	}
 
 	/**
@@ -378,7 +316,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang readDerivedByCode3Idx( ICFSecAuthorization Authorization,
 		String argISO6392Code )
 	{
-		return( isolangService.findByCode3Idx(argISO6392Code) );
+		return( jpaHooksSchema.getISOLangService().findByCode3Idx(argISO6392Code) );
 	}
 
 	/**
@@ -394,7 +332,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang[] readDerivedByCode2Idx( ICFSecAuthorization Authorization,
 		String argISO6391Code )
 	{
-		List<CFSecJpaISOLang> results = isolangService.findByCode2Idx(argISO6391Code);
+		List<CFSecJpaISOLang> results = jpaHooksSchema.getISOLangService().findByCode2Idx(argISO6391Code);
 		ICFSecISOLang[] retset = new ICFSecISOLang[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOLang cur: results) {

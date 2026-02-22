@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaISOTZoneTable database implementation for ISOTZone
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaISOTZoneTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 		}
 		else if (rec instanceof CFSecJpaISOTZone) {
 			CFSecJpaISOTZone jparec = (CFSecJpaISOTZone)rec;
-			CFSecJpaISOTZone created = isotzoneService.create(jparec);
+			CFSecJpaISOTZone created = jpaHooksSchema.getISOTZoneService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 		}
 		else if (rec instanceof CFSecJpaISOTZone) {
 			CFSecJpaISOTZone jparec = (CFSecJpaISOTZone)rec;
-			CFSecJpaISOTZone updated = isotzoneService.update(jparec);
+			CFSecJpaISOTZone updated = jpaHooksSchema.getISOTZoneService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 		}
 		if (rec instanceof CFSecJpaISOTZone) {
 			CFSecJpaISOTZone jparec = (CFSecJpaISOTZone)rec;
-			isotzoneService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getISOTZoneService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteISOTZone", "rec", rec, "CFSecJpaISOTZone");
@@ -233,7 +171,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public void deleteISOTZoneByIdIdx( ICFSecAuthorization Authorization,
 		Short argKey )
 	{
-		isotzoneService.deleteByIdIdx(argKey);
+		jpaHooksSchema.getISOTZoneService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -250,7 +188,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 		short argTZHourOffset,
 		short argTZMinOffset )
 	{
-		isotzoneService.deleteByOffsetIdx(argTZHourOffset,
+		jpaHooksSchema.getISOTZoneService().deleteByOffsetIdx(argTZHourOffset,
 		argTZMinOffset);
 	}
 
@@ -266,7 +204,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public void deleteISOTZoneByOffsetIdx( ICFSecAuthorization Authorization,
 		ICFSecISOTZoneByOffsetIdxKey argKey )
 	{
-		isotzoneService.deleteByOffsetIdx(argKey.getRequiredTZHourOffset(),
+		jpaHooksSchema.getISOTZoneService().deleteByOffsetIdx(argKey.getRequiredTZHourOffset(),
 			argKey.getRequiredTZMinOffset());
 	}
 
@@ -281,7 +219,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public void deleteISOTZoneByUTZNameIdx( ICFSecAuthorization Authorization,
 		String argTZName )
 	{
-		isotzoneService.deleteByUTZNameIdx(argTZName);
+		jpaHooksSchema.getISOTZoneService().deleteByUTZNameIdx(argTZName);
 	}
 
 
@@ -296,7 +234,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public void deleteISOTZoneByUTZNameIdx( ICFSecAuthorization Authorization,
 		ICFSecISOTZoneByUTZNameIdxKey argKey )
 	{
-		isotzoneService.deleteByUTZNameIdx(argKey.getRequiredTZName());
+		jpaHooksSchema.getISOTZoneService().deleteByUTZNameIdx(argKey.getRequiredTZName());
 	}
 
 	/**
@@ -310,7 +248,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public void deleteISOTZoneByIso8601Idx( ICFSecAuthorization Authorization,
 		String argIso8601 )
 	{
-		isotzoneService.deleteByIso8601Idx(argIso8601);
+		jpaHooksSchema.getISOTZoneService().deleteByIso8601Idx(argIso8601);
 	}
 
 
@@ -325,7 +263,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public void deleteISOTZoneByIso8601Idx( ICFSecAuthorization Authorization,
 		ICFSecISOTZoneByIso8601IdxKey argKey )
 	{
-		isotzoneService.deleteByIso8601Idx(argKey.getRequiredIso8601());
+		jpaHooksSchema.getISOTZoneService().deleteByIso8601Idx(argKey.getRequiredIso8601());
 	}
 
 
@@ -343,7 +281,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public ICFSecISOTZone readDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( isotzoneService.find(PKey) );
+		return( jpaHooksSchema.getISOTZoneService().find(PKey) );
 	}
 
 	/**
@@ -360,7 +298,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public ICFSecISOTZone lockDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( isotzoneService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getISOTZoneService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -372,7 +310,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	 */
 	@Override
 	public ICFSecISOTZone[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaISOTZone> results = isotzoneService.findAll();
+		List<CFSecJpaISOTZone> results = jpaHooksSchema.getISOTZoneService().findAll();
 		ICFSecISOTZone[] retset = new ICFSecISOTZone[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOTZone cur: results) {
@@ -395,7 +333,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public ICFSecISOTZone readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		short argISOTZoneId )
 	{
-		return( isotzoneService.find(argISOTZoneId) );
+		return( jpaHooksSchema.getISOTZoneService().find(argISOTZoneId) );
 	}
 
 	/**
@@ -414,7 +352,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 		short argTZHourOffset,
 		short argTZMinOffset )
 	{
-		List<CFSecJpaISOTZone> results = isotzoneService.findByOffsetIdx(argTZHourOffset,
+		List<CFSecJpaISOTZone> results = jpaHooksSchema.getISOTZoneService().findByOffsetIdx(argTZHourOffset,
 		argTZMinOffset);
 		ICFSecISOTZone[] retset = new ICFSecISOTZone[results.size()];
 		int idx = 0;
@@ -438,7 +376,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public ICFSecISOTZone readDerivedByUTZNameIdx( ICFSecAuthorization Authorization,
 		String argTZName )
 	{
-		return( isotzoneService.findByUTZNameIdx(argTZName) );
+		return( jpaHooksSchema.getISOTZoneService().findByUTZNameIdx(argTZName) );
 	}
 
 	/**
@@ -454,7 +392,7 @@ public class CFSecJpaISOTZoneTable implements ICFSecISOTZoneTable
 	public ICFSecISOTZone[] readDerivedByIso8601Idx( ICFSecAuthorization Authorization,
 		String argIso8601 )
 	{
-		List<CFSecJpaISOTZone> results = isotzoneService.findByIso8601Idx(argIso8601);
+		List<CFSecJpaISOTZone> results = jpaHooksSchema.getISOTZoneService().findByIso8601Idx(argIso8601);
 		ICFSecISOTZone[] retset = new ICFSecISOTZone[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOTZone cur: results) {

@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaServiceTable database implementation for Service
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaServiceTable implements ICFSecServiceTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaServiceTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		}
 		else if (rec instanceof CFSecJpaService) {
 			CFSecJpaService jparec = (CFSecJpaService)rec;
-			CFSecJpaService created = serviceService.create(jparec);
+			CFSecJpaService created = jpaHooksSchema.getServiceService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		}
 		else if (rec instanceof CFSecJpaService) {
 			CFSecJpaService jparec = (CFSecJpaService)rec;
-			CFSecJpaService updated = serviceService.update(jparec);
+			CFSecJpaService updated = jpaHooksSchema.getServiceService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		}
 		if (rec instanceof CFSecJpaService) {
 			CFSecJpaService jparec = (CFSecJpaService)rec;
-			serviceService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getServiceService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteService", "rec", rec, "CFSecJpaService");
@@ -233,7 +171,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		serviceService.deleteByIdIdx(argKey);
+		jpaHooksSchema.getServiceService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -247,7 +185,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		serviceService.deleteByClusterIdx(argClusterId);
+		jpaHooksSchema.getServiceService().deleteByClusterIdx(argClusterId);
 	}
 
 
@@ -262,7 +200,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByClusterIdx( ICFSecAuthorization Authorization,
 		ICFSecServiceByClusterIdxKey argKey )
 	{
-		serviceService.deleteByClusterIdx(argKey.getRequiredClusterId());
+		jpaHooksSchema.getServiceService().deleteByClusterIdx(argKey.getRequiredClusterId());
 	}
 
 	/**
@@ -276,7 +214,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByHostIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argHostNodeId )
 	{
-		serviceService.deleteByHostIdx(argHostNodeId);
+		jpaHooksSchema.getServiceService().deleteByHostIdx(argHostNodeId);
 	}
 
 
@@ -291,7 +229,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByHostIdx( ICFSecAuthorization Authorization,
 		ICFSecServiceByHostIdxKey argKey )
 	{
-		serviceService.deleteByHostIdx(argKey.getRequiredHostNodeId());
+		jpaHooksSchema.getServiceService().deleteByHostIdx(argKey.getRequiredHostNodeId());
 	}
 
 	/**
@@ -305,7 +243,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByTypeIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argServiceTypeId )
 	{
-		serviceService.deleteByTypeIdx(argServiceTypeId);
+		jpaHooksSchema.getServiceService().deleteByTypeIdx(argServiceTypeId);
 	}
 
 
@@ -320,7 +258,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByTypeIdx( ICFSecAuthorization Authorization,
 		ICFSecServiceByTypeIdxKey argKey )
 	{
-		serviceService.deleteByTypeIdx(argKey.getRequiredServiceTypeId());
+		jpaHooksSchema.getServiceService().deleteByTypeIdx(argKey.getRequiredServiceTypeId());
 	}
 
 	/**
@@ -340,7 +278,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		CFLibDbKeyHash256 argHostNodeId,
 		CFLibDbKeyHash256 argServiceTypeId )
 	{
-		serviceService.deleteByUTypeIdx(argClusterId,
+		jpaHooksSchema.getServiceService().deleteByUTypeIdx(argClusterId,
 		argHostNodeId,
 		argServiceTypeId);
 	}
@@ -357,7 +295,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByUTypeIdx( ICFSecAuthorization Authorization,
 		ICFSecServiceByUTypeIdxKey argKey )
 	{
-		serviceService.deleteByUTypeIdx(argKey.getRequiredClusterId(),
+		jpaHooksSchema.getServiceService().deleteByUTypeIdx(argKey.getRequiredClusterId(),
 			argKey.getRequiredHostNodeId(),
 			argKey.getRequiredServiceTypeId());
 	}
@@ -379,7 +317,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		CFLibDbKeyHash256 argHostNodeId,
 		short argHostPort )
 	{
-		serviceService.deleteByUHostPortIdx(argClusterId,
+		jpaHooksSchema.getServiceService().deleteByUHostPortIdx(argClusterId,
 		argHostNodeId,
 		argHostPort);
 	}
@@ -396,7 +334,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public void deleteServiceByUHostPortIdx( ICFSecAuthorization Authorization,
 		ICFSecServiceByUHostPortIdxKey argKey )
 	{
-		serviceService.deleteByUHostPortIdx(argKey.getRequiredClusterId(),
+		jpaHooksSchema.getServiceService().deleteByUHostPortIdx(argKey.getRequiredClusterId(),
 			argKey.getRequiredHostNodeId(),
 			argKey.getRequiredHostPort());
 	}
@@ -416,7 +354,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public ICFSecService readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( serviceService.find(PKey) );
+		return( jpaHooksSchema.getServiceService().find(PKey) );
 	}
 
 	/**
@@ -433,7 +371,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public ICFSecService lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( serviceService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getServiceService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -445,7 +383,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	 */
 	@Override
 	public ICFSecService[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaService> results = serviceService.findAll();
+		List<CFSecJpaService> results = jpaHooksSchema.getServiceService().findAll();
 		ICFSecService[] retset = new ICFSecService[results.size()];
 		int idx = 0;
 		for (CFSecJpaService cur: results) {
@@ -468,7 +406,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public ICFSecService readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argServiceId )
 	{
-		return( serviceService.find(argServiceId) );
+		return( jpaHooksSchema.getServiceService().find(argServiceId) );
 	}
 
 	/**
@@ -484,7 +422,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public ICFSecService[] readDerivedByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		List<CFSecJpaService> results = serviceService.findByClusterIdx(argClusterId);
+		List<CFSecJpaService> results = jpaHooksSchema.getServiceService().findByClusterIdx(argClusterId);
 		ICFSecService[] retset = new ICFSecService[results.size()];
 		int idx = 0;
 		for (CFSecJpaService cur: results) {
@@ -506,7 +444,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public ICFSecService[] readDerivedByHostIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argHostNodeId )
 	{
-		List<CFSecJpaService> results = serviceService.findByHostIdx(argHostNodeId);
+		List<CFSecJpaService> results = jpaHooksSchema.getServiceService().findByHostIdx(argHostNodeId);
 		ICFSecService[] retset = new ICFSecService[results.size()];
 		int idx = 0;
 		for (CFSecJpaService cur: results) {
@@ -528,7 +466,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 	public ICFSecService[] readDerivedByTypeIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argServiceTypeId )
 	{
-		List<CFSecJpaService> results = serviceService.findByTypeIdx(argServiceTypeId);
+		List<CFSecJpaService> results = jpaHooksSchema.getServiceService().findByTypeIdx(argServiceTypeId);
 		ICFSecService[] retset = new ICFSecService[results.size()];
 		int idx = 0;
 		for (CFSecJpaService cur: results) {
@@ -557,7 +495,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		CFLibDbKeyHash256 argHostNodeId,
 		CFLibDbKeyHash256 argServiceTypeId )
 	{
-		return( serviceService.findByUTypeIdx(argClusterId,
+		return( jpaHooksSchema.getServiceService().findByUTypeIdx(argClusterId,
 		argHostNodeId,
 		argServiceTypeId) );
 	}
@@ -582,7 +520,7 @@ public class CFSecJpaServiceTable implements ICFSecServiceTable
 		CFLibDbKeyHash256 argHostNodeId,
 		short argHostPort )
 	{
-		return( serviceService.findByUHostPortIdx(argClusterId,
+		return( jpaHooksSchema.getServiceService().findByUHostPortIdx(argClusterId,
 		argHostNodeId,
 		argHostPort) );
 	}

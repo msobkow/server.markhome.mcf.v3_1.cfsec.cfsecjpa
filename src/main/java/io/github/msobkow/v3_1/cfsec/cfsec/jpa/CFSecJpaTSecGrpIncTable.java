@@ -61,6 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
+import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaTSecGrpIncTable database implementation for TSecGrpInc
@@ -68,71 +69,7 @@ import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
 public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 {
 	protected CFSecJpaSchema schema;
-    @Autowired
-    @Qualifier("cfsec31EntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean cfsecEntityManagerFactory;
-	@Autowired
-	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	private CFSecJpaHostNodeService hostnodeService;
-
-	@Autowired
-	private CFSecJpaISOCcyService isoccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryService isoctryService;
-
-	@Autowired
-	private CFSecJpaISOCtryCcyService isoctryccyService;
-
-	@Autowired
-	private CFSecJpaISOCtryLangService isoctrylangService;
-
-	@Autowired
-	private CFSecJpaISOLangService isolangService;
-
-	@Autowired
-	private CFSecJpaISOTZoneService isotzoneService;
-
-	@Autowired
-	private CFSecJpaSecDeviceService secdeviceService;
-
-	@Autowired
-	private CFSecJpaSecGroupService secgroupService;
-
-	@Autowired
-	private CFSecJpaSecGrpIncService secgrpincService;
-
-	@Autowired
-	private CFSecJpaSecGrpMembService secgrpmembService;
-
-	@Autowired
-	private CFSecJpaSecSessionService secsessionService;
-
-	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaServiceService serviceService;
-
-	@Autowired
-	private CFSecJpaServiceTypeService servicetypeService;
-
-	@Autowired
-	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	private CFSecJpaTSecGroupService tsecgroupService;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncService tsecgrpincService;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembService tsecgrpmembService;
+	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaTSecGrpIncTable(ICFSecSchema schema) {
@@ -141,6 +78,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
+			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -164,7 +102,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 		}
 		else if (rec instanceof CFSecJpaTSecGrpInc) {
 			CFSecJpaTSecGrpInc jparec = (CFSecJpaTSecGrpInc)rec;
-			CFSecJpaTSecGrpInc created = tsecgrpincService.create(jparec);
+			CFSecJpaTSecGrpInc created = jpaHooksSchema.getTSecGrpIncService().create(jparec);
 			return( created );
 		}
 		else {
@@ -189,7 +127,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 		}
 		else if (rec instanceof CFSecJpaTSecGrpInc) {
 			CFSecJpaTSecGrpInc jparec = (CFSecJpaTSecGrpInc)rec;
-			CFSecJpaTSecGrpInc updated = tsecgrpincService.update(jparec);
+			CFSecJpaTSecGrpInc updated = jpaHooksSchema.getTSecGrpIncService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -213,7 +151,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 		}
 		if (rec instanceof CFSecJpaTSecGrpInc) {
 			CFSecJpaTSecGrpInc jparec = (CFSecJpaTSecGrpInc)rec;
-			tsecgrpincService.deleteByIdIdx(jparec.getPKey());
+			jpaHooksSchema.getTSecGrpIncService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteTSecGrpInc", "rec", rec, "CFSecJpaTSecGrpInc");
@@ -233,7 +171,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		tsecgrpincService.deleteByIdIdx(argKey);
+		jpaHooksSchema.getTSecGrpIncService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -247,7 +185,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByTenantIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argTenantId )
 	{
-		tsecgrpincService.deleteByTenantIdx(argTenantId);
+		jpaHooksSchema.getTSecGrpIncService().deleteByTenantIdx(argTenantId);
 	}
 
 
@@ -262,7 +200,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByTenantIdx( ICFSecAuthorization Authorization,
 		ICFSecTSecGrpIncByTenantIdxKey argKey )
 	{
-		tsecgrpincService.deleteByTenantIdx(argKey.getRequiredTenantId());
+		jpaHooksSchema.getTSecGrpIncService().deleteByTenantIdx(argKey.getRequiredTenantId());
 	}
 
 	/**
@@ -276,7 +214,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByGroupIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argTSecGroupId )
 	{
-		tsecgrpincService.deleteByGroupIdx(argTSecGroupId);
+		jpaHooksSchema.getTSecGrpIncService().deleteByGroupIdx(argTSecGroupId);
 	}
 
 
@@ -291,7 +229,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByGroupIdx( ICFSecAuthorization Authorization,
 		ICFSecTSecGrpIncByGroupIdxKey argKey )
 	{
-		tsecgrpincService.deleteByGroupIdx(argKey.getRequiredTSecGroupId());
+		jpaHooksSchema.getTSecGrpIncService().deleteByGroupIdx(argKey.getRequiredTSecGroupId());
 	}
 
 	/**
@@ -305,7 +243,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByIncludeIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argIncludeGroupId )
 	{
-		tsecgrpincService.deleteByIncludeIdx(argIncludeGroupId);
+		jpaHooksSchema.getTSecGrpIncService().deleteByIncludeIdx(argIncludeGroupId);
 	}
 
 
@@ -320,7 +258,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByIncludeIdx( ICFSecAuthorization Authorization,
 		ICFSecTSecGrpIncByIncludeIdxKey argKey )
 	{
-		tsecgrpincService.deleteByIncludeIdx(argKey.getRequiredIncludeGroupId());
+		jpaHooksSchema.getTSecGrpIncService().deleteByIncludeIdx(argKey.getRequiredIncludeGroupId());
 	}
 
 	/**
@@ -340,7 +278,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 		CFLibDbKeyHash256 argTSecGroupId,
 		CFLibDbKeyHash256 argIncludeGroupId )
 	{
-		tsecgrpincService.deleteByUIncludeIdx(argTenantId,
+		jpaHooksSchema.getTSecGrpIncService().deleteByUIncludeIdx(argTenantId,
 		argTSecGroupId,
 		argIncludeGroupId);
 	}
@@ -357,7 +295,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public void deleteTSecGrpIncByUIncludeIdx( ICFSecAuthorization Authorization,
 		ICFSecTSecGrpIncByUIncludeIdxKey argKey )
 	{
-		tsecgrpincService.deleteByUIncludeIdx(argKey.getRequiredTenantId(),
+		jpaHooksSchema.getTSecGrpIncService().deleteByUIncludeIdx(argKey.getRequiredTenantId(),
 			argKey.getRequiredTSecGroupId(),
 			argKey.getRequiredIncludeGroupId());
 	}
@@ -377,7 +315,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public ICFSecTSecGrpInc readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( tsecgrpincService.find(PKey) );
+		return( jpaHooksSchema.getTSecGrpIncService().find(PKey) );
 	}
 
 	/**
@@ -394,7 +332,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public ICFSecTSecGrpInc lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( tsecgrpincService.lockByIdIdx(PKey) );
+		return( jpaHooksSchema.getTSecGrpIncService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -406,7 +344,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	 */
 	@Override
 	public ICFSecTSecGrpInc[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaTSecGrpInc> results = tsecgrpincService.findAll();
+		List<CFSecJpaTSecGrpInc> results = jpaHooksSchema.getTSecGrpIncService().findAll();
 		ICFSecTSecGrpInc[] retset = new ICFSecTSecGrpInc[results.size()];
 		int idx = 0;
 		for (CFSecJpaTSecGrpInc cur: results) {
@@ -429,7 +367,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public ICFSecTSecGrpInc readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argTSecGrpIncId )
 	{
-		return( tsecgrpincService.find(argTSecGrpIncId) );
+		return( jpaHooksSchema.getTSecGrpIncService().find(argTSecGrpIncId) );
 	}
 
 	/**
@@ -445,7 +383,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public ICFSecTSecGrpInc[] readDerivedByTenantIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argTenantId )
 	{
-		List<CFSecJpaTSecGrpInc> results = tsecgrpincService.findByTenantIdx(argTenantId);
+		List<CFSecJpaTSecGrpInc> results = jpaHooksSchema.getTSecGrpIncService().findByTenantIdx(argTenantId);
 		ICFSecTSecGrpInc[] retset = new ICFSecTSecGrpInc[results.size()];
 		int idx = 0;
 		for (CFSecJpaTSecGrpInc cur: results) {
@@ -467,7 +405,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public ICFSecTSecGrpInc[] readDerivedByGroupIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argTSecGroupId )
 	{
-		List<CFSecJpaTSecGrpInc> results = tsecgrpincService.findByGroupIdx(argTSecGroupId);
+		List<CFSecJpaTSecGrpInc> results = jpaHooksSchema.getTSecGrpIncService().findByGroupIdx(argTSecGroupId);
 		ICFSecTSecGrpInc[] retset = new ICFSecTSecGrpInc[results.size()];
 		int idx = 0;
 		for (CFSecJpaTSecGrpInc cur: results) {
@@ -489,7 +427,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 	public ICFSecTSecGrpInc[] readDerivedByIncludeIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argIncludeGroupId )
 	{
-		List<CFSecJpaTSecGrpInc> results = tsecgrpincService.findByIncludeIdx(argIncludeGroupId);
+		List<CFSecJpaTSecGrpInc> results = jpaHooksSchema.getTSecGrpIncService().findByIncludeIdx(argIncludeGroupId);
 		ICFSecTSecGrpInc[] retset = new ICFSecTSecGrpInc[results.size()];
 		int idx = 0;
 		for (CFSecJpaTSecGrpInc cur: results) {
@@ -518,7 +456,7 @@ public class CFSecJpaTSecGrpIncTable implements ICFSecTSecGrpIncTable
 		CFLibDbKeyHash256 argTSecGroupId,
 		CFLibDbKeyHash256 argIncludeGroupId )
 	{
-		return( tsecgrpincService.findByUIncludeIdx(argTenantId,
+		return( jpaHooksSchema.getTSecGrpIncService().findByUIncludeIdx(argTenantId,
 		argTSecGroupId,
 		argIncludeGroupId) );
 	}
