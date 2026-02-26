@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaSecDeviceTable database implementation for SecDevice
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaSecDeviceTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		else if (rec instanceof CFSecJpaSecDevice) {
 			CFSecJpaSecDevice jparec = (CFSecJpaSecDevice)rec;
-			CFSecJpaSecDevice created = jpaHooksSchema.getSecDeviceService().create(jparec);
+			CFSecJpaSecDevice created = schema.getJpaHooksSchema().getSecDeviceService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		else if (rec instanceof CFSecJpaSecDevice) {
 			CFSecJpaSecDevice jparec = (CFSecJpaSecDevice)rec;
-			CFSecJpaSecDevice updated = jpaHooksSchema.getSecDeviceService().update(jparec);
+			CFSecJpaSecDevice updated = schema.getJpaHooksSchema().getSecDeviceService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		}
 		if (rec instanceof CFSecJpaSecDevice) {
 			CFSecJpaSecDevice jparec = (CFSecJpaSecDevice)rec;
-			jpaHooksSchema.getSecDeviceService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getSecDeviceService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteSecDevice", "rec", rec, "CFSecJpaSecDevice");
@@ -174,7 +172,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		jpaHooksSchema.getSecDeviceService().deleteByIdIdx(argSecUserId,
+		schema.getJpaHooksSchema().getSecDeviceService().deleteByIdIdx(argSecUserId,
 		argDevName);
 	}
 
@@ -189,7 +187,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByIdIdx( ICFSecAuthorization Authorization,
 		ICFSecSecDevicePKey argKey )
 	{
-		jpaHooksSchema.getSecDeviceService().deleteByIdIdx(argKey.getRequiredSecUserId(),
+		schema.getJpaHooksSchema().getSecDeviceService().deleteByIdIdx(argKey.getRequiredSecUserId(),
 			argKey.getRequiredDevName());
 	}
 
@@ -207,7 +205,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		jpaHooksSchema.getSecDeviceService().deleteByNameIdx(argSecUserId,
+		schema.getJpaHooksSchema().getSecDeviceService().deleteByNameIdx(argSecUserId,
 		argDevName);
 	}
 
@@ -223,7 +221,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByNameIdx( ICFSecAuthorization Authorization,
 		ICFSecSecDeviceByNameIdxKey argKey )
 	{
-		jpaHooksSchema.getSecDeviceService().deleteByNameIdx(argKey.getRequiredSecUserId(),
+		schema.getJpaHooksSchema().getSecDeviceService().deleteByNameIdx(argKey.getRequiredSecUserId(),
 			argKey.getRequiredDevName());
 	}
 
@@ -238,7 +236,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByUserIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecUserId )
 	{
-		jpaHooksSchema.getSecDeviceService().deleteByUserIdx(argSecUserId);
+		schema.getJpaHooksSchema().getSecDeviceService().deleteByUserIdx(argSecUserId);
 	}
 
 
@@ -253,7 +251,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public void deleteSecDeviceByUserIdx( ICFSecAuthorization Authorization,
 		ICFSecSecDeviceByUserIdxKey argKey )
 	{
-		jpaHooksSchema.getSecDeviceService().deleteByUserIdx(argKey.getRequiredSecUserId());
+		schema.getJpaHooksSchema().getSecDeviceService().deleteByUserIdx(argKey.getRequiredSecUserId());
 	}
 
 
@@ -271,7 +269,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public ICFSecSecDevice readDerived( ICFSecAuthorization Authorization,
 		ICFSecSecDevicePKey PKey )
 	{
-		return( jpaHooksSchema.getSecDeviceService().find(PKey) );
+		return( schema.getJpaHooksSchema().getSecDeviceService().find(PKey) );
 	}
 
 	/**
@@ -287,7 +285,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		return( jpaHooksSchema.getSecDeviceService().find(argSecUserId,
+		return( schema.getJpaHooksSchema().getSecDeviceService().find(argSecUserId,
 		argDevName) );
 	}
 
@@ -305,7 +303,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public ICFSecSecDevice lockDerived( ICFSecAuthorization Authorization,
 		ICFSecSecDevicePKey PKey )
 	{
-		return( jpaHooksSchema.getSecDeviceService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getSecDeviceService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -317,7 +315,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	 */
 	@Override
 	public ICFSecSecDevice[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaSecDevice> results = jpaHooksSchema.getSecDeviceService().findAll();
+		List<CFSecJpaSecDevice> results = schema.getJpaHooksSchema().getSecDeviceService().findAll();
 		ICFSecSecDevice[] retset = new ICFSecSecDevice[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecDevice cur: results) {
@@ -343,7 +341,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		return( jpaHooksSchema.getSecDeviceService().find(argSecUserId,
+		return( schema.getJpaHooksSchema().getSecDeviceService().find(argSecUserId,
 		argDevName) );
 	}
 
@@ -364,7 +362,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 		CFLibDbKeyHash256 argSecUserId,
 		String argDevName )
 	{
-		return( jpaHooksSchema.getSecDeviceService().findByNameIdx(argSecUserId,
+		return( schema.getJpaHooksSchema().getSecDeviceService().findByNameIdx(argSecUserId,
 		argDevName) );
 	}
 
@@ -381,7 +379,7 @@ public class CFSecJpaSecDeviceTable implements ICFSecSecDeviceTable
 	public ICFSecSecDevice[] readDerivedByUserIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecUserId )
 	{
-		List<CFSecJpaSecDevice> results = jpaHooksSchema.getSecDeviceService().findByUserIdx(argSecUserId);
+		List<CFSecJpaSecDevice> results = schema.getJpaHooksSchema().getSecDeviceService().findByUserIdx(argSecUserId);
 		ICFSecSecDevice[] retset = new ICFSecSecDevice[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecDevice cur: results) {

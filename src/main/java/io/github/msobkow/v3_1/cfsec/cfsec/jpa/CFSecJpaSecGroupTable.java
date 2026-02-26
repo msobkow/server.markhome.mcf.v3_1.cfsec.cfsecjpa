@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaSecGroupTable database implementation for SecGroup
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaSecGroupTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		}
 		else if (rec instanceof CFSecJpaSecGroup) {
 			CFSecJpaSecGroup jparec = (CFSecJpaSecGroup)rec;
-			CFSecJpaSecGroup created = jpaHooksSchema.getSecGroupService().create(jparec);
+			CFSecJpaSecGroup created = schema.getJpaHooksSchema().getSecGroupService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		}
 		else if (rec instanceof CFSecJpaSecGroup) {
 			CFSecJpaSecGroup jparec = (CFSecJpaSecGroup)rec;
-			CFSecJpaSecGroup updated = jpaHooksSchema.getSecGroupService().update(jparec);
+			CFSecJpaSecGroup updated = schema.getJpaHooksSchema().getSecGroupService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		}
 		if (rec instanceof CFSecJpaSecGroup) {
 			CFSecJpaSecGroup jparec = (CFSecJpaSecGroup)rec;
-			jpaHooksSchema.getSecGroupService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getSecGroupService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteSecGroup", "rec", rec, "CFSecJpaSecGroup");
@@ -171,7 +169,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public void deleteSecGroupByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		jpaHooksSchema.getSecGroupService().deleteByIdIdx(argKey);
+		schema.getJpaHooksSchema().getSecGroupService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public void deleteSecGroupByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		jpaHooksSchema.getSecGroupService().deleteByClusterIdx(argClusterId);
+		schema.getJpaHooksSchema().getSecGroupService().deleteByClusterIdx(argClusterId);
 	}
 
 
@@ -200,7 +198,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public void deleteSecGroupByClusterIdx( ICFSecAuthorization Authorization,
 		ICFSecSecGroupByClusterIdxKey argKey )
 	{
-		jpaHooksSchema.getSecGroupService().deleteByClusterIdx(argKey.getRequiredClusterId());
+		schema.getJpaHooksSchema().getSecGroupService().deleteByClusterIdx(argKey.getRequiredClusterId());
 	}
 
 	/**
@@ -217,7 +215,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		CFLibDbKeyHash256 argClusterId,
 		boolean argIsVisible )
 	{
-		jpaHooksSchema.getSecGroupService().deleteByClusterVisIdx(argClusterId,
+		schema.getJpaHooksSchema().getSecGroupService().deleteByClusterVisIdx(argClusterId,
 		argIsVisible);
 	}
 
@@ -233,7 +231,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public void deleteSecGroupByClusterVisIdx( ICFSecAuthorization Authorization,
 		ICFSecSecGroupByClusterVisIdxKey argKey )
 	{
-		jpaHooksSchema.getSecGroupService().deleteByClusterVisIdx(argKey.getRequiredClusterId(),
+		schema.getJpaHooksSchema().getSecGroupService().deleteByClusterVisIdx(argKey.getRequiredClusterId(),
 			argKey.getRequiredIsVisible());
 	}
 
@@ -251,7 +249,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		CFLibDbKeyHash256 argClusterId,
 		String argName )
 	{
-		jpaHooksSchema.getSecGroupService().deleteByUNameIdx(argClusterId,
+		schema.getJpaHooksSchema().getSecGroupService().deleteByUNameIdx(argClusterId,
 		argName);
 	}
 
@@ -267,7 +265,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public void deleteSecGroupByUNameIdx( ICFSecAuthorization Authorization,
 		ICFSecSecGroupByUNameIdxKey argKey )
 	{
-		jpaHooksSchema.getSecGroupService().deleteByUNameIdx(argKey.getRequiredClusterId(),
+		schema.getJpaHooksSchema().getSecGroupService().deleteByUNameIdx(argKey.getRequiredClusterId(),
 			argKey.getRequiredName());
 	}
 
@@ -286,7 +284,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public ICFSecSecGroup readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( jpaHooksSchema.getSecGroupService().find(PKey) );
+		return( schema.getJpaHooksSchema().getSecGroupService().find(PKey) );
 	}
 
 	/**
@@ -303,7 +301,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public ICFSecSecGroup lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( jpaHooksSchema.getSecGroupService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getSecGroupService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -315,7 +313,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	 */
 	@Override
 	public ICFSecSecGroup[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaSecGroup> results = jpaHooksSchema.getSecGroupService().findAll();
+		List<CFSecJpaSecGroup> results = schema.getJpaHooksSchema().getSecGroupService().findAll();
 		ICFSecSecGroup[] retset = new ICFSecSecGroup[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecGroup cur: results) {
@@ -338,7 +336,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public ICFSecSecGroup readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecGroupId )
 	{
-		return( jpaHooksSchema.getSecGroupService().find(argSecGroupId) );
+		return( schema.getJpaHooksSchema().getSecGroupService().find(argSecGroupId) );
 	}
 
 	/**
@@ -354,7 +352,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 	public ICFSecSecGroup[] readDerivedByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		List<CFSecJpaSecGroup> results = jpaHooksSchema.getSecGroupService().findByClusterIdx(argClusterId);
+		List<CFSecJpaSecGroup> results = schema.getJpaHooksSchema().getSecGroupService().findByClusterIdx(argClusterId);
 		ICFSecSecGroup[] retset = new ICFSecSecGroup[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecGroup cur: results) {
@@ -379,7 +377,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		CFLibDbKeyHash256 argClusterId,
 		boolean argIsVisible )
 	{
-		List<CFSecJpaSecGroup> results = jpaHooksSchema.getSecGroupService().findByClusterVisIdx(argClusterId,
+		List<CFSecJpaSecGroup> results = schema.getJpaHooksSchema().getSecGroupService().findByClusterVisIdx(argClusterId,
 		argIsVisible);
 		ICFSecSecGroup[] retset = new ICFSecSecGroup[results.size()];
 		int idx = 0;
@@ -406,7 +404,7 @@ public class CFSecJpaSecGroupTable implements ICFSecSecGroupTable
 		CFLibDbKeyHash256 argClusterId,
 		String argName )
 	{
-		return( jpaHooksSchema.getSecGroupService().findByUNameIdx(argClusterId,
+		return( schema.getJpaHooksSchema().getSecGroupService().findByUNameIdx(argClusterId,
 		argName) );
 	}
 

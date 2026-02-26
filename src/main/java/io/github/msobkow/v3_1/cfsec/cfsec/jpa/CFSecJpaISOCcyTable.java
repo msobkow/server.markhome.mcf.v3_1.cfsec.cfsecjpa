@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaISOCcyTable database implementation for ISOCcy
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaISOCcyTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 		}
 		else if (rec instanceof CFSecJpaISOCcy) {
 			CFSecJpaISOCcy jparec = (CFSecJpaISOCcy)rec;
-			CFSecJpaISOCcy created = jpaHooksSchema.getISOCcyService().create(jparec);
+			CFSecJpaISOCcy created = schema.getJpaHooksSchema().getISOCcyService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 		}
 		else if (rec instanceof CFSecJpaISOCcy) {
 			CFSecJpaISOCcy jparec = (CFSecJpaISOCcy)rec;
-			CFSecJpaISOCcy updated = jpaHooksSchema.getISOCcyService().update(jparec);
+			CFSecJpaISOCcy updated = schema.getJpaHooksSchema().getISOCcyService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 		}
 		if (rec instanceof CFSecJpaISOCcy) {
 			CFSecJpaISOCcy jparec = (CFSecJpaISOCcy)rec;
-			jpaHooksSchema.getISOCcyService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getISOCcyService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteISOCcy", "rec", rec, "CFSecJpaISOCcy");
@@ -171,7 +169,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public void deleteISOCcyByIdIdx( ICFSecAuthorization Authorization,
 		Short argKey )
 	{
-		jpaHooksSchema.getISOCcyService().deleteByIdIdx(argKey);
+		schema.getJpaHooksSchema().getISOCcyService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public void deleteISOCcyByCcyCdIdx( ICFSecAuthorization Authorization,
 		String argISOCode )
 	{
-		jpaHooksSchema.getISOCcyService().deleteByCcyCdIdx(argISOCode);
+		schema.getJpaHooksSchema().getISOCcyService().deleteByCcyCdIdx(argISOCode);
 	}
 
 
@@ -200,7 +198,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public void deleteISOCcyByCcyCdIdx( ICFSecAuthorization Authorization,
 		ICFSecISOCcyByCcyCdIdxKey argKey )
 	{
-		jpaHooksSchema.getISOCcyService().deleteByCcyCdIdx(argKey.getRequiredISOCode());
+		schema.getJpaHooksSchema().getISOCcyService().deleteByCcyCdIdx(argKey.getRequiredISOCode());
 	}
 
 	/**
@@ -214,7 +212,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public void deleteISOCcyByCcyNmIdx( ICFSecAuthorization Authorization,
 		String argName )
 	{
-		jpaHooksSchema.getISOCcyService().deleteByCcyNmIdx(argName);
+		schema.getJpaHooksSchema().getISOCcyService().deleteByCcyNmIdx(argName);
 	}
 
 
@@ -229,7 +227,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public void deleteISOCcyByCcyNmIdx( ICFSecAuthorization Authorization,
 		ICFSecISOCcyByCcyNmIdxKey argKey )
 	{
-		jpaHooksSchema.getISOCcyService().deleteByCcyNmIdx(argKey.getRequiredName());
+		schema.getJpaHooksSchema().getISOCcyService().deleteByCcyNmIdx(argKey.getRequiredName());
 	}
 
 
@@ -247,7 +245,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public ICFSecISOCcy readDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( jpaHooksSchema.getISOCcyService().find(PKey) );
+		return( schema.getJpaHooksSchema().getISOCcyService().find(PKey) );
 	}
 
 	/**
@@ -264,7 +262,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public ICFSecISOCcy lockDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( jpaHooksSchema.getISOCcyService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getISOCcyService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -276,7 +274,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	 */
 	@Override
 	public ICFSecISOCcy[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaISOCcy> results = jpaHooksSchema.getISOCcyService().findAll();
+		List<CFSecJpaISOCcy> results = schema.getJpaHooksSchema().getISOCcyService().findAll();
 		ICFSecISOCcy[] retset = new ICFSecISOCcy[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOCcy cur: results) {
@@ -299,7 +297,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public ICFSecISOCcy readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		short argISOCcyId )
 	{
-		return( jpaHooksSchema.getISOCcyService().find(argISOCcyId) );
+		return( schema.getJpaHooksSchema().getISOCcyService().find(argISOCcyId) );
 	}
 
 	/**
@@ -316,7 +314,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public ICFSecISOCcy readDerivedByCcyCdIdx( ICFSecAuthorization Authorization,
 		String argISOCode )
 	{
-		return( jpaHooksSchema.getISOCcyService().findByCcyCdIdx(argISOCode) );
+		return( schema.getJpaHooksSchema().getISOCcyService().findByCcyCdIdx(argISOCode) );
 	}
 
 	/**
@@ -333,7 +331,7 @@ public class CFSecJpaISOCcyTable implements ICFSecISOCcyTable
 	public ICFSecISOCcy readDerivedByCcyNmIdx( ICFSecAuthorization Authorization,
 		String argName )
 	{
-		return( jpaHooksSchema.getISOCcyService().findByCcyNmIdx(argName) );
+		return( schema.getJpaHooksSchema().getISOCcyService().findByCcyNmIdx(argName) );
 	}
 
 	/**

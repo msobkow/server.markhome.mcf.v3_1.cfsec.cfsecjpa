@@ -32,7 +32,7 @@
  *	
  */
 
-package io.github.msobkow.v3_1.cfsec.cfsecjpahooks;
+package io.github.msobkow.v3_1.cfsec.cfsec.jpa;
 
 import java.io.Serializable;
 import java.math.*;

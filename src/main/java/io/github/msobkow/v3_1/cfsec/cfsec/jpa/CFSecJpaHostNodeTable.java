@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaHostNodeTable database implementation for HostNode
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaHostNodeTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		}
 		else if (rec instanceof CFSecJpaHostNode) {
 			CFSecJpaHostNode jparec = (CFSecJpaHostNode)rec;
-			CFSecJpaHostNode created = jpaHooksSchema.getHostNodeService().create(jparec);
+			CFSecJpaHostNode created = schema.getJpaHooksSchema().getHostNodeService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		}
 		else if (rec instanceof CFSecJpaHostNode) {
 			CFSecJpaHostNode jparec = (CFSecJpaHostNode)rec;
-			CFSecJpaHostNode updated = jpaHooksSchema.getHostNodeService().update(jparec);
+			CFSecJpaHostNode updated = schema.getJpaHooksSchema().getHostNodeService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		}
 		if (rec instanceof CFSecJpaHostNode) {
 			CFSecJpaHostNode jparec = (CFSecJpaHostNode)rec;
-			jpaHooksSchema.getHostNodeService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getHostNodeService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteHostNode", "rec", rec, "CFSecJpaHostNode");
@@ -171,7 +169,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public void deleteHostNodeByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		jpaHooksSchema.getHostNodeService().deleteByIdIdx(argKey);
+		schema.getJpaHooksSchema().getHostNodeService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public void deleteHostNodeByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		jpaHooksSchema.getHostNodeService().deleteByClusterIdx(argClusterId);
+		schema.getJpaHooksSchema().getHostNodeService().deleteByClusterIdx(argClusterId);
 	}
 
 
@@ -200,7 +198,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public void deleteHostNodeByClusterIdx( ICFSecAuthorization Authorization,
 		ICFSecHostNodeByClusterIdxKey argKey )
 	{
-		jpaHooksSchema.getHostNodeService().deleteByClusterIdx(argKey.getRequiredClusterId());
+		schema.getJpaHooksSchema().getHostNodeService().deleteByClusterIdx(argKey.getRequiredClusterId());
 	}
 
 	/**
@@ -217,7 +215,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		CFLibDbKeyHash256 argClusterId,
 		String argDescription )
 	{
-		jpaHooksSchema.getHostNodeService().deleteByUDescrIdx(argClusterId,
+		schema.getJpaHooksSchema().getHostNodeService().deleteByUDescrIdx(argClusterId,
 		argDescription);
 	}
 
@@ -233,7 +231,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public void deleteHostNodeByUDescrIdx( ICFSecAuthorization Authorization,
 		ICFSecHostNodeByUDescrIdxKey argKey )
 	{
-		jpaHooksSchema.getHostNodeService().deleteByUDescrIdx(argKey.getRequiredClusterId(),
+		schema.getJpaHooksSchema().getHostNodeService().deleteByUDescrIdx(argKey.getRequiredClusterId(),
 			argKey.getRequiredDescription());
 	}
 
@@ -251,7 +249,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		CFLibDbKeyHash256 argClusterId,
 		String argHostName )
 	{
-		jpaHooksSchema.getHostNodeService().deleteByHostNameIdx(argClusterId,
+		schema.getJpaHooksSchema().getHostNodeService().deleteByHostNameIdx(argClusterId,
 		argHostName);
 	}
 
@@ -267,7 +265,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public void deleteHostNodeByHostNameIdx( ICFSecAuthorization Authorization,
 		ICFSecHostNodeByHostNameIdxKey argKey )
 	{
-		jpaHooksSchema.getHostNodeService().deleteByHostNameIdx(argKey.getRequiredClusterId(),
+		schema.getJpaHooksSchema().getHostNodeService().deleteByHostNameIdx(argKey.getRequiredClusterId(),
 			argKey.getRequiredHostName());
 	}
 
@@ -286,7 +284,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public ICFSecHostNode readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( jpaHooksSchema.getHostNodeService().find(PKey) );
+		return( schema.getJpaHooksSchema().getHostNodeService().find(PKey) );
 	}
 
 	/**
@@ -303,7 +301,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public ICFSecHostNode lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( jpaHooksSchema.getHostNodeService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getHostNodeService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -315,7 +313,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	 */
 	@Override
 	public ICFSecHostNode[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaHostNode> results = jpaHooksSchema.getHostNodeService().findAll();
+		List<CFSecJpaHostNode> results = schema.getJpaHooksSchema().getHostNodeService().findAll();
 		ICFSecHostNode[] retset = new ICFSecHostNode[results.size()];
 		int idx = 0;
 		for (CFSecJpaHostNode cur: results) {
@@ -338,7 +336,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public ICFSecHostNode readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argHostNodeId )
 	{
-		return( jpaHooksSchema.getHostNodeService().find(argHostNodeId) );
+		return( schema.getJpaHooksSchema().getHostNodeService().find(argHostNodeId) );
 	}
 
 	/**
@@ -354,7 +352,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 	public ICFSecHostNode[] readDerivedByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		List<CFSecJpaHostNode> results = jpaHooksSchema.getHostNodeService().findByClusterIdx(argClusterId);
+		List<CFSecJpaHostNode> results = schema.getJpaHooksSchema().getHostNodeService().findByClusterIdx(argClusterId);
 		ICFSecHostNode[] retset = new ICFSecHostNode[results.size()];
 		int idx = 0;
 		for (CFSecJpaHostNode cur: results) {
@@ -380,7 +378,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		CFLibDbKeyHash256 argClusterId,
 		String argDescription )
 	{
-		return( jpaHooksSchema.getHostNodeService().findByUDescrIdx(argClusterId,
+		return( schema.getJpaHooksSchema().getHostNodeService().findByUDescrIdx(argClusterId,
 		argDescription) );
 	}
 
@@ -401,7 +399,7 @@ public class CFSecJpaHostNodeTable implements ICFSecHostNodeTable
 		CFLibDbKeyHash256 argClusterId,
 		String argHostName )
 	{
-		return( jpaHooksSchema.getHostNodeService().findByHostNameIdx(argClusterId,
+		return( schema.getJpaHooksSchema().getHostNodeService().findByHostNameIdx(argClusterId,
 		argHostName) );
 	}
 

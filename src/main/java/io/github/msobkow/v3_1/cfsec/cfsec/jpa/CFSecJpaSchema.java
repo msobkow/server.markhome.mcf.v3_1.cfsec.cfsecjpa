@@ -54,7 +54,7 @@ import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cflib.inz.Inz;
 import io.github.msobkow.v3_1.cflib.xml.CFLibXmlUtil;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 public class CFSecJpaSchema
 	implements ICFSecSchema
@@ -490,41 +490,11 @@ public class CFSecJpaSchema
 	}
 
 	public CFSecJpaHooksSchema getJpaHooksSchema() {
-		final String S_ProcName = "getJpaHooksSchema";
-		final String S_BeanClassName = "CFSecJpaHooksSchema";
-		final String S_BeanName = "cfsec31JpaHooksSchema";
-		final String S_MemberName = "cfsecJpaHooksSchema";
-		if ( cfsecJpaHooksSchema == null ) {
-			ApplicationContext ctx = ICFSecSchema.getApplicationContext();
-			if (ctx == null) {
-				throw new CFLibNullArgumentException(getClass(), S_ProcName, 0, "ICFSecSchema.getApplicationContext()");
-			}
-			try {
-				if (!ctx.isTypeMatch(S_BeanName, CFSecJpaHooksSchema.class)) {
-					throw new CFLibInvalidStateException(getClass(), S_ProcName,
-						String.format(Inz.s("cflib.common.ACBeanTypeFailure"), S_BeanName, S_BeanClassName),
-						String.format(Inz.x("cflib.common.ACBeanTypeFailure"), S_BeanName, S_BeanClassName));
-				}
-				cfsecJpaHooksSchema = (CFSecJpaHooksSchema)(ctx.getBean(S_BeanName, CFSecJpaHooksSchema.class));
-				if (cfsecJpaHooksSchema == null) {
-					// Need to manually construct and register instance; the plumbing is presumed to happen automagically via createBean()
-					cfsecJpaHooksSchema = (CFSecJpaHooksSchema)(ctx.getAutowireCapableBeanFactory().createBean(CFSecJpaHooksSchema.class));
-					if (cfsecJpaHooksSchema == null) {
-						throw new CFLibInvalidStateException( getClass(), S_ProcName,
-							String.format(Inz.s("cflib.common.ACAutowireBeanInstanceCreationFailure"),	S_BeanClassName),
-							 String.format(Inz.x("cflib.common.ACAutowireBeanInstanceCreationFailure"), S_BeanClassName));
-					}
-				}
-			}
-			catch (BeansException ex) {
-				cfsecJpaHooksSchema = null;
-				throw new CFLibInvalidStateException(getClass(), S_ProcName, 
-					String.format(Inz.s("cflib.common.CaughtWhileTryingToResolve"), ex.getClass().getName(), S_BeanClassName, S_MemberName, ex.getMessage()),
-					String.format(Inz.x("cflib.common.CaughtWhileTryingToResolve"), ex.getClass().getName(), S_BeanClassName, S_MemberName, ex.getLocalizedMessage()),
-					ex);
-			}
-		}
 		return( cfsecJpaHooksSchema );
+	}
+
+	public void setJpaHooksSchema(CFSecJpaHooksSchema jpaHooksSchema) {
+		cfsecJpaHooksSchema = jpaHooksSchema;
 	}
 
 	public CFSecJpaSchemaService getSchemaService() {

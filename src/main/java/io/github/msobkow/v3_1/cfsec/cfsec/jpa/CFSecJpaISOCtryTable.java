@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaISOCtryTable database implementation for ISOCtry
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaISOCtryTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 		}
 		else if (rec instanceof CFSecJpaISOCtry) {
 			CFSecJpaISOCtry jparec = (CFSecJpaISOCtry)rec;
-			CFSecJpaISOCtry created = jpaHooksSchema.getISOCtryService().create(jparec);
+			CFSecJpaISOCtry created = schema.getJpaHooksSchema().getISOCtryService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 		}
 		else if (rec instanceof CFSecJpaISOCtry) {
 			CFSecJpaISOCtry jparec = (CFSecJpaISOCtry)rec;
-			CFSecJpaISOCtry updated = jpaHooksSchema.getISOCtryService().update(jparec);
+			CFSecJpaISOCtry updated = schema.getJpaHooksSchema().getISOCtryService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 		}
 		if (rec instanceof CFSecJpaISOCtry) {
 			CFSecJpaISOCtry jparec = (CFSecJpaISOCtry)rec;
-			jpaHooksSchema.getISOCtryService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getISOCtryService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteISOCtry", "rec", rec, "CFSecJpaISOCtry");
@@ -171,7 +169,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public void deleteISOCtryByIdIdx( ICFSecAuthorization Authorization,
 		Short argKey )
 	{
-		jpaHooksSchema.getISOCtryService().deleteByIdIdx(argKey);
+		schema.getJpaHooksSchema().getISOCtryService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public void deleteISOCtryByISOCodeIdx( ICFSecAuthorization Authorization,
 		String argISOCode )
 	{
-		jpaHooksSchema.getISOCtryService().deleteByISOCodeIdx(argISOCode);
+		schema.getJpaHooksSchema().getISOCtryService().deleteByISOCodeIdx(argISOCode);
 	}
 
 
@@ -200,7 +198,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public void deleteISOCtryByISOCodeIdx( ICFSecAuthorization Authorization,
 		ICFSecISOCtryByISOCodeIdxKey argKey )
 	{
-		jpaHooksSchema.getISOCtryService().deleteByISOCodeIdx(argKey.getRequiredISOCode());
+		schema.getJpaHooksSchema().getISOCtryService().deleteByISOCodeIdx(argKey.getRequiredISOCode());
 	}
 
 	/**
@@ -214,7 +212,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public void deleteISOCtryByNameIdx( ICFSecAuthorization Authorization,
 		String argName )
 	{
-		jpaHooksSchema.getISOCtryService().deleteByNameIdx(argName);
+		schema.getJpaHooksSchema().getISOCtryService().deleteByNameIdx(argName);
 	}
 
 
@@ -229,7 +227,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public void deleteISOCtryByNameIdx( ICFSecAuthorization Authorization,
 		ICFSecISOCtryByNameIdxKey argKey )
 	{
-		jpaHooksSchema.getISOCtryService().deleteByNameIdx(argKey.getRequiredName());
+		schema.getJpaHooksSchema().getISOCtryService().deleteByNameIdx(argKey.getRequiredName());
 	}
 
 
@@ -247,7 +245,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public ICFSecISOCtry readDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( jpaHooksSchema.getISOCtryService().find(PKey) );
+		return( schema.getJpaHooksSchema().getISOCtryService().find(PKey) );
 	}
 
 	/**
@@ -264,7 +262,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public ICFSecISOCtry lockDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( jpaHooksSchema.getISOCtryService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getISOCtryService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -276,7 +274,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	 */
 	@Override
 	public ICFSecISOCtry[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaISOCtry> results = jpaHooksSchema.getISOCtryService().findAll();
+		List<CFSecJpaISOCtry> results = schema.getJpaHooksSchema().getISOCtryService().findAll();
 		ICFSecISOCtry[] retset = new ICFSecISOCtry[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOCtry cur: results) {
@@ -299,7 +297,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public ICFSecISOCtry readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		short argISOCtryId )
 	{
-		return( jpaHooksSchema.getISOCtryService().find(argISOCtryId) );
+		return( schema.getJpaHooksSchema().getISOCtryService().find(argISOCtryId) );
 	}
 
 	/**
@@ -316,7 +314,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public ICFSecISOCtry readDerivedByISOCodeIdx( ICFSecAuthorization Authorization,
 		String argISOCode )
 	{
-		return( jpaHooksSchema.getISOCtryService().findByISOCodeIdx(argISOCode) );
+		return( schema.getJpaHooksSchema().getISOCtryService().findByISOCodeIdx(argISOCode) );
 	}
 
 	/**
@@ -333,7 +331,7 @@ public class CFSecJpaISOCtryTable implements ICFSecISOCtryTable
 	public ICFSecISOCtry readDerivedByNameIdx( ICFSecAuthorization Authorization,
 		String argName )
 	{
-		return( jpaHooksSchema.getISOCtryService().findByNameIdx(argName) );
+		return( schema.getJpaHooksSchema().getISOCtryService().findByNameIdx(argName) );
 	}
 
 	/**

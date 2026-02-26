@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaServiceTypeTable database implementation for ServiceType
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaServiceTypeTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 		}
 		else if (rec instanceof CFSecJpaServiceType) {
 			CFSecJpaServiceType jparec = (CFSecJpaServiceType)rec;
-			CFSecJpaServiceType created = jpaHooksSchema.getServiceTypeService().create(jparec);
+			CFSecJpaServiceType created = schema.getJpaHooksSchema().getServiceTypeService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 		}
 		else if (rec instanceof CFSecJpaServiceType) {
 			CFSecJpaServiceType jparec = (CFSecJpaServiceType)rec;
-			CFSecJpaServiceType updated = jpaHooksSchema.getServiceTypeService().update(jparec);
+			CFSecJpaServiceType updated = schema.getJpaHooksSchema().getServiceTypeService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 		}
 		if (rec instanceof CFSecJpaServiceType) {
 			CFSecJpaServiceType jparec = (CFSecJpaServiceType)rec;
-			jpaHooksSchema.getServiceTypeService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getServiceTypeService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteServiceType", "rec", rec, "CFSecJpaServiceType");
@@ -171,7 +169,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	public void deleteServiceTypeByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argKey )
 	{
-		jpaHooksSchema.getServiceTypeService().deleteByIdIdx(argKey);
+		schema.getJpaHooksSchema().getServiceTypeService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	public void deleteServiceTypeByUDescrIdx( ICFSecAuthorization Authorization,
 		String argDescription )
 	{
-		jpaHooksSchema.getServiceTypeService().deleteByUDescrIdx(argDescription);
+		schema.getJpaHooksSchema().getServiceTypeService().deleteByUDescrIdx(argDescription);
 	}
 
 
@@ -200,7 +198,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	public void deleteServiceTypeByUDescrIdx( ICFSecAuthorization Authorization,
 		ICFSecServiceTypeByUDescrIdxKey argKey )
 	{
-		jpaHooksSchema.getServiceTypeService().deleteByUDescrIdx(argKey.getRequiredDescription());
+		schema.getJpaHooksSchema().getServiceTypeService().deleteByUDescrIdx(argKey.getRequiredDescription());
 	}
 
 
@@ -218,7 +216,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	public ICFSecServiceType readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( jpaHooksSchema.getServiceTypeService().find(PKey) );
+		return( schema.getJpaHooksSchema().getServiceTypeService().find(PKey) );
 	}
 
 	/**
@@ -235,7 +233,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	public ICFSecServiceType lockDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 PKey )
 	{
-		return( jpaHooksSchema.getServiceTypeService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getServiceTypeService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -247,7 +245,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	 */
 	@Override
 	public ICFSecServiceType[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaServiceType> results = jpaHooksSchema.getServiceTypeService().findAll();
+		List<CFSecJpaServiceType> results = schema.getJpaHooksSchema().getServiceTypeService().findAll();
 		ICFSecServiceType[] retset = new ICFSecServiceType[results.size()];
 		int idx = 0;
 		for (CFSecJpaServiceType cur: results) {
@@ -270,7 +268,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	public ICFSecServiceType readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argServiceTypeId )
 	{
-		return( jpaHooksSchema.getServiceTypeService().find(argServiceTypeId) );
+		return( schema.getJpaHooksSchema().getServiceTypeService().find(argServiceTypeId) );
 	}
 
 	/**
@@ -287,7 +285,7 @@ public class CFSecJpaServiceTypeTable implements ICFSecServiceTypeTable
 	public ICFSecServiceType readDerivedByUDescrIdx( ICFSecAuthorization Authorization,
 		String argDescription )
 	{
-		return( jpaHooksSchema.getServiceTypeService().findByUDescrIdx(argDescription) );
+		return( schema.getJpaHooksSchema().getServiceTypeService().findByUDescrIdx(argDescription) );
 	}
 
 	/**

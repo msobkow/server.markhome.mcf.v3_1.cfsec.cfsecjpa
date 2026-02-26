@@ -72,10 +72,6 @@ public class CFSecJpaSecUser
 	protected CFLibDbKeyHash256 requiredSecUserId;
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredContainerSecUser")
 	protected Set<CFSecJpaSecDevice> optionalComponentsSecDev;
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredContainerSecUser")
-	protected Set<CFSecJpaSecSession> optionalComponentsSecSess;
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredParentSecProxy")
-	protected Set<CFSecJpaSecSession> optionalChildrenSecProxy;
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredParentUser")
 	protected Set<CFSecJpaSecGrpMemb> optionalChildrenSecGrpMemb;
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredParentUser")
@@ -136,22 +132,6 @@ public class CFSecJpaSecUser
 	public List<ICFSecSecDevice> getOptionalComponentsSecDev() {
 		List<ICFSecSecDevice> retlist = new ArrayList<>(optionalComponentsSecDev.size());
 		for (CFSecJpaSecDevice cur: optionalComponentsSecDev) {
-			retlist.add(cur);
-		}
-		return( retlist );
-	}
-	@Override
-	public List<ICFSecSecSession> getOptionalComponentsSecSess() {
-		List<ICFSecSecSession> retlist = new ArrayList<>(optionalComponentsSecSess.size());
-		for (CFSecJpaSecSession cur: optionalComponentsSecSess) {
-			retlist.add(cur);
-		}
-		return( retlist );
-	}
-	@Override
-	public List<ICFSecSecSession> getOptionalChildrenSecProxy() {
-		List<ICFSecSecSession> retlist = new ArrayList<>(optionalChildrenSecProxy.size());
-		for (CFSecJpaSecSession cur: optionalChildrenSecProxy) {
 			retlist.add(cur);
 		}
 		return( retlist );

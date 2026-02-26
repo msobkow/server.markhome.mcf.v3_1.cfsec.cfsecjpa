@@ -280,8 +280,8 @@ public class CFSecJpaSchemaService {
 			bootstrapSession = new CFSecJpaSecSession();
 			bootstrapSession.setRequiredRevision(1);
 			bootstrapSession.setPKey(bootstrapSessionID);
-			bootstrapSession.setRequiredContainerSecUser(adminUID);
-			bootstrapSession.setRequiredParentSecProxy(adminUID);
+			bootstrapSession.setRequiredSecUserId(adminUID);
+			bootstrapSession.setOptionalSecProxyId(adminUID);
 			bootstrapSession.setOptionalSecDevName(null);
 			bootstrapSession.setRequiredStart(now);
 			bootstrapSession.setOptionalFinish(null);

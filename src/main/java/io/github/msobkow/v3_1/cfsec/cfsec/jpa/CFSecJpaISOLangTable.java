@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaISOLangTable database implementation for ISOLang
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaISOLangTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		else if (rec instanceof CFSecJpaISOLang) {
 			CFSecJpaISOLang jparec = (CFSecJpaISOLang)rec;
-			CFSecJpaISOLang created = jpaHooksSchema.getISOLangService().create(jparec);
+			CFSecJpaISOLang created = schema.getJpaHooksSchema().getISOLangService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		else if (rec instanceof CFSecJpaISOLang) {
 			CFSecJpaISOLang jparec = (CFSecJpaISOLang)rec;
-			CFSecJpaISOLang updated = jpaHooksSchema.getISOLangService().update(jparec);
+			CFSecJpaISOLang updated = schema.getJpaHooksSchema().getISOLangService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 		}
 		if (rec instanceof CFSecJpaISOLang) {
 			CFSecJpaISOLang jparec = (CFSecJpaISOLang)rec;
-			jpaHooksSchema.getISOLangService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getISOLangService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteISOLang", "rec", rec, "CFSecJpaISOLang");
@@ -171,7 +169,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByIdIdx( ICFSecAuthorization Authorization,
 		Short argKey )
 	{
-		jpaHooksSchema.getISOLangService().deleteByIdIdx(argKey);
+		schema.getJpaHooksSchema().getISOLangService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode3Idx( ICFSecAuthorization Authorization,
 		String argISO6392Code )
 	{
-		jpaHooksSchema.getISOLangService().deleteByCode3Idx(argISO6392Code);
+		schema.getJpaHooksSchema().getISOLangService().deleteByCode3Idx(argISO6392Code);
 	}
 
 
@@ -200,7 +198,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode3Idx( ICFSecAuthorization Authorization,
 		ICFSecISOLangByCode3IdxKey argKey )
 	{
-		jpaHooksSchema.getISOLangService().deleteByCode3Idx(argKey.getRequiredISO6392Code());
+		schema.getJpaHooksSchema().getISOLangService().deleteByCode3Idx(argKey.getRequiredISO6392Code());
 	}
 
 	/**
@@ -214,7 +212,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode2Idx( ICFSecAuthorization Authorization,
 		String argISO6391Code )
 	{
-		jpaHooksSchema.getISOLangService().deleteByCode2Idx(argISO6391Code);
+		schema.getJpaHooksSchema().getISOLangService().deleteByCode2Idx(argISO6391Code);
 	}
 
 
@@ -229,7 +227,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public void deleteISOLangByCode2Idx( ICFSecAuthorization Authorization,
 		ICFSecISOLangByCode2IdxKey argKey )
 	{
-		jpaHooksSchema.getISOLangService().deleteByCode2Idx(argKey.getOptionalISO6391Code());
+		schema.getJpaHooksSchema().getISOLangService().deleteByCode2Idx(argKey.getOptionalISO6391Code());
 	}
 
 
@@ -247,7 +245,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang readDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( jpaHooksSchema.getISOLangService().find(PKey) );
+		return( schema.getJpaHooksSchema().getISOLangService().find(PKey) );
 	}
 
 	/**
@@ -264,7 +262,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang lockDerived( ICFSecAuthorization Authorization,
 		Short PKey )
 	{
-		return( jpaHooksSchema.getISOLangService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getISOLangService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -276,7 +274,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	 */
 	@Override
 	public ICFSecISOLang[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaISOLang> results = jpaHooksSchema.getISOLangService().findAll();
+		List<CFSecJpaISOLang> results = schema.getJpaHooksSchema().getISOLangService().findAll();
 		ICFSecISOLang[] retset = new ICFSecISOLang[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOLang cur: results) {
@@ -299,7 +297,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		short argISOLangId )
 	{
-		return( jpaHooksSchema.getISOLangService().find(argISOLangId) );
+		return( schema.getJpaHooksSchema().getISOLangService().find(argISOLangId) );
 	}
 
 	/**
@@ -316,7 +314,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang readDerivedByCode3Idx( ICFSecAuthorization Authorization,
 		String argISO6392Code )
 	{
-		return( jpaHooksSchema.getISOLangService().findByCode3Idx(argISO6392Code) );
+		return( schema.getJpaHooksSchema().getISOLangService().findByCode3Idx(argISO6392Code) );
 	}
 
 	/**
@@ -332,7 +330,7 @@ public class CFSecJpaISOLangTable implements ICFSecISOLangTable
 	public ICFSecISOLang[] readDerivedByCode2Idx( ICFSecAuthorization Authorization,
 		String argISO6391Code )
 	{
-		List<CFSecJpaISOLang> results = jpaHooksSchema.getISOLangService().findByCode2Idx(argISO6391Code);
+		List<CFSecJpaISOLang> results = schema.getJpaHooksSchema().getISOLangService().findByCode2Idx(argISO6391Code);
 		ICFSecISOLang[] retset = new ICFSecISOLang[results.size()];
 		int idx = 0;
 		for (CFSecJpaISOLang cur: results) {

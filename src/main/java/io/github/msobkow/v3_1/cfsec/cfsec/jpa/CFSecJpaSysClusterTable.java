@@ -61,7 +61,7 @@ import io.github.msobkow.v3_1.cflib.*;
 import io.github.msobkow.v3_1.cflib.dbutil.*;
 import io.github.msobkow.v3_1.cfsec.cfsec.*;
 import io.github.msobkow.v3_1.cfsec.cfsecobj.*;
-import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
+import io.github.msobkow.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
 
 /*
  *	CFSecJpaSysClusterTable database implementation for SysCluster
@@ -69,7 +69,6 @@ import io.github.msobkow.v3_1.cfsec.cfsecjpahooks.CFSecJpaHooksSchema;
 public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 {
 	protected CFSecJpaSchema schema;
-	protected CFSecJpaHooksSchema jpaHooksSchema;
 
 
 	public CFSecJpaSysClusterTable(ICFSecSchema schema) {
@@ -78,7 +77,6 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 		}
 		if (schema instanceof CFSecJpaSchema) {
 			this.schema = (CFSecJpaSchema)schema;
-			this.jpaHooksSchema = this.schema.getJpaHooksSchema();
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
@@ -102,7 +100,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 		}
 		else if (rec instanceof CFSecJpaSysCluster) {
 			CFSecJpaSysCluster jparec = (CFSecJpaSysCluster)rec;
-			CFSecJpaSysCluster created = jpaHooksSchema.getSysClusterService().create(jparec);
+			CFSecJpaSysCluster created = schema.getJpaHooksSchema().getSysClusterService().create(jparec);
 			return( created );
 		}
 		else {
@@ -127,7 +125,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 		}
 		else if (rec instanceof CFSecJpaSysCluster) {
 			CFSecJpaSysCluster jparec = (CFSecJpaSysCluster)rec;
-			CFSecJpaSysCluster updated = jpaHooksSchema.getSysClusterService().update(jparec);
+			CFSecJpaSysCluster updated = schema.getJpaHooksSchema().getSysClusterService().update(jparec);
 			return( updated );
 		}
 		else {
@@ -151,7 +149,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 		}
 		if (rec instanceof CFSecJpaSysCluster) {
 			CFSecJpaSysCluster jparec = (CFSecJpaSysCluster)rec;
-			jpaHooksSchema.getSysClusterService().deleteByIdIdx(jparec.getPKey());
+			schema.getJpaHooksSchema().getSysClusterService().deleteByIdIdx(jparec.getPKey());
 		}
 		else {
 			throw new CFLibUnsupportedClassException(getClass(), "deleteSysCluster", "rec", rec, "CFSecJpaSysCluster");
@@ -171,7 +169,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	public void deleteSysClusterByIdIdx( ICFSecAuthorization Authorization,
 		Integer argKey )
 	{
-		jpaHooksSchema.getSysClusterService().deleteByIdIdx(argKey);
+		schema.getJpaHooksSchema().getSysClusterService().deleteByIdIdx(argKey);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	public void deleteSysClusterByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		jpaHooksSchema.getSysClusterService().deleteByClusterIdx(argClusterId);
+		schema.getJpaHooksSchema().getSysClusterService().deleteByClusterIdx(argClusterId);
 	}
 
 
@@ -200,7 +198,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	public void deleteSysClusterByClusterIdx( ICFSecAuthorization Authorization,
 		ICFSecSysClusterByClusterIdxKey argKey )
 	{
-		jpaHooksSchema.getSysClusterService().deleteByClusterIdx(argKey.getRequiredClusterId());
+		schema.getJpaHooksSchema().getSysClusterService().deleteByClusterIdx(argKey.getRequiredClusterId());
 	}
 
 
@@ -218,7 +216,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	public ICFSecSysCluster readDerived( ICFSecAuthorization Authorization,
 		Integer PKey )
 	{
-		return( jpaHooksSchema.getSysClusterService().find(PKey) );
+		return( schema.getJpaHooksSchema().getSysClusterService().find(PKey) );
 	}
 
 	/**
@@ -235,7 +233,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	public ICFSecSysCluster lockDerived( ICFSecAuthorization Authorization,
 		Integer PKey )
 	{
-		return( jpaHooksSchema.getSysClusterService().lockByIdIdx(PKey) );
+		return( schema.getJpaHooksSchema().getSysClusterService().lockByIdIdx(PKey) );
 	}
 
 	/**
@@ -247,7 +245,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	 */
 	@Override
 	public ICFSecSysCluster[] readAllDerived( ICFSecAuthorization Authorization ) {
-		List<CFSecJpaSysCluster> results = jpaHooksSchema.getSysClusterService().findAll();
+		List<CFSecJpaSysCluster> results = schema.getJpaHooksSchema().getSysClusterService().findAll();
 		ICFSecSysCluster[] retset = new ICFSecSysCluster[results.size()];
 		int idx = 0;
 		for (CFSecJpaSysCluster cur: results) {
@@ -270,7 +268,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	public ICFSecSysCluster readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		int argSingletonId )
 	{
-		return( jpaHooksSchema.getSysClusterService().find(argSingletonId) );
+		return( schema.getJpaHooksSchema().getSysClusterService().find(argSingletonId) );
 	}
 
 	/**
@@ -286,7 +284,7 @@ public class CFSecJpaSysClusterTable implements ICFSecSysClusterTable
 	public ICFSecSysCluster[] readDerivedByClusterIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argClusterId )
 	{
-		List<CFSecJpaSysCluster> results = jpaHooksSchema.getSysClusterService().findByClusterIdx(argClusterId);
+		List<CFSecJpaSysCluster> results = schema.getJpaHooksSchema().getSysClusterService().findByClusterIdx(argClusterId);
 		ICFSecSysCluster[] retset = new ICFSecSysCluster[results.size()];
 		int idx = 0;
 		for (CFSecJpaSysCluster cur: results) {

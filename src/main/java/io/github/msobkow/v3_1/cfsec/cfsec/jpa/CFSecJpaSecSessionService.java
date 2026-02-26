@@ -152,12 +152,12 @@ public class CFSecJpaSecSessionService {
 			throw new CFLibCollisionDetectedException(getClass(), S_ProcName, data.getPKey());
 		}
 		// Apply superior data relationships of CFSecSecSession to existing object
-		existing.setRequiredContainerSecUser(data.getRequiredContainerSecUser());
-		existing.setRequiredParentSecProxy(data.getRequiredParentSecProxy());
 		// Apply data columns of CFSecSecSession to existing object
+		existing.setRequiredSecUserId(data.getRequiredSecUserId());
 		existing.setOptionalSecDevName(data.getOptionalSecDevName());
 		existing.setRequiredStart(data.getRequiredStart());
 		existing.setOptionalFinish(data.getOptionalFinish());
+		existing.setOptionalSecProxyId(data.getOptionalSecProxyId());
 		// Save the changes we've made
 		return cfsec31SecSessionRepository.save(existing);
 	}
