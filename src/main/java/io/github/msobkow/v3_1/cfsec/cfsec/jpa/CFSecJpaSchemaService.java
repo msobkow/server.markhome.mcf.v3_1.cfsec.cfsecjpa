@@ -175,7 +175,7 @@ public class CFSecJpaSchemaService {
 				List<CFSecJpaSecSession> sessions = secsessionService.findBySecUserIdx(adminUID);
 				if (sessions != null) {
 					for (CFSecJpaSecSession cursess: sessions) {
-						if (bootstrapSession == null || cursess.getRequiredStart().compareTo(bootstrapSession.getRequiredStart()) < 0) {
+						if (bootstrapSession == null || (bootstrapSession != null && (cursess.getRequiredStart().compareTo(bootstrapSession.getRequiredStart()) < 0))) {
 							bootstrapSession = cursess;
 						}
 					}
@@ -239,7 +239,8 @@ public class CFSecJpaSchemaService {
 		if (systemCluster == null) {
 			systemCluster = new CFSecJpaCluster();
 			systemCluster.setRequiredRevision(1);
-			systemCluster.setPKey(systemClusterID);
+			systemCluster.setRequiredId(systemClusterID);
+//			systemCluster.setPKey(systemClusterID);
 			systemCluster.setCreatedByUserId(adminUID);
 			systemCluster.setUpdatedByUserId(adminUID);
 			systemCluster.setCreatedAt(now);
@@ -256,7 +257,8 @@ public class CFSecJpaSchemaService {
 			adminUser.setUpdatedByUserId(adminUID);
 			adminUser.setCreatedAt(now);
 			adminUser.setUpdatedAt(now);
-			adminUser.setPKey(adminUID);
+			adminUser.setRequiredSecUserId(adminUID);
+//			adminUser.setPKey(adminUID);
 			adminUser.setRequiredLoginId("sysadmin");
 			adminUser.setRequiredEMailAddress("sysadmin@" + fqdn);
 			adminUser.setRequiredPasswordHash(ICFSecSchema.getPasswordHash("ChangeOnInstall"));
@@ -266,7 +268,8 @@ public class CFSecJpaSchemaService {
 		if (systemTenant == null) {
 			systemTenant = new CFSecJpaTenant();
 			systemTenant.setRequiredRevision(1);
-			systemTenant.setPKey(systemTenantID);
+			systemTenant.setRequiredId(systemTenantID);
+//			systemTenant.setPKey(systemTenantID);
 			systemTenant.setCreatedByUserId(adminUID);
 			systemTenant.setUpdatedByUserId(adminUID);
 			systemTenant.setCreatedAt(now);
@@ -279,23 +282,25 @@ public class CFSecJpaSchemaService {
 		if (bootstrapSession == null) {
 			bootstrapSession = new CFSecJpaSecSession();
 			bootstrapSession.setRequiredRevision(1);
-			bootstrapSession.setPKey(bootstrapSessionID);
+			bootstrapSession.setRequiredSecSessionId(bootstrapSessionID);
+//			bootstrapSession.setPKey(bootstrapSessionID);
 			bootstrapSession.setRequiredSecUserId(adminUID);
 			bootstrapSession.setOptionalSecProxyId(adminUID);
 			bootstrapSession.setOptionalSecDevName(null);
 			bootstrapSession.setRequiredStart(now);
 			bootstrapSession.setOptionalFinish(null);
 			bootstrapSession = secsessionService.create(bootstrapSession);
-			bootstrapSessionID = bootstrapSession.getPKey();
 		}
+//		bootstrapSessionID = bootstrapSession.getPKey();
+			
 		if (sysCluster == null) {
 			sysCluster = new CFSecJpaSysCluster();
 			sysCluster.setRequiredContainerCluster(systemClusterID);
 			sysCluster = sysclusterService.create(sysCluster);
 		}
-		if (bootstrapSession.getOptionalFinish() == null) {
+		if (bootstrapSession != null && bootstrapSessionID != null && !bootstrapSessionID.isNull() && bootstrapSession.getOptionalFinish() == null) {
 			bootstrapSession.setOptionalFinish(LocalDateTime.now());
-			bootstrapSession.setRequiredRevision(bootstrapSession.getRequiredRevision() + 1);
+//			bootstrapSession.setRequiredRevision(bootstrapSession.getRequiredRevision() + 1);
 			bootstrapSession = secsessionService.update(bootstrapSession);
 		}
 	}
