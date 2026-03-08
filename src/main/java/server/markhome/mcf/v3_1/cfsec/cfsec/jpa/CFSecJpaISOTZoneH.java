@@ -1,0 +1,909 @@
+// Description: Java 25 JPA implementation of ISOTZone history objects
+
+/*
+ *	server.markhome.mcf.CFSec
+ *
+ *	Copyright (c) 2016-2026 Mark Stephen Sobkow
+ *	
+ *	Mark's Code Fractal 3.1 CFSec - Security Services
+ *	
+ *	This file is part of Mark's Code Fractal CFSec.
+ *	
+ *	Mark's Code Fractal CFSec is available under dual commercial license from
+ *	Mark Stephen Sobkow, or under the terms of the GNU Library General Public License,
+ *	Version 3 or later.
+ *	
+ *	Mark's Code Fractal CFSec is free software: you can redistribute it and/or
+ *	modify it under the terms of the GNU Library General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *	
+ *	Mark's Code Fractal CFSec is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *	
+ *	You should have received a copy of the GNU Library General Public License
+ *	along with Mark's Code Fractal CFSec.  If not, see <https://www.gnu.org/licenses/>.
+ *	
+ *	If you wish to modify and use this code without publishing your changes in order to
+ *	tie it to proprietary code, please contact Mark Stephen Sobkow
+ *	for a commercial license at mark.sobkow@gmail.com
+ *	
+ */
+
+package server.markhome.mcf.v3_1.cfsec.cfsec.jpa;
+
+import java.io.Serializable;
+import java.math.*;
+import java.time.*;
+import java.util.*;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.text.StringEscapeUtils;
+import server.markhome.mcf.v3_1.cflib.*;
+import server.markhome.mcf.v3_1.cflib.dbutil.*;
+import server.markhome.mcf.v3_1.cflib.xml.CFLibXmlUtil;
+import server.markhome.mcf.v3_1.cfsec.cfsec.*;
+
+/**
+ *  CFSecJpaISOTZoneH provides history objects matching the CFSecISOTZone change history.
+ */
+@Entity
+@Table(
+    name = "ISOTz_h", schema = "CFSec31",
+    indexes = {
+        @Index(name = "ISOTZoneIdIdx_h", columnList = "auditClusterId, auditStamp, auditAction, requiredRevision, auditSessionId, ISOTZoneId", unique = true),
+        @Index(name = "ISOTZoneOffsetIdx_h", columnList = "TZHourOffset, TZMinOffset", unique = false),
+        @Index(name = "ISOTZoneUTZNameIdx_h", columnList = "TZName", unique = true),
+        @Index(name = "ISOTZoneIso8601Idx_h", columnList = "Iso8601", unique = false)
+    }
+)
+@Transactional(Transactional.TxType.SUPPORTS)
+@PersistenceContext(unitName = "CFSecPU")
+public class CFSecJpaISOTZoneH
+    implements ICFSecISOTZoneH, Comparable<Object>, Serializable
+{
+	@AttributeOverrides({
+		@AttributeOverride(name="auditClusterId", column = @Column( name="auditClusterId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) ),
+		@AttributeOverride(name="auditStamp", column = @Column( name="auditStamp", nullable=false ) ),
+		@AttributeOverride(name="auditAction", column = @Column( name="auditAction", nullable=false ) ),
+		@AttributeOverride(name="requiredRevision", column = @Column( name="requiredRevision", nullable=false ) ),
+		@AttributeOverride(name="auditSessionId", column = @Column( name="auditSessionId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) ),
+		@AttributeOverride(name="ISOTZoneId", column = @Column( name="ISOTZoneId", nullable=false ) )
+	})
+    @EmbeddedId
+    protected CFSecJpaISOTZoneHPKey pkey;
+	@AttributeOverrides({
+		@AttributeOverride( name="bytes", column = @Column( name="CreatedByUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
+	})
+	protected CFLibDbKeyHash256 createdByUserId = CFLibDbKeyHash256.fromHex(ICFSecISOTZone.S_INIT_CREATED_BY);
+
+	@Column(name="CreatedAt", nullable=false)
+	protected LocalDateTime createdAt = LocalDateTime.now();
+
+	@AttributeOverrides({
+		@AttributeOverride( name="bytes", column= @Column( name="UpdatedByUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
+	})
+	protected CFLibDbKeyHash256 updatedByUserId = CFLibDbKeyHash256.fromHex(ICFSecISOTZone.S_INIT_UPDATED_BY);
+
+	@Column(name="UpdatedAt", nullable=false)
+	protected LocalDateTime updatedAt = LocalDateTime.now();
+	@Column( name="Iso8601", nullable=false, length=6 )
+	protected String requiredIso8601;
+	@Column( name="TZName", nullable=false, length=64 )
+	protected String requiredTZName;
+	@Column( name="TZHourOffset", nullable=false )
+	protected short requiredTZHourOffset;
+	@Column( name="TZMinOffset", nullable=false )
+	protected short requiredTZMinOffset;
+	@Column( name="Description", nullable=false, length=128 )
+	protected String requiredDescription;
+	@Column( name="Visible", nullable=false )
+	protected boolean requiredVisible;
+
+    public CFSecJpaISOTZoneH() {
+            // The primary key member attributes are initialized on construction
+            pkey = new CFSecJpaISOTZoneHPKey();
+		requiredIso8601 = ICFSecISOTZone.ISO8601_INIT_VALUE;
+		requiredTZName = ICFSecISOTZone.TZNAME_INIT_VALUE;
+		requiredTZHourOffset = ICFSecISOTZone.TZHOUROFFSET_INIT_VALUE;
+		requiredTZMinOffset = ICFSecISOTZone.TZMINOFFSET_INIT_VALUE;
+		requiredDescription = ICFSecISOTZone.DESCRIPTION_INIT_VALUE;
+		requiredVisible = ICFSecISOTZone.VISIBLE_INIT_VALUE;
+    }
+
+    @Override
+    public int getClassCode() {
+            return( ICFSecISOTZone.CLASS_CODE );
+    }
+
+    @Override
+    public CFLibDbKeyHash256 getCreatedByUserId() {
+        return( createdByUserId );
+    }
+
+    @Override
+    public void setCreatedByUserId( CFLibDbKeyHash256 value ) {
+        if (value == null || value.isNull()) {
+            throw new CFLibNullArgumentException(getClass(), "setCreatedByUserId", 1, "value");
+        }
+        createdByUserId = value;
+    }
+
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return( createdAt );
+    }
+
+    @Override
+    public void setCreatedAt( LocalDateTime value ) {
+        if (value == null) {
+            throw new CFLibNullArgumentException(getClass(), "setCreatedAt", 1, "value");
+        }
+        createdAt = value;
+    }
+
+    @Override
+    public CFLibDbKeyHash256 getUpdatedByUserId() {
+        return( updatedByUserId );
+    }
+
+    @Override
+    public void setUpdatedByUserId( CFLibDbKeyHash256 value ) {
+        if (value == null || value.isNull()) {
+            throw new CFLibNullArgumentException(getClass(), "setUpdatedByUserId", 1, "value");
+        }
+        updatedByUserId = value;
+    }
+
+    @Override
+    public LocalDateTime getUpdatedAt() {
+        return( updatedAt );
+    }
+
+    @Override
+    public void setUpdatedAt( LocalDateTime value ) {
+        if (value == null) {
+            throw new CFLibNullArgumentException(getClass(), "setUpdatedAt", 1, "value");
+        }
+        updatedAt = value;
+    }
+
+    @Override
+    public ICFSecISOTZoneHPKey getPKey() {
+        return( pkey );
+    }
+
+    @Override
+    public void setPKey( ICFSecISOTZoneHPKey pkey ) {
+        if (pkey != null) {
+            if (pkey instanceof CFSecJpaISOTZoneHPKey) {
+                this.pkey = (CFSecJpaISOTZoneHPKey)pkey;
+            }
+            else {
+                throw new CFLibUnsupportedClassException(getClass(), "setPKey", "pkey", pkey, "CFSecJpaISOTZoneHPKey");
+            }
+        }
+    }
+
+    @Override
+    public CFLibDbKeyHash256 getAuditClusterId() {
+        return pkey.getAuditClusterId();
+    }
+
+    @Override
+    public void setAuditClusterId(CFLibDbKeyHash256 auditClusterId) {
+        pkey.setAuditClusterId(auditClusterId);
+    }
+
+    @Override
+    public LocalDateTime getAuditStamp() {
+        return pkey.getAuditStamp();
+    }
+
+    @Override
+    public void setAuditStamp(LocalDateTime auditStamp) {
+        pkey.setAuditStamp(auditStamp);
+    }
+
+    @Override
+    public short getAuditActionId() {
+        return pkey.getAuditActionId();
+    }
+
+    @Override
+    public void setAuditActionId(short auditActionId) {
+        pkey.setAuditActionId(auditActionId);
+    }
+
+    @Override
+    public int getRequiredRevision() {
+        return pkey.getRequiredRevision();
+    }
+
+    @Override
+    public void setRequiredRevision(int revision) {
+        pkey.setRequiredRevision(revision);
+    }
+
+    @Override
+    public CFLibDbKeyHash256 getAuditSessionId() {
+        return pkey.getAuditSessionId();
+    }
+
+    @Override
+    public void setAuditSessionId(CFLibDbKeyHash256 auditSessionId) {
+        pkey.setAuditSessionId(auditSessionId);
+    }
+
+    @Override
+    public short getRequiredISOTZoneId() {
+        return( pkey.getRequiredISOTZoneId() );
+    }
+
+    @Override
+    public void setRequiredISOTZoneId( short requiredISOTZoneId ) {
+        pkey.setRequiredISOTZoneId( requiredISOTZoneId );
+    }
+
+	@Override
+	public String getRequiredIso8601() {
+		return( requiredIso8601 );
+	}
+
+	@Override
+	public void setRequiredIso8601( String value ) {
+		if( value == null ) {
+			throw new CFLibNullArgumentException( getClass(),
+				"setRequiredIso8601",
+				1,
+				"value" );
+		}
+		else if( value.length() > 6 ) {
+			throw new CFLibArgumentOverflowException( getClass(),
+				"setRequiredIso8601",
+				1,
+				"value.length()",
+				value.length(),
+				6 );
+		}
+		requiredIso8601 = value;
+	}
+
+	@Override
+	public String getRequiredTZName() {
+		return( requiredTZName );
+	}
+
+	@Override
+	public void setRequiredTZName( String value ) {
+		if( value == null ) {
+			throw new CFLibNullArgumentException( getClass(),
+				"setRequiredTZName",
+				1,
+				"value" );
+		}
+		else if( value.length() > 64 ) {
+			throw new CFLibArgumentOverflowException( getClass(),
+				"setRequiredTZName",
+				1,
+				"value.length()",
+				value.length(),
+				64 );
+		}
+		requiredTZName = value;
+	}
+
+	@Override
+	public short getRequiredTZHourOffset() {
+		return( requiredTZHourOffset );
+	}
+
+	@Override
+	public void setRequiredTZHourOffset( short value ) {
+		if( value < ICFSecISOTZone.TZHOUROFFSET_MIN_VALUE ) {
+			throw new CFLibArgumentUnderflowException( getClass(),
+				"setRequiredTZHourOffset",
+				1,
+				"value",
+				value,
+				ICFSecISOTZone.TZHOUROFFSET_MIN_VALUE );
+		}
+		if( value > ICFSecISOTZone.TZHOUROFFSET_MAX_VALUE ) {
+			throw new CFLibArgumentOverflowException( getClass(),
+				"setRequiredTZHourOffset",
+				1,
+				"value",
+				value,
+				ICFSecISOTZone.TZHOUROFFSET_MAX_VALUE );
+		}
+		requiredTZHourOffset = value;
+	}
+
+	@Override
+	public short getRequiredTZMinOffset() {
+		return( requiredTZMinOffset );
+	}
+
+	@Override
+	public void setRequiredTZMinOffset( short value ) {
+		if( value < ICFSecISOTZone.TZMINOFFSET_MIN_VALUE ) {
+			throw new CFLibArgumentUnderflowException( getClass(),
+				"setRequiredTZMinOffset",
+				1,
+				"value",
+				value,
+				ICFSecISOTZone.TZMINOFFSET_MIN_VALUE );
+		}
+		if( value > ICFSecISOTZone.TZMINOFFSET_MAX_VALUE ) {
+			throw new CFLibArgumentOverflowException( getClass(),
+				"setRequiredTZMinOffset",
+				1,
+				"value",
+				value,
+				ICFSecISOTZone.TZMINOFFSET_MAX_VALUE );
+		}
+		requiredTZMinOffset = value;
+	}
+
+	@Override
+	public String getRequiredDescription() {
+		return( requiredDescription );
+	}
+
+	@Override
+	public void setRequiredDescription( String value ) {
+		if( value == null ) {
+			throw new CFLibNullArgumentException( getClass(),
+				"setRequiredDescription",
+				1,
+				"value" );
+		}
+		else if( value.length() > 128 ) {
+			throw new CFLibArgumentOverflowException( getClass(),
+				"setRequiredDescription",
+				1,
+				"value.length()",
+				value.length(),
+				128 );
+		}
+		requiredDescription = value;
+	}
+
+	@Override
+	public boolean getRequiredVisible() {
+		return( requiredVisible );
+	}
+
+	@Override
+	public void setRequiredVisible( boolean value ) {
+		requiredVisible = value;
+	}
+
+    @Override
+    public boolean equals( Object obj ) {
+        if (obj == null) {
+            return( false );
+        }
+        else if (obj instanceof ICFSecISOTZone) {
+            ICFSecISOTZone rhs = (ICFSecISOTZone)obj;
+		if (getPKey() != null) {
+			if (rhs.getPKey() != null) {
+				if (!getPKey().equals(rhs.getPKey())) {
+					return( false );
+				}
+			}
+			else {
+				return( false );
+			}
+		}
+		else if (rhs.getPKey() != null) {
+			return( false );
+		}
+
+			if( getRequiredIso8601() != null ) {
+				if( rhs.getRequiredIso8601() != null ) {
+					if( ! getRequiredIso8601().equals( rhs.getRequiredIso8601() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredIso8601() != null ) {
+					return( false );
+				}
+			}
+			if( getRequiredTZName() != null ) {
+				if( rhs.getRequiredTZName() != null ) {
+					if( ! getRequiredTZName().equals( rhs.getRequiredTZName() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredTZName() != null ) {
+					return( false );
+				}
+			}
+			if( getRequiredTZHourOffset() != rhs.getRequiredTZHourOffset() ) {
+				return( false );
+			}
+			if( getRequiredTZMinOffset() != rhs.getRequiredTZMinOffset() ) {
+				return( false );
+			}
+			if( getRequiredDescription() != null ) {
+				if( rhs.getRequiredDescription() != null ) {
+					if( ! getRequiredDescription().equals( rhs.getRequiredDescription() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredDescription() != null ) {
+					return( false );
+				}
+			}
+			if( getRequiredVisible() != rhs.getRequiredVisible() ) {
+				return( false );
+			}
+            return( true );
+        }
+        else if (obj instanceof ICFSecISOTZoneH) {
+            ICFSecISOTZoneH rhs = (ICFSecISOTZoneH)obj;
+		if (getPKey() != null) {
+			if (rhs.getPKey() != null) {
+				if (!getPKey().equals(rhs.getPKey())) {
+					return( false );
+				}
+			}
+			else {
+				return( false );
+			}
+		}
+		else if (rhs.getPKey() != null) {
+			return( false );
+		}
+
+			if( getRequiredIso8601() != null ) {
+				if( rhs.getRequiredIso8601() != null ) {
+					if( ! getRequiredIso8601().equals( rhs.getRequiredIso8601() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredIso8601() != null ) {
+					return( false );
+				}
+			}
+			if( getRequiredTZName() != null ) {
+				if( rhs.getRequiredTZName() != null ) {
+					if( ! getRequiredTZName().equals( rhs.getRequiredTZName() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredTZName() != null ) {
+					return( false );
+				}
+			}
+			if( getRequiredTZHourOffset() != rhs.getRequiredTZHourOffset() ) {
+				return( false );
+			}
+			if( getRequiredTZMinOffset() != rhs.getRequiredTZMinOffset() ) {
+				return( false );
+			}
+			if( getRequiredDescription() != null ) {
+				if( rhs.getRequiredDescription() != null ) {
+					if( ! getRequiredDescription().equals( rhs.getRequiredDescription() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredDescription() != null ) {
+					return( false );
+				}
+			}
+			if( getRequiredVisible() != rhs.getRequiredVisible() ) {
+				return( false );
+			}
+            return( true );
+        }
+        else if (obj instanceof ICFSecISOTZoneHPKey) {
+		ICFSecISOTZoneHPKey rhs = (ICFSecISOTZoneHPKey)obj;
+			if( getRequiredISOTZoneId() != rhs.getRequiredISOTZoneId() ) {
+				return( false );
+			}
+		return( true );
+        }
+        else if (obj instanceof ICFSecISOTZoneByOffsetIdxKey) {
+            ICFSecISOTZoneByOffsetIdxKey rhs = (ICFSecISOTZoneByOffsetIdxKey)obj;
+			if( getRequiredTZHourOffset() != rhs.getRequiredTZHourOffset() ) {
+				return( false );
+			}
+			if( getRequiredTZMinOffset() != rhs.getRequiredTZMinOffset() ) {
+				return( false );
+			}
+            return( true );
+        }
+        else if (obj instanceof ICFSecISOTZoneByUTZNameIdxKey) {
+            ICFSecISOTZoneByUTZNameIdxKey rhs = (ICFSecISOTZoneByUTZNameIdxKey)obj;
+			if( getRequiredTZName() != null ) {
+				if( rhs.getRequiredTZName() != null ) {
+					if( ! getRequiredTZName().equals( rhs.getRequiredTZName() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredTZName() != null ) {
+					return( false );
+				}
+			}
+            return( true );
+        }
+        else if (obj instanceof ICFSecISOTZoneByIso8601IdxKey) {
+            ICFSecISOTZoneByIso8601IdxKey rhs = (ICFSecISOTZoneByIso8601IdxKey)obj;
+			if( getRequiredIso8601() != null ) {
+				if( rhs.getRequiredIso8601() != null ) {
+					if( ! getRequiredIso8601().equals( rhs.getRequiredIso8601() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredIso8601() != null ) {
+					return( false );
+				}
+			}
+            return( true );
+        }
+        else {
+			return( false );
+        }
+    }
+    
+    @Override
+    public int hashCode() {
+        int hashCode = pkey.hashCode();
+		if( getRequiredIso8601() != null ) {
+			hashCode = hashCode + getRequiredIso8601().hashCode();
+		}
+		if( getRequiredTZName() != null ) {
+			hashCode = hashCode + getRequiredTZName().hashCode();
+		}
+		hashCode = ( hashCode * 0x10000 ) + getRequiredTZHourOffset();
+		hashCode = ( hashCode * 0x10000 ) + getRequiredTZMinOffset();
+		if( getRequiredDescription() != null ) {
+			hashCode = hashCode + getRequiredDescription().hashCode();
+		}
+		if( getRequiredVisible() ) {
+			hashCode = ( hashCode * 2 ) + 1;
+		}
+		else {
+			hashCode = hashCode * 2;
+		}
+        return( hashCode & 0x7fffffff );
+    }
+
+    @Override
+    public int compareTo( Object obj ) {
+        int cmp;
+        if (obj == null) {
+            return( 1 );
+        }
+        else if (obj instanceof ICFSecISOTZone) {
+		ICFSecISOTZone rhs = (ICFSecISOTZone)obj;
+		if (getPKey() != null) {
+			if (rhs.getPKey() == null) {
+				return( 1 );
+			}
+			else {
+				cmp = getPKey().compareTo(rhs.getPKey());
+				if (cmp != 0) {
+					return( cmp );
+				}
+			}
+		}
+		else {
+			if (rhs.getPKey() != null) {
+				return( -1 );
+			}
+		}
+			if (getRequiredIso8601() != null) {
+				if (rhs.getRequiredIso8601() != null) {
+					cmp = getRequiredIso8601().compareTo( rhs.getRequiredIso8601() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredIso8601() != null) {
+				return( -1 );
+			}
+			if (getRequiredTZName() != null) {
+				if (rhs.getRequiredTZName() != null) {
+					cmp = getRequiredTZName().compareTo( rhs.getRequiredTZName() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredTZName() != null) {
+				return( -1 );
+			}
+			if( getRequiredTZHourOffset() < rhs.getRequiredTZHourOffset() ) {
+				return( -1 );
+			}
+			else if( getRequiredTZHourOffset() > rhs.getRequiredTZHourOffset() ) {
+				return( 1 );
+			}
+			if( getRequiredTZMinOffset() < rhs.getRequiredTZMinOffset() ) {
+				return( -1 );
+			}
+			else if( getRequiredTZMinOffset() > rhs.getRequiredTZMinOffset() ) {
+				return( 1 );
+			}
+			if (getRequiredDescription() != null) {
+				if (rhs.getRequiredDescription() != null) {
+					cmp = getRequiredDescription().compareTo( rhs.getRequiredDescription() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredDescription() != null) {
+				return( -1 );
+			}
+			if( getRequiredVisible() ) {
+				if( ! rhs.getRequiredVisible() ) {
+					return( 1 );
+				}
+			}
+			else {
+				if( rhs.getRequiredVisible() ) {
+					return( -1 );
+				}
+			}
+            return( 0 );
+        }
+        else if (obj instanceof ICFSecISOTZoneHPKey) {
+        if (getPKey() != null) {
+            return( getPKey().compareTo( obj ));
+        }
+        else {
+            return( -1 );
+        }
+        }
+        else if (obj instanceof ICFSecISOTZoneH) {
+		ICFSecISOTZoneH rhs = (ICFSecISOTZoneH)obj;
+		if (getPKey() != null) {
+			if (rhs.getPKey() == null) {
+				return( 1 );
+			}
+			else {
+				cmp = getPKey().compareTo(rhs.getPKey());
+				if (cmp != 0) {
+					return( cmp );
+				}
+			}
+		}
+		else {
+			if (rhs.getPKey() != null) {
+				return( -1 );
+			}
+		}
+			if (getRequiredIso8601() != null) {
+				if (rhs.getRequiredIso8601() != null) {
+					cmp = getRequiredIso8601().compareTo( rhs.getRequiredIso8601() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredIso8601() != null) {
+				return( -1 );
+			}
+			if (getRequiredTZName() != null) {
+				if (rhs.getRequiredTZName() != null) {
+					cmp = getRequiredTZName().compareTo( rhs.getRequiredTZName() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredTZName() != null) {
+				return( -1 );
+			}
+			if( getRequiredTZHourOffset() < rhs.getRequiredTZHourOffset() ) {
+				return( -1 );
+			}
+			else if( getRequiredTZHourOffset() > rhs.getRequiredTZHourOffset() ) {
+				return( 1 );
+			}
+			if( getRequiredTZMinOffset() < rhs.getRequiredTZMinOffset() ) {
+				return( -1 );
+			}
+			else if( getRequiredTZMinOffset() > rhs.getRequiredTZMinOffset() ) {
+				return( 1 );
+			}
+			if (getRequiredDescription() != null) {
+				if (rhs.getRequiredDescription() != null) {
+					cmp = getRequiredDescription().compareTo( rhs.getRequiredDescription() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredDescription() != null) {
+				return( -1 );
+			}
+			if( getRequiredVisible() ) {
+				if( ! rhs.getRequiredVisible() ) {
+					return( 1 );
+				}
+			}
+			else {
+				if( rhs.getRequiredVisible() ) {
+					return( -1 );
+				}
+			}
+            return( 0 );
+        }
+        else if (obj instanceof ICFSecISOTZoneByOffsetIdxKey ) {
+            ICFSecISOTZoneByOffsetIdxKey rhs = (ICFSecISOTZoneByOffsetIdxKey)obj;
+			if( getRequiredTZHourOffset() < rhs.getRequiredTZHourOffset() ) {
+				return( -1 );
+			}
+			else if( getRequiredTZHourOffset() > rhs.getRequiredTZHourOffset() ) {
+				return( 1 );
+			}
+			if( getRequiredTZMinOffset() < rhs.getRequiredTZMinOffset() ) {
+				return( -1 );
+			}
+			else if( getRequiredTZMinOffset() > rhs.getRequiredTZMinOffset() ) {
+				return( 1 );
+			}
+            return( 0 );
+        }
+        else if (obj instanceof ICFSecISOTZoneByUTZNameIdxKey ) {
+            ICFSecISOTZoneByUTZNameIdxKey rhs = (ICFSecISOTZoneByUTZNameIdxKey)obj;
+			if (getRequiredTZName() != null) {
+				if (rhs.getRequiredTZName() != null) {
+					cmp = getRequiredTZName().compareTo( rhs.getRequiredTZName() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredTZName() != null) {
+				return( -1 );
+			}
+            return( 0 );
+        }
+        else if (obj instanceof ICFSecISOTZoneByIso8601IdxKey ) {
+            ICFSecISOTZoneByIso8601IdxKey rhs = (ICFSecISOTZoneByIso8601IdxKey)obj;
+			if (getRequiredIso8601() != null) {
+				if (rhs.getRequiredIso8601() != null) {
+					cmp = getRequiredIso8601().compareTo( rhs.getRequiredIso8601() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredIso8601() != null) {
+				return( -1 );
+			}
+            return( 0 );
+        }
+        else {
+            throw new CFLibUnsupportedClassException( getClass(),
+                "compareTo",
+                "obj",
+                obj,
+                null );
+        }
+    }
+	@Override
+    public void set( ICFSecISOTZone src ) {
+		setISOTZone( src );
+    }
+
+	@Override
+    public void setISOTZone( ICFSecISOTZone src ) {
+		setRequiredISOTZoneId( src.getRequiredISOTZoneId() );
+		setRequiredIso8601( src.getRequiredIso8601() );
+		setRequiredTZName( src.getRequiredTZName() );
+		setRequiredTZHourOffset( src.getRequiredTZHourOffset() );
+		setRequiredTZMinOffset( src.getRequiredTZMinOffset() );
+		setRequiredDescription( src.getRequiredDescription() );
+		setRequiredVisible( src.getRequiredVisible() );
+		setRequiredRevision( src.getRequiredRevision() );
+    }
+
+	@Override
+    public void set( ICFSecISOTZoneH src ) {
+		setISOTZone( src );
+    }
+
+	@Override
+    public void setISOTZone( ICFSecISOTZoneH src ) {
+		setRequiredISOTZoneId( src.getRequiredISOTZoneId() );
+		setRequiredIso8601( src.getRequiredIso8601() );
+		setRequiredTZName( src.getRequiredTZName() );
+		setRequiredTZHourOffset( src.getRequiredTZHourOffset() );
+		setRequiredTZMinOffset( src.getRequiredTZMinOffset() );
+		setRequiredDescription( src.getRequiredDescription() );
+		setRequiredVisible( src.getRequiredVisible() );
+		setRequiredRevision( src.getRequiredRevision() );
+    }
+
+    public String getXmlAttrFragment() {
+        String ret = pkey.getXmlAttrFragment() 
+			+ " RequiredRevision=\"" + Integer.toString( getRequiredRevision() ) + "\""
+			+ " RequiredIso8601=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredIso8601() ) + "\""
+			+ " RequiredTZName=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredTZName() ) + "\""
+			+ " RequiredTZHourOffset=" + "\"" + Short.toString( getRequiredTZHourOffset() ) + "\""
+			+ " RequiredTZMinOffset=" + "\"" + Short.toString( getRequiredTZMinOffset() ) + "\""
+			+ " RequiredDescription=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredDescription() ) + "\""
+			+ " RequiredVisible=" + (( getRequiredVisible() ) ? "\"true\"" : "\"false\"" );
+        return( ret );
+    }
+
+    public String toString() {
+        String ret = "<CFSecJpaISOTZoneH" + getXmlAttrFragment() + "/>";
+        return( ret );
+    }
+}
