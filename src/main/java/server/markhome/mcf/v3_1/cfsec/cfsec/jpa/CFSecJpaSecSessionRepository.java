@@ -86,29 +86,6 @@ public interface CFSecJpaSecSessionRepository extends JpaRepository<CFSecJpaSecS
 	}
 
 	/**
-	 *	Read zero or more entities into a List using the columns of the CFSecSecSessionBySecDevIdxKey as arguments.
-	 *
-	 *		@param requiredSecUserId
-	 *		@param optionalSecDevName
-	 *
-	 *		@return List&lt;CFSecJpaSecSession&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
-	 */
-	@Query("select r from CFSecJpaSecSession r where r.requiredSecUserId = :secUserId and r.optionalSecDevName = :secDevName")
-	List<CFSecJpaSecSession> findBySecDevIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId,
-		@Param("secDevName") String optionalSecDevName);
-
-	/**
-	 *	CFSecSecSessionBySecDevIdxKey entity list reader convenience method for object-based access.
-	 *
-	 *		@param key The CFSecSecSessionBySecDevIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
-	 */
-	default List<CFSecJpaSecSession> findBySecDevIdx(ICFSecSecSessionBySecDevIdxKey key) {
-		return( findBySecDevIdx(key.getRequiredSecUserId(), key.getOptionalSecDevName()));
-	}
-
-	/**
 	 *	Read an entity using the columns of the CFSecSecSessionByStartIdxKey as arguments.
 	 *
 	 *		@param requiredSecUserId
@@ -213,31 +190,6 @@ public interface CFSecJpaSecSessionRepository extends JpaRepository<CFSecJpaSecS
 	}
 
 	/**
-	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecUserId
-	 *		@param optionalSecDevName
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional
-	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecSession r where r.requiredSecUserId = :secUserId and r.optionalSecDevName = :secDevName")
-	List<CFSecJpaSecSession> lockBySecDevIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId,
-		@Param("secDevName") String optionalSecDevName);
-
-	/**
-	 *	CFSecSecSessionBySecDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	default List<CFSecJpaSecSession> lockBySecDevIdx(ICFSecSecSessionBySecDevIdxKey key) {
-		return( lockBySecDevIdx(key.getRequiredSecUserId(), key.getOptionalSecDevName()));
-	}
-
-	/**
 	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecUserId
@@ -339,27 +291,6 @@ public interface CFSecJpaSecSessionRepository extends JpaRepository<CFSecJpaSecS
 	 */
 	default void deleteBySecUserIdx(ICFSecSecSessionBySecUserIdxKey key) {
 		deleteBySecUserIdx(key.getRequiredSecUserId());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecUserId
-	 *		@param optionalSecDevName
-	 */
-	@Transactional
-	@Modifying
-	@Query("delete from CFSecJpaSecSession r where r.requiredSecUserId = :secUserId and r.optionalSecDevName = :secDevName")
-	void deleteBySecDevIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId,
-		@Param("secDevName") String optionalSecDevName);
-
-	/**
-	 *	CFSecSecSessionBySecDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The CFSecSecSessionBySecDevIdxKey of the entity to be locked.
-	 */
-	default void deleteBySecDevIdx(ICFSecSecSessionBySecDevIdxKey key) {
-		deleteBySecDevIdx(key.getRequiredSecUserId(), key.getOptionalSecDevName());
 	}
 
 	/**

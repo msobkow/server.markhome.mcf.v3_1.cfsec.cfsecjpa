@@ -147,7 +147,6 @@ public class CFSecJpaSecSessionService {
 		// Apply superior data relationships of CFSecSecSession to existing object
 		// Apply data columns of CFSecSecSession to existing object
 		existing.setRequiredSecUserId(data.getRequiredSecUserId());
-		existing.setOptionalSecDevName(data.getOptionalSecDevName());
 		existing.setRequiredStart(data.getRequiredStart());
 		existing.setOptionalFinish(data.getOptionalFinish());
 		existing.setOptionalSecProxyId(data.getOptionalSecProxyId());
@@ -201,33 +200,6 @@ public class CFSecJpaSecSessionService {
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public List<CFSecJpaSecSession> findBySecUserIdx(ICFSecSecSessionBySecUserIdxKey key) {
 		return( cfsec31SecSessionRepository.findBySecUserIdx(key.getRequiredSecUserId()));
-	}
-
-	/**
-	 *	Find zero or more entities into a List using the columns of the ICFSecSecSessionBySecDevIdxKey as arguments.
-	 *
-	 *		@param requiredSecUserId
-	 *		@param optionalSecDevName
-	 *
-	 *		@return List&lt;CFSecJpaSecSession&gt; of the found entities, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSession> findBySecDevIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId,
-		@Param("secDevName") String optionalSecDevName) {
-		return( cfsec31SecSessionRepository.findBySecDevIdx(requiredSecUserId,
-			optionalSecDevName));
-	}
-
-	/**
-	 *	ICFSecSecSessionBySecDevIdxKey entity list finder convenience method for object-based access.
-	 *
-	 *		@param key The ICFSecSecSessionBySecDevIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity list, which may be empty.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSession> findBySecDevIdx(ICFSecSecSessionBySecDevIdxKey key) {
-		return( cfsec31SecSessionRepository.findBySecDevIdx(key.getRequiredSecUserId(), key.getOptionalSecDevName()));
 	}
 
 	/**
@@ -347,33 +319,6 @@ public class CFSecJpaSecSessionService {
 	}
 
 	/**
-	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecUserId
-	 *		@param optionalSecDevName
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSession> lockBySecDevIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId,
-		@Param("secDevName") String optionalSecDevName) {
-		return( cfsec31SecSessionRepository.lockBySecDevIdx(requiredSecUserId,
-			optionalSecDevName));
-	}
-
-	/**
-	 *	ICFSecSecSessionBySecDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSession> lockBySecDevIdx(ICFSecSecSessionBySecDevIdxKey key) {
-		return( cfsec31SecSessionRepository.lockBySecDevIdx(key.getRequiredSecUserId(), key.getOptionalSecDevName()));
-	}
-
-	/**
 	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecUserId
@@ -481,29 +426,6 @@ public class CFSecJpaSecSessionService {
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteBySecUserIdx(ICFSecSecSessionBySecUserIdxKey key) {
 		cfsec31SecSessionRepository.deleteBySecUserIdx(key.getRequiredSecUserId());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecUserId
-	 *		@param optionalSecDevName
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteBySecDevIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId,
-		@Param("secDevName") String optionalSecDevName) {
-		cfsec31SecSessionRepository.deleteBySecDevIdx(requiredSecUserId,
-			optionalSecDevName);
-	}
-
-	/**
-	 *	ICFSecSecSessionBySecDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The ICFSecSecSessionBySecDevIdxKey of the entity to be locked.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteBySecDevIdx(ICFSecSecSessionBySecDevIdxKey key) {
-		cfsec31SecSessionRepository.deleteBySecDevIdx(key.getRequiredSecUserId(), key.getOptionalSecDevName());
 	}
 
 	/**

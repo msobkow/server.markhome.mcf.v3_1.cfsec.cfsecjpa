@@ -71,28 +71,6 @@ public class CFSecJpaSecSessionDefaultFactory
 	}
 
     @Override
-    public ICFSecSecSessionBySecDevIdxKey newBySecDevIdxKey() {
-	ICFSecSecSessionBySecDevIdxKey key =
-            new CFSecJpaSecSessionBySecDevIdxKey();
-	return( key );
-    }
-
-	public CFSecJpaSecSessionBySecDevIdxKey ensureBySecDevIdxKey(ICFSecSecSessionBySecDevIdxKey key) {
-		if (key == null) {
-			return( null );
-		}
-		else if (key instanceof CFSecJpaSecSessionBySecDevIdxKey) {
-			return( (CFSecJpaSecSessionBySecDevIdxKey)key );
-		}
-		else {
-			CFSecJpaSecSessionBySecDevIdxKey mapped = new CFSecJpaSecSessionBySecDevIdxKey();
-			mapped.setRequiredSecUserId( key.getRequiredSecUserId() );
-			mapped.setOptionalSecDevName( key.getOptionalSecDevName() );
-			return( mapped );
-		}
-	}
-
-    @Override
     public ICFSecSecSessionByStartIdxKey newByStartIdxKey() {
 	ICFSecSecSessionByStartIdxKey key =
             new CFSecJpaSecSessionByStartIdxKey();

@@ -195,40 +195,6 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	}
 
 	/**
-	 *	Delete the SecSession instances identified by the key SecDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	SecUserId	The SecSession key attribute of the instance generating the id.
-	 *
-	 *	@param	SecDevName	The SecSession key attribute of the instance generating the id.
-	 */
-	@Override
-	public void deleteSecSessionBySecDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId,
-		String argSecDevName )
-	{
-		schema.getJpaHooksSchema().getSecSessionService().deleteBySecDevIdx(argSecUserId,
-		argSecDevName);
-	}
-
-
-	/**
-	 *	Delete the SecSession instances identified by the key SecDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	argKey	The key identifying the instances to be deleted.
-	 */
-	@Override
-	public void deleteSecSessionBySecDevIdx( ICFSecAuthorization Authorization,
-		ICFSecSecSessionBySecDevIdxKey argKey )
-	{
-		schema.getJpaHooksSchema().getSecSessionService().deleteBySecDevIdx(argKey.getRequiredSecUserId(),
-			argKey.getOptionalSecDevName());
-	}
-
-	/**
 	 *	Delete the SecSession instances identified by the key StartIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
@@ -418,32 +384,6 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	}
 
 	/**
-	 *	Read an array of the derived SecSession record instances identified by the duplicate key SecDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	SecUserId	The SecSession key attribute of the instance generating the id.
-	 *
-	 *	@param	SecDevName	The SecSession key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
-	 */
-	@Override
-	public ICFSecSecSession[] readDerivedBySecDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId,
-		String argSecDevName )
-	{
-		List<CFSecJpaSecSession> results = schema.getJpaHooksSchema().getSecSessionService().findBySecDevIdx(argSecUserId,
-		argSecDevName);
-		ICFSecSecSession[] retset = new ICFSecSecSession[results.size()];
-		int idx = 0;
-		for (CFSecJpaSecSession cur: results) {
-			retset[idx++] = cur;
-		}
-		return( retset );
-	}
-
-	/**
 	 *	Read the derived SecSession record instance identified by the unique key StartIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
@@ -615,27 +555,6 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 	}
 
 	/**
-	 *	Read an array of the specific SecSession record instances identified by the duplicate key SecDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	SecUserId	The SecSession key attribute of the instance generating the id.
-	 *
-	 *	@param	SecDevName	The SecSession key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
-	 *
-	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
-	 */
-	@Override
-	public ICFSecSecSession[] readRecBySecDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId,
-		String argSecDevName )
-	{
-		throw new CFLibNotImplementedYetException(getClass(), "readRecBySecDevIdx");
-	}
-
-	/**
 	 *	Read the specific SecSession record instance identified by the unique key StartIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
@@ -713,28 +632,6 @@ public class CFSecJpaSecSessionTable implements ICFSecSecSessionTable
 		CFLibDbKeyHash256 priorSecSessionId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageRecBySecUserIdx");
-	}
-
-	/**
-	 *	Read a page array of the specific SecSession record instances identified by the duplicate key SecDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	SecUserId	The SecSession key attribute of the instance generating the id.
-	 *
-	 *	@param	SecDevName	The SecSession key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
-	 *
-	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
-	 */
-	@Override
-	public ICFSecSecSession[] pageRecBySecDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId,
-		String argSecDevName,
-		CFLibDbKeyHash256 priorSecSessionId )
-	{
-		throw new CFLibNotImplementedYetException(getClass(), "pageRecBySecDevIdx");
 	}
 
 	/**

@@ -138,28 +138,6 @@ public class CFSecJpaSecUserDefaultFactory
 	}
 
     @Override
-    public ICFSecSecUserByDefDevIdxKey newByDefDevIdxKey() {
-	ICFSecSecUserByDefDevIdxKey key =
-            new CFSecJpaSecUserByDefDevIdxKey();
-	return( key );
-    }
-
-	public CFSecJpaSecUserByDefDevIdxKey ensureByDefDevIdxKey(ICFSecSecUserByDefDevIdxKey key) {
-		if (key == null) {
-			return( null );
-		}
-		else if (key instanceof CFSecJpaSecUserByDefDevIdxKey) {
-			return( (CFSecJpaSecUserByDefDevIdxKey)key );
-		}
-		else {
-			CFSecJpaSecUserByDefDevIdxKey mapped = new CFSecJpaSecUserByDefDevIdxKey();
-			mapped.setOptionalDfltDevUserId( key.getOptionalDfltDevUserId() );
-			mapped.setOptionalDfltDevName( key.getOptionalDfltDevName() );
-			return( mapped );
-		}
-	}
-
-    @Override
     public ICFSecSecUser newRec() {
         ICFSecSecUser rec =
             new CFSecJpaSecUser();

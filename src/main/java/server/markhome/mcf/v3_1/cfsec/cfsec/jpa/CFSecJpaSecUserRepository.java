@@ -127,29 +127,6 @@ public interface CFSecJpaSecUserRepository extends JpaRepository<CFSecJpaSecUser
 		return( findByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
 	}
 
-	/**
-	 *	Read zero or more entities into a List using the columns of the CFSecSecUserByDefDevIdxKey as arguments.
-	 *
-	 *		@param optionalDfltDevUserId
-	 *		@param optionalDfltDevName
-	 *
-	 *		@return List&lt;CFSecJpaSecUser&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
-	 */
-	@Query("select r from CFSecJpaSecUser r where r.optionalLookupDefDev.pkey.requiredContainerSecUser.requiredSecUserId = :secUserId and r.optionalLookupDefDev.pkey.requiredDevName = :dfltDevName")
-	List<CFSecJpaSecUser> findByDefDevIdx(@Param("dfltDevUserId") CFLibDbKeyHash256 optionalDfltDevUserId,
-		@Param("dfltDevName") String optionalDfltDevName);
-
-	/**
-	 *	CFSecSecUserByDefDevIdxKey entity list reader convenience method for object-based access.
-	 *
-	 *		@param key The CFSecSecUserByDefDevIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
-	 */
-	default List<CFSecJpaSecUser> findByDefDevIdx(ICFSecSecUserByDefDevIdxKey key) {
-		return( findByDefDevIdx(key.getOptionalDfltDevUserId(), key.getOptionalDfltDevName()));
-	}
-
 	// CFSecJpaSecUser specified delete-by-index methods
 
 	/**
@@ -233,31 +210,6 @@ public interface CFSecJpaSecUserRepository extends JpaRepository<CFSecJpaSecUser
 		return( lockByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
 	}
 
-	/**
-	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalDfltDevUserId
-	 *		@param optionalDfltDevName
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional
-	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecUser r where r.optionalLookupDefDev.pkey.requiredContainerSecUser.requiredSecUserId = :secUserId and r.optionalLookupDefDev.pkey.requiredDevName = :dfltDevName")
-	List<CFSecJpaSecUser> lockByDefDevIdx(@Param("dfltDevUserId") CFLibDbKeyHash256 optionalDfltDevUserId,
-		@Param("dfltDevName") String optionalDfltDevName);
-
-	/**
-	 *	CFSecSecUserByDefDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	default List<CFSecJpaSecUser> lockByDefDevIdx(ICFSecSecUserByDefDevIdxKey key) {
-		return( lockByDefDevIdx(key.getOptionalDfltDevUserId(), key.getOptionalDfltDevName()));
-	}
-
 	// CFSecJpaSecUser specified delete-by-index methods
 
 	/**
@@ -325,27 +277,6 @@ public interface CFSecJpaSecUserRepository extends JpaRepository<CFSecJpaSecUser
 	 */
 	default void deleteByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
 		deleteByPwdResetIdx(key.getOptionalPasswordResetUuid6());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalDfltDevUserId
-	 *		@param optionalDfltDevName
-	 */
-	@Transactional
-	@Modifying
-	@Query("delete from CFSecJpaSecUser r where r.optionalLookupDefDev.pkey.requiredContainerSecUser.requiredSecUserId = :secUserId and r.optionalLookupDefDev.pkey.requiredDevName = :dfltDevName")
-	void deleteByDefDevIdx(@Param("dfltDevUserId") CFLibDbKeyHash256 optionalDfltDevUserId,
-		@Param("dfltDevName") String optionalDfltDevName);
-
-	/**
-	 *	CFSecSecUserByDefDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The CFSecSecUserByDefDevIdxKey of the entity to be locked.
-	 */
-	default void deleteByDefDevIdx(ICFSecSecUserByDefDevIdxKey key) {
-		deleteByDefDevIdx(key.getOptionalDfltDevUserId(), key.getOptionalDfltDevName());
 	}
 
 }

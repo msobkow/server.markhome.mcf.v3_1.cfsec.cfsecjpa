@@ -128,15 +128,6 @@ public class CFSecJpaIdGenService {
 	}
 
 	/**
-	 *	Generate a ServiceTypeIdGen CFLibDbKeyHash256 id.
-	 *
-	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
-	 */
-	public CFLibDbKeyHash256 generateServiceTypeIdGen() {
-		return( new CFLibDbKeyHash256(0) );
-	}
-
-	/**
 	 *	Generate a TenantIdGen CFLibDbKeyHash256 id.
 	 *
 	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
@@ -146,74 +137,29 @@ public class CFSecJpaIdGenService {
 	}
 
 	/**
-	 *	Generate a HostNodeIdGen CFLibDbKeyHash256 id.
+	 *	Generate a SecSysGrpIdGen CFLibDbKeyHash256 id.
 	 *
 	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
 	 */
-	public CFLibDbKeyHash256 generateHostNodeIdGen() {
+	public CFLibDbKeyHash256 generateSecSysGrpIdGen() {
 		return( new CFLibDbKeyHash256(0) );
 	}
 
 	/**
-	 *	Generate a SecGroupIdGen CFLibDbKeyHash256 id.
+	 *	Generate a SecClusGrpIdGen CFLibDbKeyHash256 id.
 	 *
 	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
 	 */
-	public CFLibDbKeyHash256 generateSecGroupIdGen() {
+	public CFLibDbKeyHash256 generateSecClusGrpIdGen() {
 		return( new CFLibDbKeyHash256(0) );
 	}
 
 	/**
-	 *	Generate a SecGrpIncIdGen CFLibDbKeyHash256 id.
+	 *	Generate a SecTentGrpIdGen CFLibDbKeyHash256 id.
 	 *
 	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
 	 */
-	public CFLibDbKeyHash256 generateSecGrpIncIdGen() {
-		return( new CFLibDbKeyHash256(0) );
-	}
-
-	/**
-	 *	Generate a SecGrpMembIdGen CFLibDbKeyHash256 id.
-	 *
-	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
-	 */
-	public CFLibDbKeyHash256 generateSecGrpMembIdGen() {
-		return( new CFLibDbKeyHash256(0) );
-	}
-
-	/**
-	 *	Generate a ServiceIdGen CFLibDbKeyHash256 id.
-	 *
-	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
-	 */
-	public CFLibDbKeyHash256 generateServiceIdGen() {
-		return( new CFLibDbKeyHash256(0) );
-	}
-
-	/**
-	 *	Generate a TSecGroupIdGen CFLibDbKeyHash256 id.
-	 *
-	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
-	 */
-	public CFLibDbKeyHash256 generateTSecGroupIdGen() {
-		return( new CFLibDbKeyHash256(0) );
-	}
-
-	/**
-	 *	Generate a TSecGrpIncIdGen CFLibDbKeyHash256 id.
-	 *
-	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
-	 */
-	public CFLibDbKeyHash256 generateTSecGrpIncIdGen() {
-		return( new CFLibDbKeyHash256(0) );
-	}
-
-	/**
-	 *	Generate a TSecGrpMembIdGen CFLibDbKeyHash256 id.
-	 *
-	 *		@return A pseudo-randomly generated CFLibDBKeyHash128 value
-	 */
-	public CFLibDbKeyHash256 generateTSecGrpMembIdGen() {
+	public CFLibDbKeyHash256 generateSecTentGrpIdGen() {
 		return( new CFLibDbKeyHash256(0) );
 	}
 

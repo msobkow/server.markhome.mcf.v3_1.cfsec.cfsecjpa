@@ -81,6 +81,24 @@ public class CFSecJpaSecUserService {
 				0,
 				"data.requiredLoginId");
 		}
+		if(data.getRequiredDfltSysGrpName() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredDfltSysGrpName");
+		}
+		if(data.getRequiredDfltClusGrpName() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredDfltClusGrpName");
+		}
+		if(data.getRequiredDfltTentGrpName() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredDfltTentGrpName");
+		}
 		if(data.getRequiredEMailAddress() == null) {
 			throw new CFLibNullArgumentException(getClass(),
 				S_ProcName,
@@ -141,6 +159,24 @@ public class CFSecJpaSecUserService {
 				0,
 				"data.requiredLoginId");
 		}
+		if(data.getRequiredDfltSysGrpName() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredDfltSysGrpName");
+		}
+		if(data.getRequiredDfltClusGrpName() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredDfltClusGrpName");
+		}
+		if(data.getRequiredDfltTentGrpName() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredDfltTentGrpName");
+		}
 		if(data.getRequiredEMailAddress() == null) {
 			throw new CFLibNullArgumentException(getClass(),
 				S_ProcName,
@@ -160,9 +196,11 @@ public class CFSecJpaSecUserService {
 			throw new CFLibCollisionDetectedException(getClass(), S_ProcName, data.getPKey());
 		}
 		// Apply superior data relationships of CFSecSecUser to existing object
-		existing.setOptionalLookupDefDev(data.getOptionalLookupDefDev());
 		// Apply data columns of CFSecSecUser to existing object
 		existing.setRequiredLoginId(data.getRequiredLoginId());
+		existing.setRequiredDfltSysGrpName(data.getRequiredDfltSysGrpName());
+		existing.setRequiredDfltClusGrpName(data.getRequiredDfltClusGrpName());
+		existing.setRequiredDfltTentGrpName(data.getRequiredDfltTentGrpName());
 		existing.setRequiredEMailAddress(data.getRequiredEMailAddress());
 		existing.setOptionalEMailConfirmUuid6(data.getOptionalEMailConfirmUuid6());
 		existing.setRequiredPasswordHash(data.getRequiredPasswordHash());
@@ -269,33 +307,6 @@ public class CFSecJpaSecUserService {
 		return( cfsec31SecUserRepository.findByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
 	}
 
-	/**
-	 *	Find zero or more entities into a List using the columns of the ICFSecSecUserByDefDevIdxKey as arguments.
-	 *
-	 *		@param optionalDfltDevUserId
-	 *		@param optionalDfltDevName
-	 *
-	 *		@return List&lt;CFSecJpaSecUser&gt; of the found entities, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> findByDefDevIdx(@Param("dfltDevUserId") CFLibDbKeyHash256 optionalDfltDevUserId,
-		@Param("dfltDevName") String optionalDfltDevName) {
-		return( cfsec31SecUserRepository.findByDefDevIdx(optionalDfltDevUserId,
-			optionalDfltDevName));
-	}
-
-	/**
-	 *	ICFSecSecUserByDefDevIdxKey entity list finder convenience method for object-based access.
-	 *
-	 *		@param key The ICFSecSecUserByDefDevIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity list, which may be empty.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> findByDefDevIdx(ICFSecSecUserByDefDevIdxKey key) {
-		return( cfsec31SecUserRepository.findByDefDevIdx(key.getOptionalDfltDevUserId(), key.getOptionalDfltDevName()));
-	}
-
 	// CFSecSecUser specified lock-by-index methods
 
 	/**
@@ -382,33 +393,6 @@ public class CFSecJpaSecUserService {
 		return( cfsec31SecUserRepository.lockByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
 	}
 
-	/**
-	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalDfltDevUserId
-	 *		@param optionalDfltDevName
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> lockByDefDevIdx(@Param("dfltDevUserId") CFLibDbKeyHash256 optionalDfltDevUserId,
-		@Param("dfltDevName") String optionalDfltDevName) {
-		return( cfsec31SecUserRepository.lockByDefDevIdx(optionalDfltDevUserId,
-			optionalDfltDevName));
-	}
-
-	/**
-	 *	ICFSecSecUserByDefDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> lockByDefDevIdx(ICFSecSecUserByDefDevIdxKey key) {
-		return( cfsec31SecUserRepository.lockByDefDevIdx(key.getOptionalDfltDevUserId(), key.getOptionalDfltDevName()));
-	}
-
 	// CFSecSecUser specified delete-by-index methods
 
 	/**
@@ -479,28 +463,5 @@ public class CFSecJpaSecUserService {
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
 		cfsec31SecUserRepository.deleteByPwdResetIdx(key.getOptionalPasswordResetUuid6());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalDfltDevUserId
-	 *		@param optionalDfltDevName
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByDefDevIdx(@Param("dfltDevUserId") CFLibDbKeyHash256 optionalDfltDevUserId,
-		@Param("dfltDevName") String optionalDfltDevName) {
-		cfsec31SecUserRepository.deleteByDefDevIdx(optionalDfltDevUserId,
-			optionalDfltDevName);
-	}
-
-	/**
-	 *	ICFSecSecUserByDefDevIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The ICFSecSecUserByDefDevIdxKey of the entity to be locked.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByDefDevIdx(ICFSecSecUserByDefDevIdxKey key) {
-		cfsec31SecUserRepository.deleteByDefDevIdx(key.getOptionalDfltDevUserId(), key.getOptionalDfltDevName());
 	}
 }

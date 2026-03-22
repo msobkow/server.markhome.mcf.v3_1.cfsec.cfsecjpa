@@ -6,8 +6,6 @@
     <persistence-unit name="CFSec31PU" transaction-type="RESOURCE_LOCAL">
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaCluster</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaClusterH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaHostNode</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaHostNodeH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOCcy</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOCcyH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOCtry</class>
@@ -20,30 +18,32 @@
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOLangH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOTZone</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOTZoneH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecDevice</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecDeviceH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecGroup</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecGroupH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecGrpInc</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecGrpIncH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecGrpMemb</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecGrpMembH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrp</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpInc</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpIncH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpMemb</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpMembH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecClusGrp</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecClusGrpH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecClusGrpInc</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecClusGrpIncH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecClusGrpMemb</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecClusGrpMembH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrp</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpInc</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpIncH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpMemb</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpMembH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSession</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUser</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaService</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaServiceH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaServiceType</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaServiceTypeH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPassword</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPWHistory</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSysCluster</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenant</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenantH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTSecGroup</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTSecGroupH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTSecGrpInc</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTSecGrpIncH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTSecGrpMemb</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTSecGrpMembH</class>
         <properties>
             <!-- Example properties, adjust for your DBMS -->
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.engine.transaction.jta.platform.internal.SpringJtaPlatform"/>

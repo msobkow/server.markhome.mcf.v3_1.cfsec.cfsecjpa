@@ -61,9 +61,6 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaClusterRepository clusterRepository;
 
 	@Autowired
-	private CFSecJpaHostNodeRepository hostNodeRepository;
-
-	@Autowired
 	private CFSecJpaISOCcyRepository iSOCcyRepository;
 
 	@Autowired
@@ -82,16 +79,31 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaISOTZoneRepository iSOTZoneRepository;
 
 	@Autowired
-	private CFSecJpaSecDeviceRepository secDeviceRepository;
+	private CFSecJpaSecSysGrpRepository secSysGrpRepository;
 
 	@Autowired
-	private CFSecJpaSecGroupRepository secGroupRepository;
+	private CFSecJpaSecSysGrpIncRepository secSysGrpIncRepository;
 
 	@Autowired
-	private CFSecJpaSecGrpIncRepository secGrpIncRepository;
+	private CFSecJpaSecSysGrpMembRepository secSysGrpMembRepository;
 
 	@Autowired
-	private CFSecJpaSecGrpMembRepository secGrpMembRepository;
+	private CFSecJpaSecClusGrpRepository secClusGrpRepository;
+
+	@Autowired
+	private CFSecJpaSecClusGrpIncRepository secClusGrpIncRepository;
+
+	@Autowired
+	private CFSecJpaSecClusGrpMembRepository secClusGrpMembRepository;
+
+	@Autowired
+	private CFSecJpaSecTentGrpRepository secTentGrpRepository;
+
+	@Autowired
+	private CFSecJpaSecTentGrpIncRepository secTentGrpIncRepository;
+
+	@Autowired
+	private CFSecJpaSecTentGrpMembRepository secTentGrpMembRepository;
 
 	@Autowired
 	private CFSecJpaSecSessionRepository secSessionRepository;
@@ -100,25 +112,16 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaSecUserRepository secUserRepository;
 
 	@Autowired
-	private CFSecJpaServiceRepository serviceRepository;
+	private CFSecJpaSecUserPasswordRepository secUserPasswordRepository;
 
 	@Autowired
-	private CFSecJpaServiceTypeRepository serviceTypeRepository;
+	private CFSecJpaSecUserPWHistoryRepository secUserPWHistoryRepository;
 
 	@Autowired
 	private CFSecJpaSysClusterRepository sysClusterRepository;
 
 	@Autowired
 	private CFSecJpaTenantRepository tenantRepository;
-
-	@Autowired
-	private CFSecJpaTSecGroupRepository tSecGroupRepository;
-
-	@Autowired
-	private CFSecJpaTSecGrpIncRepository tSecGrpIncRepository;
-
-	@Autowired
-	private CFSecJpaTSecGrpMembRepository tSecGrpMembRepository;
 
 	@Autowired
 	@Qualifier("cfsec31JpaSchemaService")
@@ -131,10 +134,6 @@ public class CFSecJpaHooksSchema {
 	@Autowired
 	@Qualifier("cfsec31JpaClusterService")
 	private CFSecJpaClusterService clusterService;
-
-	@Autowired
-	@Qualifier("cfsec31JpaHostNodeService")
-	private CFSecJpaHostNodeService hostNodeService;
 
 	@Autowired
 	@Qualifier("cfsec31JpaISOCcyService")
@@ -161,20 +160,40 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaISOTZoneService iSOTZoneService;
 
 	@Autowired
-	@Qualifier("cfsec31JpaSecDeviceService")
-	private CFSecJpaSecDeviceService secDeviceService;
+	@Qualifier("cfsec31JpaSecSysGrpService")
+	private CFSecJpaSecSysGrpService secSysGrpService;
 
 	@Autowired
-	@Qualifier("cfsec31JpaSecGroupService")
-	private CFSecJpaSecGroupService secGroupService;
+	@Qualifier("cfsec31JpaSecSysGrpIncService")
+	private CFSecJpaSecSysGrpIncService secSysGrpIncService;
 
 	@Autowired
-	@Qualifier("cfsec31JpaSecGrpIncService")
-	private CFSecJpaSecGrpIncService secGrpIncService;
+	@Qualifier("cfsec31JpaSecSysGrpMembService")
+	private CFSecJpaSecSysGrpMembService secSysGrpMembService;
 
 	@Autowired
-	@Qualifier("cfsec31JpaSecGrpMembService")
-	private CFSecJpaSecGrpMembService secGrpMembService;
+	@Qualifier("cfsec31JpaSecClusGrpService")
+	private CFSecJpaSecClusGrpService secClusGrpService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaSecClusGrpIncService")
+	private CFSecJpaSecClusGrpIncService secClusGrpIncService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaSecClusGrpMembService")
+	private CFSecJpaSecClusGrpMembService secClusGrpMembService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaSecTentGrpService")
+	private CFSecJpaSecTentGrpService secTentGrpService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaSecTentGrpIncService")
+	private CFSecJpaSecTentGrpIncService secTentGrpIncService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaSecTentGrpMembService")
+	private CFSecJpaSecTentGrpMembService secTentGrpMembService;
 
 	@Autowired
 	@Qualifier("cfsec31JpaSecSessionService")
@@ -185,12 +204,12 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaSecUserService secUserService;
 
 	@Autowired
-	@Qualifier("cfsec31JpaServiceService")
-	private CFSecJpaServiceService serviceService;
+	@Qualifier("cfsec31JpaSecUserPasswordService")
+	private CFSecJpaSecUserPasswordService secUserPasswordService;
 
 	@Autowired
-	@Qualifier("cfsec31JpaServiceTypeService")
-	private CFSecJpaServiceTypeService serviceTypeService;
+	@Qualifier("cfsec31JpaSecUserPWHistoryService")
+	private CFSecJpaSecUserPWHistoryService secUserPWHistoryService;
 
 	@Autowired
 	@Qualifier("cfsec31JpaSysClusterService")
@@ -199,18 +218,6 @@ public class CFSecJpaHooksSchema {
 	@Autowired
 	@Qualifier("cfsec31JpaTenantService")
 	private CFSecJpaTenantService tenantService;
-
-	@Autowired
-	@Qualifier("cfsec31JpaTSecGroupService")
-	private CFSecJpaTSecGroupService tSecGroupService;
-
-	@Autowired
-	@Qualifier("cfsec31JpaTSecGrpIncService")
-	private CFSecJpaTSecGrpIncService tSecGrpIncService;
-
-	@Autowired
-	@Qualifier("cfsec31JpaTSecGrpMembService")
-	private CFSecJpaTSecGrpMembService tSecGrpMembService;
 
 	public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
 		if ( cfsec31EntityManagerFactory == null ) {
@@ -250,16 +257,6 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( clusterRepository );
-	}
-
-	public CFSecJpaHostNodeRepository getHostNodeRepository() {
-		if ( hostNodeRepository == null ) {
-			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getHostNodeRepository",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( hostNodeRepository );
 	}
 
 	public CFSecJpaISOCcyRepository getISOCcyRepository() {
@@ -322,44 +319,94 @@ public class CFSecJpaHooksSchema {
 		return( iSOTZoneRepository );
 	}
 
-	public CFSecJpaSecDeviceRepository getSecDeviceRepository() {
-		if ( secDeviceRepository == null ) {
+	public CFSecJpaSecSysGrpRepository getSecSysGrpRepository() {
+		if ( secSysGrpRepository == null ) {
 			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getSecDeviceRepository",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecSysGrpRepository",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secDeviceRepository );
+		return( secSysGrpRepository );
 	}
 
-	public CFSecJpaSecGroupRepository getSecGroupRepository() {
-		if ( secGroupRepository == null ) {
+	public CFSecJpaSecSysGrpIncRepository getSecSysGrpIncRepository() {
+		if ( secSysGrpIncRepository == null ) {
 			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getSecGroupRepository",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecSysGrpIncRepository",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secGroupRepository );
+		return( secSysGrpIncRepository );
 	}
 
-	public CFSecJpaSecGrpIncRepository getSecGrpIncRepository() {
-		if ( secGrpIncRepository == null ) {
+	public CFSecJpaSecSysGrpMembRepository getSecSysGrpMembRepository() {
+		if ( secSysGrpMembRepository == null ) {
 			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getSecGrpIncRepository",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecSysGrpMembRepository",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secGrpIncRepository );
+		return( secSysGrpMembRepository );
 	}
 
-	public CFSecJpaSecGrpMembRepository getSecGrpMembRepository() {
-		if ( secGrpMembRepository == null ) {
+	public CFSecJpaSecClusGrpRepository getSecClusGrpRepository() {
+		if ( secClusGrpRepository == null ) {
 			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getSecGrpMembRepository",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecClusGrpRepository",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secGrpMembRepository );
+		return( secClusGrpRepository );
+	}
+
+	public CFSecJpaSecClusGrpIncRepository getSecClusGrpIncRepository() {
+		if ( secClusGrpIncRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getSecClusGrpIncRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secClusGrpIncRepository );
+	}
+
+	public CFSecJpaSecClusGrpMembRepository getSecClusGrpMembRepository() {
+		if ( secClusGrpMembRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getSecClusGrpMembRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secClusGrpMembRepository );
+	}
+
+	public CFSecJpaSecTentGrpRepository getSecTentGrpRepository() {
+		if ( secTentGrpRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getSecTentGrpRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secTentGrpRepository );
+	}
+
+	public CFSecJpaSecTentGrpIncRepository getSecTentGrpIncRepository() {
+		if ( secTentGrpIncRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getSecTentGrpIncRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secTentGrpIncRepository );
+	}
+
+	public CFSecJpaSecTentGrpMembRepository getSecTentGrpMembRepository() {
+		if ( secTentGrpMembRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getSecTentGrpMembRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secTentGrpMembRepository );
 	}
 
 	public CFSecJpaSecSessionRepository getSecSessionRepository() {
@@ -382,24 +429,24 @@ public class CFSecJpaHooksSchema {
 		return( secUserRepository );
 	}
 
-	public CFSecJpaServiceRepository getServiceRepository() {
-		if ( serviceRepository == null ) {
+	public CFSecJpaSecUserPasswordRepository getSecUserPasswordRepository() {
+		if ( secUserPasswordRepository == null ) {
 			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getServiceRepository",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserPasswordRepository",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( serviceRepository );
+		return( secUserPasswordRepository );
 	}
 
-	public CFSecJpaServiceTypeRepository getServiceTypeRepository() {
-		if ( serviceTypeRepository == null ) {
+	public CFSecJpaSecUserPWHistoryRepository getSecUserPWHistoryRepository() {
+		if ( secUserPWHistoryRepository == null ) {
 			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getServiceTypeRepository",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserPWHistoryRepository",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( serviceTypeRepository );
+		return( secUserPWHistoryRepository );
 	}
 
 	public CFSecJpaSysClusterRepository getSysClusterRepository() {
@@ -422,36 +469,6 @@ public class CFSecJpaHooksSchema {
 		return( tenantRepository );
 	}
 
-	public CFSecJpaTSecGroupRepository getTSecGroupRepository() {
-		if ( tSecGroupRepository == null ) {
-			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getTSecGroupRepository",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tSecGroupRepository );
-	}
-
-	public CFSecJpaTSecGrpIncRepository getTSecGrpIncRepository() {
-		if ( tSecGrpIncRepository == null ) {
-			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getTSecGrpIncRepository",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tSecGrpIncRepository );
-	}
-
-	public CFSecJpaTSecGrpMembRepository getTSecGrpMembRepository() {
-		if ( tSecGrpMembRepository == null ) {
-			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getTSecGrpMembRepository",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tSecGrpMembRepository );
-	}
-
 	public CFSecJpaClusterService getClusterService() {
 		if ( clusterService == null ) {
 			// Dynamically resolve the repository by qualifier name
@@ -460,16 +477,6 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( clusterService );
-	}
-
-	public CFSecJpaHostNodeService getHostNodeService() {
-		if ( hostNodeService == null ) {
-			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getHostNodeService",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( hostNodeService );
 	}
 
 	public CFSecJpaISOCcyService getISOCcyService() {
@@ -532,44 +539,94 @@ public class CFSecJpaHooksSchema {
 		return( iSOTZoneService );
 	}
 
-	public CFSecJpaSecDeviceService getSecDeviceService() {
-		if ( secDeviceService == null ) {
+	public CFSecJpaSecSysGrpService getSecSysGrpService() {
+		if ( secSysGrpService == null ) {
 			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getSecDeviceService",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecSysGrpService",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secDeviceService );
+		return( secSysGrpService );
 	}
 
-	public CFSecJpaSecGroupService getSecGroupService() {
-		if ( secGroupService == null ) {
+	public CFSecJpaSecSysGrpIncService getSecSysGrpIncService() {
+		if ( secSysGrpIncService == null ) {
 			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getSecGroupService",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecSysGrpIncService",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secGroupService );
+		return( secSysGrpIncService );
 	}
 
-	public CFSecJpaSecGrpIncService getSecGrpIncService() {
-		if ( secGrpIncService == null ) {
+	public CFSecJpaSecSysGrpMembService getSecSysGrpMembService() {
+		if ( secSysGrpMembService == null ) {
 			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getSecGrpIncService",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecSysGrpMembService",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secGrpIncService );
+		return( secSysGrpMembService );
 	}
 
-	public CFSecJpaSecGrpMembService getSecGrpMembService() {
-		if ( secGrpMembService == null ) {
+	public CFSecJpaSecClusGrpService getSecClusGrpService() {
+		if ( secClusGrpService == null ) {
 			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getSecGrpMembService",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecClusGrpService",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( secGrpMembService );
+		return( secClusGrpService );
+	}
+
+	public CFSecJpaSecClusGrpIncService getSecClusGrpIncService() {
+		if ( secClusGrpIncService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getSecClusGrpIncService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secClusGrpIncService );
+	}
+
+	public CFSecJpaSecClusGrpMembService getSecClusGrpMembService() {
+		if ( secClusGrpMembService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getSecClusGrpMembService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secClusGrpMembService );
+	}
+
+	public CFSecJpaSecTentGrpService getSecTentGrpService() {
+		if ( secTentGrpService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getSecTentGrpService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secTentGrpService );
+	}
+
+	public CFSecJpaSecTentGrpIncService getSecTentGrpIncService() {
+		if ( secTentGrpIncService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getSecTentGrpIncService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secTentGrpIncService );
+	}
+
+	public CFSecJpaSecTentGrpMembService getSecTentGrpMembService() {
+		if ( secTentGrpMembService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getSecTentGrpMembService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secTentGrpMembService );
 	}
 
 	public CFSecJpaSecSessionService getSecSessionService() {
@@ -592,24 +649,24 @@ public class CFSecJpaHooksSchema {
 		return( secUserService );
 	}
 
-	public CFSecJpaServiceService getServiceService() {
-		if ( serviceService == null ) {
+	public CFSecJpaSecUserPasswordService getSecUserPasswordService() {
+		if ( secUserPasswordService == null ) {
 			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getServiceService",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserPasswordService",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( serviceService );
+		return( secUserPasswordService );
 	}
 
-	public CFSecJpaServiceTypeService getServiceTypeService() {
-		if ( serviceTypeService == null ) {
+	public CFSecJpaSecUserPWHistoryService getSecUserPWHistoryService() {
+		if ( secUserPWHistoryService == null ) {
 			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getServiceTypeService",
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserPWHistoryService",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
-		return( serviceTypeService );
+		return( secUserPWHistoryService );
 	}
 
 	public CFSecJpaSysClusterService getSysClusterService() {
@@ -630,35 +687,5 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( tenantService );
-	}
-
-	public CFSecJpaTSecGroupService getTSecGroupService() {
-		if ( tSecGroupService == null ) {
-			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getTSecGroupService",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tSecGroupService );
-	}
-
-	public CFSecJpaTSecGrpIncService getTSecGrpIncService() {
-		if ( tSecGrpIncService == null ) {
-			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getTSecGrpIncService",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tSecGrpIncService );
-	}
-
-	public CFSecJpaTSecGrpMembService getTSecGrpMembService() {
-		if ( tSecGrpMembService == null ) {
-			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getTSecGrpMembService",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tSecGrpMembService );
 	}
 }

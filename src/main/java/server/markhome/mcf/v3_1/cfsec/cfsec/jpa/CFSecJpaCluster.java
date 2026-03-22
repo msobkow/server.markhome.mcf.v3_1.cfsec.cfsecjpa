@@ -62,11 +62,9 @@ public class CFSecJpaCluster
 	})
 	protected CFLibDbKeyHash256 requiredId;
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredContainerCluster")
-	protected Set<CFSecJpaHostNode> optionalComponentsHostNode;
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredContainerCluster")
 	protected Set<CFSecJpaTenant> optionalComponentsTenant;
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredContainerCluster")
-	protected Set<CFSecJpaSecGroup> optionalComponentsSecGroup;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredOwnerCluster")
+	protected Set<CFSecJpaSecClusGrp> optionalComponentsSecGroup;
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredContainerCluster")
 	protected Set<CFSecJpaSysCluster> optionalComponentsSysCluster;
 	protected int requiredRevision;
@@ -104,14 +102,6 @@ public class CFSecJpaCluster
 	}
 
 	@Override
-	public List<ICFSecHostNode> getOptionalComponentsHostNode() {
-		List<ICFSecHostNode> retlist = new ArrayList<>(optionalComponentsHostNode.size());
-		for (CFSecJpaHostNode cur: optionalComponentsHostNode) {
-			retlist.add(cur);
-		}
-		return( retlist );
-	}
-	@Override
 	public List<ICFSecTenant> getOptionalComponentsTenant() {
 		List<ICFSecTenant> retlist = new ArrayList<>(optionalComponentsTenant.size());
 		for (CFSecJpaTenant cur: optionalComponentsTenant) {
@@ -120,9 +110,9 @@ public class CFSecJpaCluster
 		return( retlist );
 	}
 	@Override
-	public List<ICFSecSecGroup> getOptionalComponentsSecGroup() {
-		List<ICFSecSecGroup> retlist = new ArrayList<>(optionalComponentsSecGroup.size());
-		for (CFSecJpaSecGroup cur: optionalComponentsSecGroup) {
+	public List<ICFSecSecClusGrp> getOptionalComponentsSecGroup() {
+		List<ICFSecSecClusGrp> retlist = new ArrayList<>(optionalComponentsSecGroup.size());
+		for (CFSecJpaSecClusGrp cur: optionalComponentsSecGroup) {
 			retlist.add(cur);
 		}
 		return( retlist );

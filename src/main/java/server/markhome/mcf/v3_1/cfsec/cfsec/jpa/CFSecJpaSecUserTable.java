@@ -252,40 +252,6 @@ public class CFSecJpaSecUserTable implements ICFSecSecUserTable
 		schema.getJpaHooksSchema().getSecUserService().deleteByPwdResetIdx(argKey.getOptionalPasswordResetUuid6());
 	}
 
-	/**
-	 *	Delete the SecUser instances identified by the key DefDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	DfltDevUserId	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@param	DfltDevName	The SecUser key attribute of the instance generating the id.
-	 */
-	@Override
-	public void deleteSecUserByDefDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argDfltDevUserId,
-		String argDfltDevName )
-	{
-		schema.getJpaHooksSchema().getSecUserService().deleteByDefDevIdx(argDfltDevUserId,
-		argDfltDevName);
-	}
-
-
-	/**
-	 *	Delete the SecUser instances identified by the key DefDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	argKey	The key identifying the instances to be deleted.
-	 */
-	@Override
-	public void deleteSecUserByDefDevIdx( ICFSecAuthorization Authorization,
-		ICFSecSecUserByDefDevIdxKey argKey )
-	{
-		schema.getJpaHooksSchema().getSecUserService().deleteByDefDevIdx(argKey.getOptionalDfltDevUserId(),
-			argKey.getOptionalDfltDevName());
-	}
-
 
 	/**
 	 *	Read the derived SecUser record instance by primary key.
@@ -409,32 +375,6 @@ public class CFSecJpaSecUserTable implements ICFSecSecUserTable
 		CFLibUuid6 argPasswordResetUuid6 )
 	{
 		List<CFSecJpaSecUser> results = schema.getJpaHooksSchema().getSecUserService().findByPwdResetIdx(argPasswordResetUuid6);
-		ICFSecSecUser[] retset = new ICFSecSecUser[results.size()];
-		int idx = 0;
-		for (CFSecJpaSecUser cur: results) {
-			retset[idx++] = cur;
-		}
-		return( retset );
-	}
-
-	/**
-	 *	Read an array of the derived SecUser record instances identified by the duplicate key DefDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	DfltDevUserId	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@param	DfltDevName	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
-	 */
-	@Override
-	public ICFSecSecUser[] readDerivedByDefDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argDfltDevUserId,
-		String argDfltDevName )
-	{
-		List<CFSecJpaSecUser> results = schema.getJpaHooksSchema().getSecUserService().findByDefDevIdx(argDfltDevUserId,
-		argDfltDevName);
 		ICFSecSecUser[] retset = new ICFSecSecUser[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecUser cur: results) {
@@ -583,27 +523,6 @@ public class CFSecJpaSecUserTable implements ICFSecSecUserTable
 	}
 
 	/**
-	 *	Read an array of the specific SecUser record instances identified by the duplicate key DefDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	DfltDevUserId	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@param	DfltDevName	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
-	 *
-	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
-	 */
-	@Override
-	public ICFSecSecUser[] readRecByDefDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argDfltDevUserId,
-		String argDfltDevName )
-	{
-		throw new CFLibNotImplementedYetException(getClass(), "readRecByDefDevIdx");
-	}
-
-	/**
 	 *	Read a page array of the specific SecUser record instances identified by the duplicate key EMConfIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
@@ -639,27 +558,5 @@ public class CFSecJpaSecUserTable implements ICFSecSecUserTable
 		CFLibDbKeyHash256 priorSecUserId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageRecByPwdResetIdx");
-	}
-
-	/**
-	 *	Read a page array of the specific SecUser record instances identified by the duplicate key DefDevIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	DfltDevUserId	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@param	DfltDevName	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
-	 *
-	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
-	 */
-	@Override
-	public ICFSecSecUser[] pageRecByDefDevIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argDfltDevUserId,
-		String argDfltDevName,
-		CFLibDbKeyHash256 priorSecUserId )
-	{
-		throw new CFLibNotImplementedYetException(getClass(), "pageRecByDefDevIdx");
 	}
 }

@@ -46,7 +46,6 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 	indexes = {
 		@Index(name = "SecSessionIdIdx", columnList = "SecSessionId", unique = true),
 		@Index(name = "SessionSecUserIdx", columnList = "SecUserId", unique = false),
-		@Index(name = "SessionSecDevIdx", columnList = "SecUserId, SecDevName", unique = false),
 		@Index(name = "SessionStartIdx", columnList = "SecUserId, start_ts", unique = true),
 		@Index(name = "SessionFinishIdx", columnList = "SecUserId, finish_ts", unique = false),
 		@Index(name = "SessionSecProxyIdx", columnList = "SecProxyId", unique = false)
@@ -71,8 +70,6 @@ public class CFSecJpaSecSession
 		@AttributeOverride(name="bytes", column = @Column( name="SecUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
 	})
 	protected CFLibDbKeyHash256 requiredSecUserId;
-	@Column( name="SecDevName", nullable=true, length=127 )
-	protected String optionalSecDevName;
 	@Column( name="start_ts", nullable=false )
 	protected LocalDateTime requiredStart;
 	@Column( name="finish_ts", nullable=true )
@@ -85,7 +82,6 @@ public class CFSecJpaSecSession
 	public CFSecJpaSecSession() {
 		requiredSecSessionId = CFLibDbKeyHash256.fromHex( ICFSecSecSession.SECSESSIONID_INIT_VALUE.toString() );
 		requiredSecUserId = CFLibDbKeyHash256.fromHex( ICFSecSecSession.SECUSERID_INIT_VALUE.toString() );
-		optionalSecDevName = null;
 		requiredStart = CFLibXmlUtil.parseTimestamp("2020-01-01T00:00:00");
 		optionalFinish = null;
 		optionalSecProxyId = CFLibDbKeyHash256.nullGet();
@@ -149,24 +145,6 @@ public class CFSecJpaSecSession
 				"value" );
 		}
 		requiredSecUserId = value;
-	}
-
-	@Override
-	public String getOptionalSecDevName() {
-		return( optionalSecDevName );
-	}
-
-	@Override
-	public void setOptionalSecDevName( String value ) {
-		if( value != null && value.length() > 127 ) {
-			throw new CFLibArgumentOverflowException( getClass(),
-				"setOptionalSecDevName",
-				1,
-				"value.length()",
-				value.length(),
-				127 );
-		}
-		optionalSecDevName = value;
 	}
 
 	@Override
@@ -242,21 +220,6 @@ public class CFSecJpaSecSession
 					return( false );
 				}
 			}
-			if( getOptionalSecDevName() != null ) {
-				if( rhs.getOptionalSecDevName() != null ) {
-					if( ! getOptionalSecDevName().equals( rhs.getOptionalSecDevName() ) ) {
-						return( false );
-					}
-				}
-				else {
-					return( false );
-				}
-			}
-			else {
-				if( rhs.getOptionalSecDevName() != null ) {
-					return( false );
-				}
-			}
 			if( getRequiredStart() != null ) {
 				if( rhs.getRequiredStart() != null ) {
 					if( ! getRequiredStart().equals( rhs.getRequiredStart() ) ) {
@@ -318,40 +281,6 @@ public class CFSecJpaSecSession
 			}
 			else {
 				if( rhs.getRequiredSecUserId() != null ) {
-					return( false );
-				}
-			}
-			return( true );
-		}
-		else if (obj instanceof ICFSecSecSessionBySecDevIdxKey) {
-			ICFSecSecSessionBySecDevIdxKey rhs = (ICFSecSecSessionBySecDevIdxKey)obj;
-			if( getRequiredSecUserId() != null ) {
-				if( rhs.getRequiredSecUserId() != null ) {
-					if( ! getRequiredSecUserId().equals( rhs.getRequiredSecUserId() ) ) {
-						return( false );
-					}
-				}
-				else {
-					return( false );
-				}
-			}
-			else {
-				if( rhs.getRequiredSecUserId() != null ) {
-					return( false );
-				}
-			}
-			if( getOptionalSecDevName() != null ) {
-				if( rhs.getOptionalSecDevName() != null ) {
-					if( ! getOptionalSecDevName().equals( rhs.getOptionalSecDevName() ) ) {
-						return( false );
-					}
-				}
-				else {
-					return( false );
-				}
-			}
-			else {
-				if( rhs.getOptionalSecDevName() != null ) {
 					return( false );
 				}
 			}
@@ -454,9 +383,6 @@ public class CFSecJpaSecSession
 		int hashCode = getPKey().hashCode();
 		hashCode = hashCode + getRequiredSecSessionId().hashCode();
 		hashCode = hashCode + getRequiredSecUserId().hashCode();
-		if( getOptionalSecDevName() != null ) {
-			hashCode = hashCode + getOptionalSecDevName().hashCode();
-		}
 		if( getRequiredStart() != null ) {
 			hashCode = hashCode + getRequiredStart().hashCode();
 		}
@@ -506,22 +432,6 @@ public class CFSecJpaSecSession
 			}
 			else if (rhs.getRequiredSecUserId() != null) {
 				return( -1 );
-			}
-			if( getOptionalSecDevName() != null ) {
-				if( rhs.getOptionalSecDevName() != null ) {
-					cmp = getOptionalSecDevName().compareTo( rhs.getOptionalSecDevName() );
-					if( cmp != 0 ) {
-						return( cmp );
-					}
-				}
-				else {
-					return( 1 );
-				}
-			}
-			else {
-				if( rhs.getOptionalSecDevName() != null ) {
-					return( -1 );
-				}
 			}
 			if (getRequiredStart() != null) {
 				if (rhs.getRequiredStart() != null) {
@@ -586,40 +496,6 @@ public class CFSecJpaSecSession
 			}
 			else if (rhs.getRequiredSecUserId() != null) {
 				return( -1 );
-			}
-			return( 0 );
-		}
-		else if (obj instanceof ICFSecSecSessionBySecDevIdxKey) {
-			ICFSecSecSessionBySecDevIdxKey rhs = (ICFSecSecSessionBySecDevIdxKey)obj;
-			if (getRequiredSecUserId() != null) {
-				if (rhs.getRequiredSecUserId() != null) {
-					cmp = getRequiredSecUserId().compareTo( rhs.getRequiredSecUserId() );
-					if( cmp != 0 ) {
-						return( cmp );
-					}
-				}
-				else {
-					return( 1 );
-				}
-			}
-			else if (rhs.getRequiredSecUserId() != null) {
-				return( -1 );
-			}
-			if( getOptionalSecDevName() != null ) {
-				if( rhs.getOptionalSecDevName() != null ) {
-					cmp = getOptionalSecDevName().compareTo( rhs.getOptionalSecDevName() );
-					if( cmp != 0 ) {
-						return( cmp );
-					}
-				}
-				else {
-					return( 1 );
-				}
-			}
-			else {
-				if( rhs.getOptionalSecDevName() != null ) {
-					return( -1 );
-				}
 			}
 			return( 0 );
 		}
@@ -728,7 +604,6 @@ public class CFSecJpaSecSession
 		setRequiredSecSessionId(src.getRequiredSecSessionId());
 		setRequiredRevision( src.getRequiredRevision() );
 		setRequiredSecUserId(src.getRequiredSecUserId());
-		setOptionalSecDevName(src.getOptionalSecDevName());
 		setRequiredStart(src.getRequiredStart());
 		setOptionalFinish(src.getOptionalFinish());
 		setOptionalSecProxyId(src.getOptionalSecProxyId());
@@ -741,7 +616,6 @@ public class CFSecJpaSecSession
 			+ " RequiredRevision=\"" + Integer.toString( getRequiredRevision() ) + "\""
 			+ " RequiredSecSessionId=" + "\"" + getRequiredSecSessionId().toString() + "\""
 			+ " RequiredSecUserId=" + "\"" + getRequiredSecUserId().toString() + "\""
-			+ " OptionalSecDevName=" + ( ( getOptionalSecDevName() == null ) ? "null" : "\"" + StringEscapeUtils.escapeXml11( getOptionalSecDevName() ) + "\"" )
 			+ " RequiredStart=" + "\"" + getRequiredStart().toString() + "\""
 			+ " OptionalFinish=" + ( ( getOptionalFinish() == null ) ? "null" : "\"" + getOptionalFinish().toString() + "\"" )
 			+ " OptionalSecProxyId=" + ( ( getOptionalSecProxyId() == null ) ? "null" : "\"" + getOptionalSecProxyId().toString() + "\"" );
