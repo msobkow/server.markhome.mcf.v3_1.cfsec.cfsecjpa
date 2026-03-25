@@ -124,6 +124,20 @@ public class CFSecJpaSchema
 			throw new CFLibNullArgumentException(CFSecJpaSchema.class, "wireRecConstructors", 0, "ICFSecSchema.getClassMapByBackingClassCode(ICFSecCluster.CLASS_CODE)[" + ICFSecCluster.CLASS_CODE + "]");
 		}
 	
+		entry = ICFSecSchema.getClassMapByBackingClassCode(ICFSecTenant.CLASS_CODE);
+		if (entry != null) {
+			entry.setBackingRecConstructor( new BackingRecConstructor() {
+				@Override
+				public Object instantiate() {
+					ICFSecTenant ret = new CFSecJpaTenant();
+					return(ret);
+				}
+			});
+		}
+		else {
+			throw new CFLibNullArgumentException(CFSecJpaSchema.class, "wireRecConstructors", 0, "ICFSecSchema.getClassMapByBackingClassCode(ICFSecTenant.CLASS_CODE)[" + ICFSecTenant.CLASS_CODE + "]");
+		}
+	
 		entry = ICFSecSchema.getClassMapByBackingClassCode(ICFSecISOCcy.CLASS_CODE);
 		if (entry != null) {
 			entry.setBackingRecConstructor( new BackingRecConstructor() {
@@ -404,26 +418,15 @@ public class CFSecJpaSchema
 			throw new CFLibNullArgumentException(CFSecJpaSchema.class, "wireRecConstructors", 0, "ICFSecSchema.getClassMapByBackingClassCode(ICFSecSysCluster.CLASS_CODE)[" + ICFSecSysCluster.CLASS_CODE + "]");
 		}
 	
-		entry = ICFSecSchema.getClassMapByBackingClassCode(ICFSecTenant.CLASS_CODE);
-		if (entry != null) {
-			entry.setBackingRecConstructor( new BackingRecConstructor() {
-				@Override
-				public Object instantiate() {
-					ICFSecTenant ret = new CFSecJpaTenant();
-					return(ret);
-				}
-			});
-		}
-		else {
-			throw new CFLibNullArgumentException(CFSecJpaSchema.class, "wireRecConstructors", 0, "ICFSecSchema.getClassMapByBackingClassCode(ICFSecTenant.CLASS_CODE)[" + ICFSecTenant.CLASS_CODE + "]");
-		}
-	
 	}
 
 	@Override
 	public void wireTableTableInstances() {
 		if (tableCluster == null || !(tableCluster instanceof CFSecJpaClusterTable)) {
 			tableCluster = new CFSecJpaClusterTable(this);
+		}
+		if (tableTenant == null || !(tableTenant instanceof CFSecJpaTenantTable)) {
+			tableTenant = new CFSecJpaTenantTable(this);
 		}
 		if (tableISOCcy == null || !(tableISOCcy instanceof CFSecJpaISOCcyTable)) {
 			tableISOCcy = new CFSecJpaISOCcyTable(this);
@@ -484,9 +487,6 @@ public class CFSecJpaSchema
 		}
 		if (tableSysCluster == null || !(tableSysCluster instanceof CFSecJpaSysClusterTable)) {
 			tableSysCluster = new CFSecJpaSysClusterTable(this);
-		}
-		if (tableTenant == null || !(tableTenant instanceof CFSecJpaTenantTable)) {
-			tableTenant = new CFSecJpaTenantTable(this);
 		}
 	}
 

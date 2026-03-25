@@ -61,6 +61,9 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaClusterRepository clusterRepository;
 
 	@Autowired
+	private CFSecJpaTenantRepository tenantRepository;
+
+	@Autowired
 	private CFSecJpaISOCcyRepository iSOCcyRepository;
 
 	@Autowired
@@ -121,9 +124,6 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaSysClusterRepository sysClusterRepository;
 
 	@Autowired
-	private CFSecJpaTenantRepository tenantRepository;
-
-	@Autowired
 	@Qualifier("cfsec31JpaSchemaService")
 	private CFSecJpaSchemaService schemaService;
 
@@ -134,6 +134,10 @@ public class CFSecJpaHooksSchema {
 	@Autowired
 	@Qualifier("cfsec31JpaClusterService")
 	private CFSecJpaClusterService clusterService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaTenantService")
+	private CFSecJpaTenantService tenantService;
 
 	@Autowired
 	@Qualifier("cfsec31JpaISOCcyService")
@@ -215,10 +219,6 @@ public class CFSecJpaHooksSchema {
 	@Qualifier("cfsec31JpaSysClusterService")
 	private CFSecJpaSysClusterService sysClusterService;
 
-	@Autowired
-	@Qualifier("cfsec31JpaTenantService")
-	private CFSecJpaTenantService tenantService;
-
 	public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
 		if ( cfsec31EntityManagerFactory == null ) {
 			// Dynamically resolve the repository by qualifier name
@@ -257,6 +257,16 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( clusterRepository );
+	}
+
+	public CFSecJpaTenantRepository getTenantRepository() {
+		if ( tenantRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getTenantRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( tenantRepository );
 	}
 
 	public CFSecJpaISOCcyRepository getISOCcyRepository() {
@@ -459,16 +469,6 @@ public class CFSecJpaHooksSchema {
 		return( sysClusterRepository );
 	}
 
-	public CFSecJpaTenantRepository getTenantRepository() {
-		if ( tenantRepository == null ) {
-			// Dynamically resolve the repository by interface type
-			throw new CFLibNotImplementedYetException( getClass(), "getTenantRepository",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tenantRepository );
-	}
-
 	public CFSecJpaClusterService getClusterService() {
 		if ( clusterService == null ) {
 			// Dynamically resolve the repository by qualifier name
@@ -477,6 +477,16 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( clusterService );
+	}
+
+	public CFSecJpaTenantService getTenantService() {
+		if ( tenantService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getTenantService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( tenantService );
 	}
 
 	public CFSecJpaISOCcyService getISOCcyService() {
@@ -677,15 +687,5 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( sysClusterService );
-	}
-
-	public CFSecJpaTenantService getTenantService() {
-		if ( tenantService == null ) {
-			// Dynamically resolve the repository by qualifier name
-			throw new CFLibNotImplementedYetException( getClass(), "getTenantService",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
-				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
-		}
-		return( tenantService );
 	}
 }

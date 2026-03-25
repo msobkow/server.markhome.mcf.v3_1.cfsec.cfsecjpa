@@ -61,6 +61,9 @@ public class CFSecJpaSchemaService {
 	private CFSecJpaClusterService clusterService;
 
 	@Autowired
+	private CFSecJpaTenantService tenantService;
+
+	@Autowired
 	private CFSecJpaISOCcyService isoccyService;
 
 	@Autowired
@@ -119,9 +122,6 @@ public class CFSecJpaSchemaService {
 
 	@Autowired
 	private CFSecJpaSysClusterService sysclusterService;
-
-	@Autowired
-	private CFSecJpaTenantService tenantService;
 
 
 	public void bootstrapSchema() {
@@ -372,6 +372,7 @@ public class CFSecJpaSchemaService {
 		bootstrapSessionID = bootstrapSession.getRequiredSecSessionId();
 
 		bootstrapTableSecurity(auth, "Cluster", true, false);
+		bootstrapTableSecurity(auth, "Tenant", true, false);
 		bootstrapTableSecurity(auth, "ISOCcy", true, false);
 		bootstrapTableSecurity(auth, "ISOCtry", true, false);
 		bootstrapTableSecurity(auth, "ISOCtryCcy", true, false);
@@ -392,7 +393,6 @@ public class CFSecJpaSchemaService {
 		bootstrapTableSecurity(auth, "SecTentGrpMemb", true, false);
 		bootstrapTableSecurity(auth, "SecSession", false, false);
 		bootstrapTableSecurity(auth, "SysCluster", false, false);
-		bootstrapTableSecurity(auth, "Tenant", true, false);
 
 		if (bootstrapSession != null && bootstrapSessionID != null && !bootstrapSessionID.isNull() && bootstrapSession.getOptionalFinish() == null) {
 			bootstrapSession.setOptionalFinish(LocalDateTime.now());

@@ -6,6 +6,8 @@
     <persistence-unit name="CFSec31PU" transaction-type="RESOURCE_LOCAL">
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaCluster</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaClusterH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenant</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenantH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOCcy</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOCcyH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOCtry</class>
@@ -42,8 +44,6 @@
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpMembH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSession</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSysCluster</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenant</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenantH</class>
         <properties>
             <!-- Example properties, adjust for your DBMS -->
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.engine.transaction.jta.platform.internal.SpringJtaPlatform"/>
