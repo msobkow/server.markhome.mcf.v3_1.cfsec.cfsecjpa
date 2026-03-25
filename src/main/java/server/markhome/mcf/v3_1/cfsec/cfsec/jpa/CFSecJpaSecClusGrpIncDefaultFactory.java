@@ -66,7 +66,7 @@ public class CFSecJpaSecClusGrpIncDefaultFactory
 		else {
 			CFSecJpaSecClusGrpIncPKey mapped = new CFSecJpaSecClusGrpIncPKey();
 			mapped.setRequiredSecClusGrpId( key.getRequiredSecClusGrpId() );
-			mapped.setRequiredIncName( key.getRequiredIncName() );
+			mapped.setRequiredInclName( key.getRequiredInclName() );
 			return( mapped );
 		}
 	}
@@ -92,7 +92,7 @@ public class CFSecJpaSecClusGrpIncDefaultFactory
 			mapped.setAuditSessionId(key.getAuditSessionId());
 			mapped.setAuditStamp(key.getAuditStamp());
 			mapped.setRequiredSecClusGrpId( key.getRequiredSecClusGrpId() );
-			mapped.setRequiredIncName( key.getRequiredIncName() );
+			mapped.setRequiredInclName( key.getRequiredInclName() );
 			return( mapped );
 		}
 	}
@@ -134,7 +134,7 @@ public class CFSecJpaSecClusGrpIncDefaultFactory
 		}
 		else {
 			CFSecJpaSecClusGrpIncByNameIdxKey mapped = new CFSecJpaSecClusGrpIncByNameIdxKey();
-			mapped.setRequiredIncName( key.getRequiredIncName() );
+			mapped.setRequiredInclName( key.getRequiredInclName() );
 			return( mapped );
 		}
 	}

@@ -224,13 +224,13 @@ public class CFSecJpaSecClusGrpIncH
     }
 
     @Override
-    public String getRequiredIncName() {
-        return( pkey.getRequiredIncName() );
+    public String getRequiredInclName() {
+        return( pkey.getRequiredInclName() );
     }
 
     @Override
-    public void setRequiredIncName( String requiredIncName ) {
-        pkey.setRequiredIncName( requiredIncName );
+    public void setRequiredInclName( String requiredInclName ) {
+        pkey.setRequiredInclName( requiredInclName );
     }
 
     @Override
@@ -291,9 +291,9 @@ public class CFSecJpaSecClusGrpIncH
 					return( false );
 				}
 			}
-			if( getRequiredIncName() != null ) {
-				if( rhs.getRequiredIncName() != null ) {
-					if( ! getRequiredIncName().equals( rhs.getRequiredIncName() ) ) {
+			if( getRequiredInclName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
+					if( ! getRequiredInclName().equals( rhs.getRequiredInclName() ) ) {
 						return( false );
 					}
 				}
@@ -302,7 +302,7 @@ public class CFSecJpaSecClusGrpIncH
 				}
 			}
 			else {
-				if( rhs.getRequiredIncName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
 					return( false );
 				}
 			}
@@ -329,9 +329,9 @@ public class CFSecJpaSecClusGrpIncH
         }
         else if (obj instanceof ICFSecSecClusGrpIncByNameIdxKey) {
             ICFSecSecClusGrpIncByNameIdxKey rhs = (ICFSecSecClusGrpIncByNameIdxKey)obj;
-			if( getRequiredIncName() != null ) {
-				if( rhs.getRequiredIncName() != null ) {
-					if( ! getRequiredIncName().equals( rhs.getRequiredIncName() ) ) {
+			if( getRequiredInclName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
+					if( ! getRequiredInclName().equals( rhs.getRequiredInclName() ) ) {
 						return( false );
 					}
 				}
@@ -340,7 +340,7 @@ public class CFSecJpaSecClusGrpIncH
 				}
 			}
 			else {
-				if( rhs.getRequiredIncName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
 					return( false );
 				}
 			}
@@ -431,9 +431,9 @@ public class CFSecJpaSecClusGrpIncH
         }
         else if (obj instanceof ICFSecSecClusGrpIncByNameIdxKey ) {
             ICFSecSecClusGrpIncByNameIdxKey rhs = (ICFSecSecClusGrpIncByNameIdxKey)obj;
-			if (getRequiredIncName() != null) {
-				if (rhs.getRequiredIncName() != null) {
-					cmp = getRequiredIncName().compareTo( rhs.getRequiredIncName() );
+			if (getRequiredInclName() != null) {
+				if (rhs.getRequiredInclName() != null) {
+					cmp = getRequiredInclName().compareTo( rhs.getRequiredInclName() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -442,7 +442,7 @@ public class CFSecJpaSecClusGrpIncH
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredIncName() != null) {
+			else if (rhs.getRequiredInclName() != null) {
 				return( -1 );
 			}
             return( 0 );
@@ -463,7 +463,7 @@ public class CFSecJpaSecClusGrpIncH
 	@Override
     public void setSecClusGrpInc( ICFSecSecClusGrpInc src ) {
 		setRequiredSecClusGrpId( src.getRequiredSecClusGrpId() );
-		setRequiredIncName( src.getRequiredIncName() );
+		setRequiredInclName( src.getRequiredInclName() );
 		setRequiredRevision( src.getRequiredRevision() );
     }
 
@@ -475,7 +475,7 @@ public class CFSecJpaSecClusGrpIncH
 	@Override
     public void setSecClusGrpInc( ICFSecSecClusGrpIncH src ) {
 		setRequiredSecClusGrpId( src.getRequiredSecClusGrpId() );
-		setRequiredIncName( src.getRequiredIncName() );
+		setRequiredInclName( src.getRequiredInclName() );
 		setRequiredRevision( src.getRequiredRevision() );
     }
 

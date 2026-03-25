@@ -158,15 +158,15 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	 *
 	 *	@param	SecClusGrpId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
-	 *	@param	SecUserId	The SecClusGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 */
 	@Override
 	public void deleteSecClusGrpMembByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		schema.getJpaHooksSchema().getSecClusGrpMembService().deleteByIdIdx(argSecClusGrpId,
-		argSecUserId);
+		argLoginId);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 		ICFSecSecClusGrpMembPKey argKey )
 	{
 		schema.getJpaHooksSchema().getSecClusGrpMembService().deleteByIdIdx(argKey.getRequiredSecClusGrpId(),
-			argKey.getRequiredSecUserId());
+			argKey.getRequiredLoginId());
 	}
 
 	/**
@@ -214,32 +214,32 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	}
 
 	/**
-	 *	Delete the SecClusGrpMemb instances identified by the key UserIdx.
+	 *	Delete the SecClusGrpMemb instances identified by the key LoginIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecClusGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 */
 	@Override
-	public void deleteSecClusGrpMembByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId )
+	public void deleteSecClusGrpMembByLoginIdx( ICFSecAuthorization Authorization,
+		String argLoginId )
 	{
-		schema.getJpaHooksSchema().getSecClusGrpMembService().deleteByUserIdx(argSecUserId);
+		schema.getJpaHooksSchema().getSecClusGrpMembService().deleteByLoginIdx(argLoginId);
 	}
 
 
 	/**
-	 *	Delete the SecClusGrpMemb instances identified by the key UserIdx.
+	 *	Delete the SecClusGrpMemb instances identified by the key LoginIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
 	 *	@param	argKey	The key identifying the instances to be deleted.
 	 */
 	@Override
-	public void deleteSecClusGrpMembByUserIdx( ICFSecAuthorization Authorization,
-		ICFSecSecClusGrpMembByUserIdxKey argKey )
+	public void deleteSecClusGrpMembByLoginIdx( ICFSecAuthorization Authorization,
+		ICFSecSecClusGrpMembByLoginIdxKey argKey )
 	{
-		schema.getJpaHooksSchema().getSecClusGrpMembService().deleteByUserIdx(argKey.getRequiredSecUserId());
+		schema.getJpaHooksSchema().getSecClusGrpMembService().deleteByLoginIdx(argKey.getRequiredLoginId());
 	}
 
 
@@ -271,10 +271,10 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	@Override
 	public ICFSecSecClusGrpMemb readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		return( schema.getJpaHooksSchema().getSecClusGrpMembService().find(argSecClusGrpId,
-		argSecUserId) );
+		argLoginId) );
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	 *
 	 *	@param	SecClusGrpId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
-	 *	@param	SecUserId	The SecClusGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return The record instance for the specified key, or null if there is
 	 *		no such existing key value.
@@ -327,10 +327,10 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	@Override
 	public ICFSecSecClusGrpMemb readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		return( schema.getJpaHooksSchema().getSecClusGrpMembService().find(argSecClusGrpId,
-		argSecUserId) );
+		argLoginId) );
 	}
 
 	/**
@@ -356,19 +356,19 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	}
 
 	/**
-	 *	Read an array of the derived SecClusGrpMemb record instances identified by the duplicate key UserIdx.
+	 *	Read an array of the derived SecClusGrpMemb record instances identified by the duplicate key LoginIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecClusGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
 	 */
 	@Override
-	public ICFSecSecClusGrpMemb[] readDerivedByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId )
+	public ICFSecSecClusGrpMemb[] readDerivedByLoginIdx( ICFSecAuthorization Authorization,
+		String argLoginId )
 	{
-		List<CFSecJpaSecClusGrpMemb> results = schema.getJpaHooksSchema().getSecClusGrpMembService().findByUserIdx(argSecUserId);
+		List<CFSecJpaSecClusGrpMemb> results = schema.getJpaHooksSchema().getSecClusGrpMembService().findByLoginIdx(argLoginId);
 		ICFSecSecClusGrpMemb[] retset = new ICFSecSecClusGrpMemb[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecClusGrpMemb cur: results) {
@@ -411,7 +411,7 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	@Override
 	public ICFSecSecClusGrpMemb readRec( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRec-args");
 	}
@@ -458,7 +458,7 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	@Override
 	public ICFSecSecClusGrpMemb[] pageAllRec( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 priorSecClusGrpId,
-		CFLibDbKeyHash256 priorSecUserId )
+		String priorLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageAllRec");
 	}
@@ -470,7 +470,7 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	 *
 	 *	@param	SecClusGrpId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
-	 *	@param	SecUserId	The SecClusGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return The record instance for the specified key, or null if there is
 	 *		no such existing key value.
@@ -480,7 +480,7 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	@Override
 	public ICFSecSecClusGrpMemb readRecByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRecByIdIdx");
 	}
@@ -504,21 +504,21 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	}
 
 	/**
-	 *	Read an array of the specific SecClusGrpMemb record instances identified by the duplicate key UserIdx.
+	 *	Read an array of the specific SecClusGrpMemb record instances identified by the duplicate key LoginIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecClusGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
 	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
 	 */
 	@Override
-	public ICFSecSecClusGrpMemb[] readRecByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId )
+	public ICFSecSecClusGrpMemb[] readRecByLoginIdx( ICFSecAuthorization Authorization,
+		String argLoginId )
 	{
-		throw new CFLibNotImplementedYetException(getClass(), "readRecByUserIdx");
+		throw new CFLibNotImplementedYetException(getClass(), "readRecByLoginIdx");
 	}
 
 	/**
@@ -536,28 +536,28 @@ public class CFSecJpaSecClusGrpMembTable implements ICFSecSecClusGrpMembTable
 	public ICFSecSecClusGrpMemb[] pageRecByClusGrpIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
 		CFLibDbKeyHash256 priorSecClusGrpId,
-		CFLibDbKeyHash256 priorSecUserId )
+		String priorLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageRecByClusGrpIdx");
 	}
 
 	/**
-	 *	Read a page array of the specific SecClusGrpMemb record instances identified by the duplicate key UserIdx.
+	 *	Read a page array of the specific SecClusGrpMemb record instances identified by the duplicate key LoginIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecClusGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecClusGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
 	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
 	 */
 	@Override
-	public ICFSecSecClusGrpMemb[] pageRecByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId,
+	public ICFSecSecClusGrpMemb[] pageRecByLoginIdx( ICFSecAuthorization Authorization,
+		String argLoginId,
 		CFLibDbKeyHash256 priorSecClusGrpId,
-		CFLibDbKeyHash256 priorSecUserId )
+		String priorLoginId )
 	{
-		throw new CFLibNotImplementedYetException(getClass(), "pageRecByUserIdx");
+		throw new CFLibNotImplementedYetException(getClass(), "pageRecByLoginIdx");
 	}
 }

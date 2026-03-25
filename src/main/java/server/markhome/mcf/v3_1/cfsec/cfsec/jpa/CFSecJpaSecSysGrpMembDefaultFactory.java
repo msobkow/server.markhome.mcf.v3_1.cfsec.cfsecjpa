@@ -66,7 +66,7 @@ public class CFSecJpaSecSysGrpMembDefaultFactory
 		else {
 			CFSecJpaSecSysGrpMembPKey mapped = new CFSecJpaSecSysGrpMembPKey();
 			mapped.setRequiredContainerGroup( key.getRequiredSecSysGrpId() );
-			mapped.setRequiredParentUser( key.getRequiredSecUserId() );
+			mapped.setRequiredParentUser( key.getRequiredLoginId() );
 			return( mapped );
 		}
 	}
@@ -92,7 +92,7 @@ public class CFSecJpaSecSysGrpMembDefaultFactory
 			mapped.setAuditSessionId(key.getAuditSessionId());
 			mapped.setAuditStamp(key.getAuditStamp());
 			mapped.setRequiredSecSysGrpId( key.getRequiredSecSysGrpId() );
-			mapped.setRequiredSecUserId( key.getRequiredSecUserId() );
+			mapped.setRequiredLoginId( key.getRequiredLoginId() );
 			return( mapped );
 		}
 	}
@@ -119,22 +119,22 @@ public class CFSecJpaSecSysGrpMembDefaultFactory
 	}
 
     @Override
-    public ICFSecSecSysGrpMembByUserIdxKey newByUserIdxKey() {
-	ICFSecSecSysGrpMembByUserIdxKey key =
-            new CFSecJpaSecSysGrpMembByUserIdxKey();
+    public ICFSecSecSysGrpMembByLoginIdxKey newByLoginIdxKey() {
+	ICFSecSecSysGrpMembByLoginIdxKey key =
+            new CFSecJpaSecSysGrpMembByLoginIdxKey();
 	return( key );
     }
 
-	public CFSecJpaSecSysGrpMembByUserIdxKey ensureByUserIdxKey(ICFSecSecSysGrpMembByUserIdxKey key) {
+	public CFSecJpaSecSysGrpMembByLoginIdxKey ensureByLoginIdxKey(ICFSecSecSysGrpMembByLoginIdxKey key) {
 		if (key == null) {
 			return( null );
 		}
-		else if (key instanceof CFSecJpaSecSysGrpMembByUserIdxKey) {
-			return( (CFSecJpaSecSysGrpMembByUserIdxKey)key );
+		else if (key instanceof CFSecJpaSecSysGrpMembByLoginIdxKey) {
+			return( (CFSecJpaSecSysGrpMembByLoginIdxKey)key );
 		}
 		else {
-			CFSecJpaSecSysGrpMembByUserIdxKey mapped = new CFSecJpaSecSysGrpMembByUserIdxKey();
-			mapped.setRequiredSecUserId( key.getRequiredSecUserId() );
+			CFSecJpaSecSysGrpMembByLoginIdxKey mapped = new CFSecJpaSecSysGrpMembByLoginIdxKey();
+			mapped.setRequiredLoginId( key.getRequiredLoginId() );
 			return( mapped );
 		}
 	}

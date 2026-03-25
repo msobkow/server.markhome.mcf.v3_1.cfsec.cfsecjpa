@@ -44,9 +44,9 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 @Table(
 	name = "SecTentGrpMemb", schema = "CFSec31",
 	indexes = {
-		@Index(name = "SecTentGrpMembIdIdx", columnList = "SecTentGrpId, SecUserId", unique = true),
+		@Index(name = "SecTentGrpMembIdIdx", columnList = "SecTentGrpId, login_id", unique = true),
 		@Index(name = "SecTentGrpMembTentGrpIdx", columnList = "SecTentGrpId", unique = false),
-		@Index(name = "SecTentGrpMembUserIdx", columnList = "SecUserId", unique = false)
+		@Index(name = "SecTentGrpMembLoginIdx", columnList = "login_id", unique = false)
 	}
 )
 @Transactional(Transactional.TxType.SUPPORTS)
@@ -59,7 +59,7 @@ public class CFSecJpaSecTentGrpMemb
 	// Embedded id's are package-accessible so that the Repository can dereference the attributes of the primary key
 	@AttributeOverrides({
 		@AttributeOverride(name="SecTentGrpId", column = @Column( name="SecTentGrpId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) ),
-		@AttributeOverride(name="SecUserId", column = @Column( name="SecUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
+		@AttributeOverride(name="login_id", column = @Column( name="login_id", nullable=false, length=32 ) )
 	})
 	@EmbeddedId
 	CFSecJpaSecTentGrpMembPKey pkey = new CFSecJpaSecTentGrpMembPKey();
@@ -170,13 +170,13 @@ public class CFSecJpaSecTentGrpMemb
 	}
 
 	@Override
-	public CFLibDbKeyHash256 getRequiredSecUserId() {
-		return( pkey.getRequiredSecUserId() );
+	public String getRequiredLoginId() {
+		return( pkey.getRequiredLoginId() );
 	}
 
 	@Override
-	public void setRequiredSecUserId( CFLibDbKeyHash256 requiredSecUserId ) {
-		pkey.setRequiredSecUserId( requiredSecUserId );
+	public void setRequiredLoginId( String requiredLoginId ) {
+		pkey.setRequiredLoginId( requiredLoginId );
 	}
 
 	@Override
@@ -223,9 +223,9 @@ public class CFSecJpaSecTentGrpMemb
 					return( false );
 				}
 			}
-			if( getRequiredSecUserId() != null ) {
-				if( rhs.getRequiredSecUserId() != null ) {
-					if( ! getRequiredSecUserId().equals( rhs.getRequiredSecUserId() ) ) {
+			if( getRequiredLoginId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
+					if( ! getRequiredLoginId().equals( rhs.getRequiredLoginId() ) ) {
 						return( false );
 					}
 				}
@@ -234,7 +234,7 @@ public class CFSecJpaSecTentGrpMemb
 				}
 			}
 			else {
-				if( rhs.getRequiredSecUserId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
 					return( false );
 				}
 			}
@@ -269,9 +269,9 @@ public class CFSecJpaSecTentGrpMemb
 					return( false );
 				}
 			}
-			if( getRequiredSecUserId() != null ) {
-				if( rhs.getRequiredSecUserId() != null ) {
-					if( ! getRequiredSecUserId().equals( rhs.getRequiredSecUserId() ) ) {
+			if( getRequiredLoginId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
+					if( ! getRequiredLoginId().equals( rhs.getRequiredLoginId() ) ) {
 						return( false );
 					}
 				}
@@ -280,7 +280,7 @@ public class CFSecJpaSecTentGrpMemb
 				}
 			}
 			else {
-				if( rhs.getRequiredSecUserId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
 					return( false );
 				}
 			}
@@ -303,9 +303,9 @@ public class CFSecJpaSecTentGrpMemb
 					return( false );
 				}
 			}
-			if( getRequiredSecUserId() != null ) {
-				if( rhs.getRequiredSecUserId() != null ) {
-					if( ! getRequiredSecUserId().equals( rhs.getRequiredSecUserId() ) ) {
+			if( getRequiredLoginId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
+					if( ! getRequiredLoginId().equals( rhs.getRequiredLoginId() ) ) {
 						return( false );
 					}
 				}
@@ -314,7 +314,7 @@ public class CFSecJpaSecTentGrpMemb
 				}
 			}
 			else {
-				if( rhs.getRequiredSecUserId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
 					return( false );
 				}
 			}
@@ -341,9 +341,9 @@ public class CFSecJpaSecTentGrpMemb
 		}
 		else if (obj instanceof ICFSecSecTentGrpMembByUserIdxKey) {
 			ICFSecSecTentGrpMembByUserIdxKey rhs = (ICFSecSecTentGrpMembByUserIdxKey)obj;
-			if( getRequiredSecUserId() != null ) {
-				if( rhs.getRequiredSecUserId() != null ) {
-					if( ! getRequiredSecUserId().equals( rhs.getRequiredSecUserId() ) ) {
+			if( getRequiredLoginId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
+					if( ! getRequiredLoginId().equals( rhs.getRequiredLoginId() ) ) {
 						return( false );
 					}
 				}
@@ -352,7 +352,7 @@ public class CFSecJpaSecTentGrpMemb
 				}
 			}
 			else {
-				if( rhs.getRequiredSecUserId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
 					return( false );
 				}
 			}
@@ -371,7 +371,9 @@ public class CFSecJpaSecTentGrpMemb
 		hashCode = hashCode + getUpdatedByUserId().hashCode();
 		hashCode = hashCode + getUpdatedAt().hashCode();
 		hashCode = hashCode + getRequiredSecTentGrpId().hashCode();
-		hashCode = hashCode + getRequiredSecUserId().hashCode();
+		if( getRequiredLoginId() != null ) {
+			hashCode = hashCode + getRequiredLoginId().hashCode();
+		}
 		return( hashCode & 0x7fffffff );
 	}
 
@@ -433,9 +435,9 @@ public class CFSecJpaSecTentGrpMemb
 			else if (rhs.getRequiredSecTentGrpId() != null) {
 				return( -1 );
 			}
-			if (getRequiredSecUserId() != null) {
-				if (rhs.getRequiredSecUserId() != null) {
-					cmp = getRequiredSecUserId().compareTo( rhs.getRequiredSecUserId() );
+			if (getRequiredLoginId() != null) {
+				if (rhs.getRequiredLoginId() != null) {
+					cmp = getRequiredLoginId().compareTo( rhs.getRequiredLoginId() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -444,7 +446,7 @@ public class CFSecJpaSecTentGrpMemb
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredSecUserId() != null) {
+			else if (rhs.getRequiredLoginId() != null) {
 				return( -1 );
 			}
 			return( 0 );
@@ -465,9 +467,9 @@ public class CFSecJpaSecTentGrpMemb
 			else if (rhs.getRequiredSecTentGrpId() != null) {
 				return( -1 );
 			}
-			if (getRequiredSecUserId() != null) {
-				if (rhs.getRequiredSecUserId() != null) {
-					cmp = getRequiredSecUserId().compareTo( rhs.getRequiredSecUserId() );
+			if (getRequiredLoginId() != null) {
+				if (rhs.getRequiredLoginId() != null) {
+					cmp = getRequiredLoginId().compareTo( rhs.getRequiredLoginId() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -476,7 +478,7 @@ public class CFSecJpaSecTentGrpMemb
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredSecUserId() != null) {
+			else if (rhs.getRequiredLoginId() != null) {
 				return( -1 );
 			}
 			cmp = getCreatedByUserId().compareTo( rhs.getCreatedByUserId() );
@@ -517,9 +519,9 @@ public class CFSecJpaSecTentGrpMemb
 		}
 		else if (obj instanceof ICFSecSecTentGrpMembByUserIdxKey) {
 			ICFSecSecTentGrpMembByUserIdxKey rhs = (ICFSecSecTentGrpMembByUserIdxKey)obj;
-			if (getRequiredSecUserId() != null) {
-				if (rhs.getRequiredSecUserId() != null) {
-					cmp = getRequiredSecUserId().compareTo( rhs.getRequiredSecUserId() );
+			if (getRequiredLoginId() != null) {
+				if (rhs.getRequiredLoginId() != null) {
+					cmp = getRequiredLoginId().compareTo( rhs.getRequiredLoginId() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -528,7 +530,7 @@ public class CFSecJpaSecTentGrpMemb
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredSecUserId() != null) {
+			else if (rhs.getRequiredLoginId() != null) {
 				return( -1 );
 			}
 			return( 0 );
@@ -550,7 +552,7 @@ public class CFSecJpaSecTentGrpMemb
 	@Override
 	public void setSecTentGrpMemb( ICFSecSecTentGrpMemb src ) {
 		setRequiredSecTentGrpId(src.getRequiredSecTentGrpId());
-		setRequiredSecUserId(src.getRequiredSecUserId());
+		setRequiredLoginId(src.getRequiredLoginId());
 		setRequiredRevision( src.getRequiredRevision() );
 		setCreatedByUserId( src.getCreatedByUserId() );
 		setCreatedAt( src.getCreatedAt() );
@@ -566,7 +568,7 @@ public class CFSecJpaSecTentGrpMemb
 	@Override
 	public void setSecTentGrpMemb( ICFSecSecTentGrpMembH src ) {
 		setRequiredSecTentGrpId(src.getRequiredSecTentGrpId());
-		setRequiredSecUserId(src.getRequiredSecUserId());
+		setRequiredLoginId(src.getRequiredLoginId());
 	}
 
 	@Override
@@ -574,7 +576,7 @@ public class CFSecJpaSecTentGrpMemb
 		String ret = pkey.getXmlAttrFragment() 
 			+ " RequiredRevision=\"" + Integer.toString( getRequiredRevision() ) + "\""
 			+ " RequiredSecTentGrpId=" + "\"" + getRequiredSecTentGrpId().toString() + "\""
-			+ " RequiredSecUserId=" + "\"" + getRequiredSecUserId().toString() + "\"";
+			+ " RequiredLoginId=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredLoginId() ) + "\"";
 		return( ret );
 	}
 

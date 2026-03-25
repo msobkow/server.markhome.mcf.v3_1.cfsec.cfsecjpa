@@ -132,15 +132,15 @@ public class CFSecJpaSecSysGrpMembService {
 	 *	Argument-based find database instance for compatibility with the current MSS code factory code base.
 	 *
 	 *		@param requiredSecSysGrpId
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return The retrieved entity, or null if no such entity exists.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpMemb find(@Param("secSysGrpId") CFLibDbKeyHash256 requiredSecSysGrpId,
-		@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId) {
+		@Param("loginId") String requiredLoginId) {
 		return( cfsec31SecSysGrpMembRepository.get(requiredSecSysGrpId,
-			requiredSecUserId));
+			requiredLoginId));
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class CFSecJpaSecSysGrpMembService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpMemb find(ICFSecSecSysGrpMembPKey key) {
-		return( cfsec31SecSysGrpMembRepository.get(key.getRequiredSecSysGrpId(), key.getRequiredSecUserId()));
+		return( cfsec31SecSysGrpMembRepository.get(key.getRequiredSecSysGrpId(), key.getRequiredLoginId()));
 	}
 
 	/**
@@ -192,27 +192,27 @@ public class CFSecJpaSecSysGrpMembService {
 	}
 
 	/**
-	 *	Find zero or more entities into a List using the columns of the ICFSecSecSysGrpMembByUserIdxKey as arguments.
+	 *	Find zero or more entities into a List using the columns of the ICFSecSecSysGrpMembByLoginIdxKey as arguments.
 	 *
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return List&lt;CFSecJpaSecSysGrpMemb&gt; of the found entities, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSysGrpMemb> findByUserIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId) {
-		return( cfsec31SecSysGrpMembRepository.findByUserIdx(requiredSecUserId));
+	public List<CFSecJpaSecSysGrpMemb> findByLoginIdx(@Param("loginId") String requiredLoginId) {
+		return( cfsec31SecSysGrpMembRepository.findByLoginIdx(requiredLoginId));
 	}
 
 	/**
-	 *	ICFSecSecSysGrpMembByUserIdxKey entity list finder convenience method for object-based access.
+	 *	ICFSecSecSysGrpMembByLoginIdxKey entity list finder convenience method for object-based access.
 	 *
-	 *		@param key The ICFSecSecSysGrpMembByUserIdxKey instance to use for the query arguments.
+	 *		@param key The ICFSecSecSysGrpMembByLoginIdxKey instance to use for the query arguments.
 	 *
 	 *		@return The found entity list, which may be empty.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSysGrpMemb> findByUserIdx(ICFSecSecSysGrpMembByUserIdxKey key) {
-		return( cfsec31SecSysGrpMembRepository.findByUserIdx(key.getRequiredSecUserId()));
+	public List<CFSecJpaSecSysGrpMemb> findByLoginIdx(ICFSecSecSysGrpMembByLoginIdxKey key) {
+		return( cfsec31SecSysGrpMembRepository.findByLoginIdx(key.getRequiredLoginId()));
 	}
 
 	// CFSecSecSysGrpMemb specified lock-by-index methods
@@ -221,15 +221,15 @@ public class CFSecJpaSecSysGrpMembService {
 	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecSysGrpId
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpMemb lockByIdIdx(@Param("secSysGrpId") CFLibDbKeyHash256 requiredSecSysGrpId,
-		@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId) {
+		@Param("loginId") String requiredLoginId) {
 		return( cfsec31SecSysGrpMembRepository.lockByIdIdx(requiredSecSysGrpId,
-			requiredSecUserId));
+			requiredLoginId));
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class CFSecJpaSecSysGrpMembService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpMemb lockByIdIdx(ICFSecSecSysGrpMembPKey key) {
-		return( cfsec31SecSysGrpMembRepository.lockByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredSecUserId()));
+		return( cfsec31SecSysGrpMembRepository.lockByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredLoginId()));
 	}
 
 	/**
@@ -271,25 +271,25 @@ public class CFSecJpaSecSysGrpMembService {
 	/**
 	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSysGrpMemb> lockByUserIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId) {
-		return( cfsec31SecSysGrpMembRepository.lockByUserIdx(requiredSecUserId));
+	public List<CFSecJpaSecSysGrpMemb> lockByLoginIdx(@Param("loginId") String requiredLoginId) {
+		return( cfsec31SecSysGrpMembRepository.lockByLoginIdx(requiredLoginId));
 	}
 
 	/**
-	 *	ICFSecSecSysGrpMembByUserIdxKey based lock method for object-based access.
+	 *	ICFSecSecSysGrpMembByLoginIdxKey based lock method for object-based access.
 	 *
 	 *		@param key The key of the entity to be locked.
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSysGrpMemb> lockByUserIdx(ICFSecSecSysGrpMembByUserIdxKey key) {
-		return( cfsec31SecSysGrpMembRepository.lockByUserIdx(key.getRequiredSecUserId()));
+	public List<CFSecJpaSecSysGrpMemb> lockByLoginIdx(ICFSecSecSysGrpMembByLoginIdxKey key) {
+		return( cfsec31SecSysGrpMembRepository.lockByLoginIdx(key.getRequiredLoginId()));
 	}
 
 	// CFSecSecSysGrpMemb specified delete-by-index methods
@@ -298,13 +298,13 @@ public class CFSecJpaSecSysGrpMembService {
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecSysGrpId
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteByIdIdx(@Param("secSysGrpId") CFLibDbKeyHash256 requiredSecSysGrpId,
-		@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId) {
+		@Param("loginId") String requiredLoginId) {
 		cfsec31SecSysGrpMembRepository.deleteByIdIdx(requiredSecSysGrpId,
-			requiredSecUserId);
+			requiredLoginId);
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class CFSecJpaSecSysGrpMembService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteByIdIdx(ICFSecSecSysGrpMembPKey key) {
-		cfsec31SecSysGrpMembRepository.deleteByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredSecUserId());
+		cfsec31SecSysGrpMembRepository.deleteByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredLoginId());
 	}
 
 	/**
@@ -340,20 +340,20 @@ public class CFSecJpaSecSysGrpMembService {
 	/**
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByUserIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId) {
-		cfsec31SecSysGrpMembRepository.deleteByUserIdx(requiredSecUserId);
+	public void deleteByLoginIdx(@Param("loginId") String requiredLoginId) {
+		cfsec31SecSysGrpMembRepository.deleteByLoginIdx(requiredLoginId);
 	}
 
 	/**
-	 *	ICFSecSecSysGrpMembByUserIdxKey based lock method for object-based access.
+	 *	ICFSecSecSysGrpMembByLoginIdxKey based lock method for object-based access.
 	 *
-	 *		@param key The ICFSecSecSysGrpMembByUserIdxKey of the entity to be locked.
+	 *		@param key The ICFSecSecSysGrpMembByLoginIdxKey of the entity to be locked.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByUserIdx(ICFSecSecSysGrpMembByUserIdxKey key) {
-		cfsec31SecSysGrpMembRepository.deleteByUserIdx(key.getRequiredSecUserId());
+	public void deleteByLoginIdx(ICFSecSecSysGrpMembByLoginIdxKey key) {
+		cfsec31SecSysGrpMembRepository.deleteByLoginIdx(key.getRequiredLoginId());
 	}
 }

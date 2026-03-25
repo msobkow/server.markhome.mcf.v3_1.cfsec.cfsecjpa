@@ -56,13 +56,13 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *	Argument-based get database instance for compatibility with the current MSS code factory code base.
 	 *
 	 *		@param requiredSecClusGrpId
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return The retrieved entity, usually from the JPA cache, or null if no such entity exists.
 	 */
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredIncName = :incName")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredInclName = :inclName")
 	CFSecJpaSecClusGrpInc get(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId,
-		@Param("incName") String requiredIncName);
+		@Param("inclName") String requiredInclName);
 
 	/**
 	 *	CFSecSecClusGrpIncPKey based read method for object-based access.
@@ -72,7 +72,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *		@return The entity read, usually from the JPA cache, or null if no such entity exists.
 	 */
 	default CFSecJpaSecClusGrpInc get(ICFSecSecClusGrpIncPKey key) {
-		return( get(key.getRequiredSecClusGrpId(), key.getRequiredIncName()));
+		return( get(key.getRequiredSecClusGrpId(), key.getRequiredInclName()));
 	}
 
 	// CFSecJpaSecClusGrpInc specified index readers
@@ -101,12 +101,12 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	/**
 	 *	Read zero or more entities into a List using the columns of the CFSecSecClusGrpIncByNameIdxKey as arguments.
 	 *
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return List&lt;CFSecJpaSecClusGrpInc&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredIncName = :incName")
-	List<CFSecJpaSecClusGrpInc> findByNameIdx(@Param("incName") String requiredIncName);
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredInclName = :inclName")
+	List<CFSecJpaSecClusGrpInc> findByNameIdx(@Param("inclName") String requiredInclName);
 
 	/**
 	 *	CFSecSecClusGrpIncByNameIdxKey entity list reader convenience method for object-based access.
@@ -116,7 +116,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
 	 */
 	default List<CFSecJpaSecClusGrpInc> findByNameIdx(ICFSecSecClusGrpIncByNameIdxKey key) {
-		return( findByNameIdx(key.getRequiredIncName()));
+		return( findByNameIdx(key.getRequiredInclName()));
 	}
 
 	// CFSecJpaSecClusGrpInc specified delete-by-index methods
@@ -125,15 +125,15 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecClusGrpId
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredIncName = :incName")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredInclName = :inclName")
 	CFSecJpaSecClusGrpInc lockByIdIdx(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId,
-		@Param("incName") String requiredIncName);
+		@Param("inclName") String requiredInclName);
 
 	/**
 	 *	CFSecSecClusGrpIncByIdIdxKey based lock method for object-based access.
@@ -143,7 +143,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
 	 */
 	default CFSecJpaSecClusGrpInc lockByIdIdx(ICFSecSecClusGrpIncPKey key) {
-		return( lockByIdIdx(key.getRequiredSecClusGrpId(), key.getRequiredIncName()));
+		return( lockByIdIdx(key.getRequiredSecClusGrpId(), key.getRequiredInclName()));
 	}
 
 	/**
@@ -172,14 +172,14 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	/**
 	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredIncName = :incName")
-	List<CFSecJpaSecClusGrpInc> lockByNameIdx(@Param("incName") String requiredIncName);
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredInclName = :inclName")
+	List<CFSecJpaSecClusGrpInc> lockByNameIdx(@Param("inclName") String requiredInclName);
 
 	/**
 	 *	CFSecSecClusGrpIncByNameIdxKey based lock method for object-based access.
@@ -189,7 +189,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	default List<CFSecJpaSecClusGrpInc> lockByNameIdx(ICFSecSecClusGrpIncByNameIdxKey key) {
-		return( lockByNameIdx(key.getRequiredIncName()));
+		return( lockByNameIdx(key.getRequiredInclName()));
 	}
 
 	// CFSecJpaSecClusGrpInc specified delete-by-index methods
@@ -198,13 +198,13 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecClusGrpId
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredIncName = :incName")
+	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredInclName = :inclName")
 	void deleteByIdIdx(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId,
-		@Param("incName") String requiredIncName);
+		@Param("inclName") String requiredInclName);
 
 	/**
 	 *	CFSecSecClusGrpIncByIdIdxKey based lock method for object-based access.
@@ -212,7 +212,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *		@param key The CFSecSecClusGrpIncByIdIdxKey of the entity to be locked.
 	 */
 	default void deleteByIdIdx(ICFSecSecClusGrpIncPKey key) {
-		deleteByIdIdx(key.getRequiredSecClusGrpId(), key.getRequiredIncName());
+		deleteByIdIdx(key.getRequiredSecClusGrpId(), key.getRequiredInclName());
 	}
 
 	/**
@@ -237,12 +237,12 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	/**
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredIncName = :incName")
-	void deleteByNameIdx(@Param("incName") String requiredIncName);
+	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredInclName = :inclName")
+	void deleteByNameIdx(@Param("inclName") String requiredInclName);
 
 	/**
 	 *	CFSecSecClusGrpIncByNameIdxKey based lock method for object-based access.
@@ -250,7 +250,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *		@param key The CFSecSecClusGrpIncByNameIdxKey of the entity to be locked.
 	 */
 	default void deleteByNameIdx(ICFSecSecClusGrpIncByNameIdxKey key) {
-		deleteByNameIdx(key.getRequiredIncName());
+		deleteByNameIdx(key.getRequiredInclName());
 	}
 
 }

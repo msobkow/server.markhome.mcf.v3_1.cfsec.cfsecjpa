@@ -62,10 +62,10 @@ public class CFSecJpaSecUser
 		@AttributeOverride(name="bytes", column = @Column( name="SecUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
 	})
 	protected CFLibDbKeyHash256 requiredSecUserId;
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredParentUser")
-	protected Set<CFSecJpaSecSysGrpMemb> optionalChildrenSysSecGrpMemb;
 	protected int requiredRevision;
 
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredParentUser")
+	protected Set<CFSecJpaSecSysGrpMemb> optionalChildrenSysSecGrpMemb;
 
 	@AttributeOverrides({
 		@AttributeOverride( name="bytes", column = @Column( name="CreatedByUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )

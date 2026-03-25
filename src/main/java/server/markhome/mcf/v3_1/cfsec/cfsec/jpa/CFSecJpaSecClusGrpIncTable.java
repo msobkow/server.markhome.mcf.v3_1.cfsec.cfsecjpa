@@ -158,15 +158,15 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 *
 	 *	@param	SecClusGrpId	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
-	 *	@param	IncName	The SecClusGrpInc key attribute of the instance generating the id.
+	 *	@param	InclName	The SecClusGrpInc key attribute of the instance generating the id.
 	 */
 	@Override
 	public void deleteSecClusGrpIncByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		String argIncName )
+		String argInclName )
 	{
 		schema.getJpaHooksSchema().getSecClusGrpIncService().deleteByIdIdx(argSecClusGrpId,
-		argIncName);
+		argInclName);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 		ICFSecSecClusGrpIncPKey argKey )
 	{
 		schema.getJpaHooksSchema().getSecClusGrpIncService().deleteByIdIdx(argKey.getRequiredSecClusGrpId(),
-			argKey.getRequiredIncName());
+			argKey.getRequiredInclName());
 	}
 
 	/**
@@ -218,13 +218,13 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	IncName	The SecClusGrpInc key attribute of the instance generating the id.
+	 *	@param	InclName	The SecClusGrpInc key attribute of the instance generating the id.
 	 */
 	@Override
 	public void deleteSecClusGrpIncByNameIdx( ICFSecAuthorization Authorization,
-		String argIncName )
+		String argInclName )
 	{
-		schema.getJpaHooksSchema().getSecClusGrpIncService().deleteByNameIdx(argIncName);
+		schema.getJpaHooksSchema().getSecClusGrpIncService().deleteByNameIdx(argInclName);
 	}
 
 
@@ -239,7 +239,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	public void deleteSecClusGrpIncByNameIdx( ICFSecAuthorization Authorization,
 		ICFSecSecClusGrpIncByNameIdxKey argKey )
 	{
-		schema.getJpaHooksSchema().getSecClusGrpIncService().deleteByNameIdx(argKey.getRequiredIncName());
+		schema.getJpaHooksSchema().getSecClusGrpIncService().deleteByNameIdx(argKey.getRequiredInclName());
 	}
 
 
@@ -271,10 +271,10 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	@Override
 	public ICFSecSecClusGrpInc readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		String argIncName )
+		String argInclName )
 	{
 		return( schema.getJpaHooksSchema().getSecClusGrpIncService().find(argSecClusGrpId,
-		argIncName) );
+		argInclName) );
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 *
 	 *	@param	SecClusGrpId	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
-	 *	@param	IncName	The SecClusGrpInc key attribute of the instance generating the id.
+	 *	@param	InclName	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
 	 *	@return The record instance for the specified key, or null if there is
 	 *		no such existing key value.
@@ -327,10 +327,10 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	@Override
 	public ICFSecSecClusGrpInc readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		String argIncName )
+		String argInclName )
 	{
 		return( schema.getJpaHooksSchema().getSecClusGrpIncService().find(argSecClusGrpId,
-		argIncName) );
+		argInclName) );
 	}
 
 	/**
@@ -360,15 +360,15 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	IncName	The SecClusGrpInc key attribute of the instance generating the id.
+	 *	@param	InclName	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
 	 */
 	@Override
 	public ICFSecSecClusGrpInc[] readDerivedByNameIdx( ICFSecAuthorization Authorization,
-		String argIncName )
+		String argInclName )
 	{
-		List<CFSecJpaSecClusGrpInc> results = schema.getJpaHooksSchema().getSecClusGrpIncService().findByNameIdx(argIncName);
+		List<CFSecJpaSecClusGrpInc> results = schema.getJpaHooksSchema().getSecClusGrpIncService().findByNameIdx(argInclName);
 		ICFSecSecClusGrpInc[] retset = new ICFSecSecClusGrpInc[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecClusGrpInc cur: results) {
@@ -411,7 +411,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	@Override
 	public ICFSecSecClusGrpInc readRec( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		String argIncName )
+		String argInclName )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRec-args");
 	}
@@ -458,7 +458,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	@Override
 	public ICFSecSecClusGrpInc[] pageAllRec( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 priorSecClusGrpId,
-		String priorIncName )
+		String priorInclName )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageAllRec");
 	}
@@ -470,7 +470,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 *
 	 *	@param	SecClusGrpId	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
-	 *	@param	IncName	The SecClusGrpInc key attribute of the instance generating the id.
+	 *	@param	InclName	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
 	 *	@return The record instance for the specified key, or null if there is
 	 *		no such existing key value.
@@ -480,7 +480,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	@Override
 	public ICFSecSecClusGrpInc readRecByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
-		String argIncName )
+		String argInclName )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRecByIdIdx");
 	}
@@ -508,7 +508,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	IncName	The SecClusGrpInc key attribute of the instance generating the id.
+	 *	@param	InclName	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
@@ -516,7 +516,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 */
 	@Override
 	public ICFSecSecClusGrpInc[] readRecByNameIdx( ICFSecAuthorization Authorization,
-		String argIncName )
+		String argInclName )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRecByNameIdx");
 	}
@@ -536,7 +536,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	public ICFSecSecClusGrpInc[] pageRecByClusGrpIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecClusGrpId,
 		CFLibDbKeyHash256 priorSecClusGrpId,
-		String priorIncName )
+		String priorInclName )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageRecByClusGrpIdx");
 	}
@@ -546,7 +546,7 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	IncName	The SecClusGrpInc key attribute of the instance generating the id.
+	 *	@param	InclName	The SecClusGrpInc key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
@@ -554,9 +554,9 @@ public class CFSecJpaSecClusGrpIncTable implements ICFSecSecClusGrpIncTable
 	 */
 	@Override
 	public ICFSecSecClusGrpInc[] pageRecByNameIdx( ICFSecAuthorization Authorization,
-		String argIncName,
+		String argInclName,
 		CFLibDbKeyHash256 priorSecClusGrpId,
-		String priorIncName )
+		String priorInclName )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageRecByNameIdx");
 	}

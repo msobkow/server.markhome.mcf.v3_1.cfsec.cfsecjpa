@@ -132,15 +132,15 @@ public class CFSecJpaSecSysGrpIncService {
 	 *	Argument-based find database instance for compatibility with the current MSS code factory code base.
 	 *
 	 *		@param requiredSecSysGrpId
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return The retrieved entity, or null if no such entity exists.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpInc find(@Param("secSysGrpId") CFLibDbKeyHash256 requiredSecSysGrpId,
-		@Param("incName") String requiredIncName) {
+		@Param("inclName") String requiredInclName) {
 		return( cfsec31SecSysGrpIncRepository.get(requiredSecSysGrpId,
-			requiredIncName));
+			requiredInclName));
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class CFSecJpaSecSysGrpIncService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpInc find(ICFSecSecSysGrpIncPKey key) {
-		return( cfsec31SecSysGrpIncRepository.get(key.getRequiredSecSysGrpId(), key.getRequiredIncName()));
+		return( cfsec31SecSysGrpIncRepository.get(key.getRequiredSecSysGrpId(), key.getRequiredInclName()));
 	}
 
 	/**
@@ -194,13 +194,13 @@ public class CFSecJpaSecSysGrpIncService {
 	/**
 	 *	Find zero or more entities into a List using the columns of the ICFSecSecSysGrpIncByNameIdxKey as arguments.
 	 *
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return List&lt;CFSecJpaSecSysGrpInc&gt; of the found entities, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSysGrpInc> findByNameIdx(@Param("incName") String requiredIncName) {
-		return( cfsec31SecSysGrpIncRepository.findByNameIdx(requiredIncName));
+	public List<CFSecJpaSecSysGrpInc> findByNameIdx(@Param("inclName") String requiredInclName) {
+		return( cfsec31SecSysGrpIncRepository.findByNameIdx(requiredInclName));
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class CFSecJpaSecSysGrpIncService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public List<CFSecJpaSecSysGrpInc> findByNameIdx(ICFSecSecSysGrpIncByNameIdxKey key) {
-		return( cfsec31SecSysGrpIncRepository.findByNameIdx(key.getRequiredIncName()));
+		return( cfsec31SecSysGrpIncRepository.findByNameIdx(key.getRequiredInclName()));
 	}
 
 	// CFSecSecSysGrpInc specified lock-by-index methods
@@ -221,15 +221,15 @@ public class CFSecJpaSecSysGrpIncService {
 	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecSysGrpId
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpInc lockByIdIdx(@Param("secSysGrpId") CFLibDbKeyHash256 requiredSecSysGrpId,
-		@Param("incName") String requiredIncName) {
+		@Param("inclName") String requiredInclName) {
 		return( cfsec31SecSysGrpIncRepository.lockByIdIdx(requiredSecSysGrpId,
-			requiredIncName));
+			requiredInclName));
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class CFSecJpaSecSysGrpIncService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public CFSecJpaSecSysGrpInc lockByIdIdx(ICFSecSecSysGrpIncPKey key) {
-		return( cfsec31SecSysGrpIncRepository.lockByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredIncName()));
+		return( cfsec31SecSysGrpIncRepository.lockByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredInclName()));
 	}
 
 	/**
@@ -271,13 +271,13 @@ public class CFSecJpaSecSysGrpIncService {
 	/**
 	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecSysGrpInc> lockByNameIdx(@Param("incName") String requiredIncName) {
-		return( cfsec31SecSysGrpIncRepository.lockByNameIdx(requiredIncName));
+	public List<CFSecJpaSecSysGrpInc> lockByNameIdx(@Param("inclName") String requiredInclName) {
+		return( cfsec31SecSysGrpIncRepository.lockByNameIdx(requiredInclName));
 	}
 
 	/**
@@ -289,7 +289,7 @@ public class CFSecJpaSecSysGrpIncService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public List<CFSecJpaSecSysGrpInc> lockByNameIdx(ICFSecSecSysGrpIncByNameIdxKey key) {
-		return( cfsec31SecSysGrpIncRepository.lockByNameIdx(key.getRequiredIncName()));
+		return( cfsec31SecSysGrpIncRepository.lockByNameIdx(key.getRequiredInclName()));
 	}
 
 	// CFSecSecSysGrpInc specified delete-by-index methods
@@ -298,13 +298,13 @@ public class CFSecJpaSecSysGrpIncService {
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecSysGrpId
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteByIdIdx(@Param("secSysGrpId") CFLibDbKeyHash256 requiredSecSysGrpId,
-		@Param("incName") String requiredIncName) {
+		@Param("inclName") String requiredInclName) {
 		cfsec31SecSysGrpIncRepository.deleteByIdIdx(requiredSecSysGrpId,
-			requiredIncName);
+			requiredInclName);
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class CFSecJpaSecSysGrpIncService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteByIdIdx(ICFSecSecSysGrpIncPKey key) {
-		cfsec31SecSysGrpIncRepository.deleteByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredIncName());
+		cfsec31SecSysGrpIncRepository.deleteByIdIdx(key.getRequiredSecSysGrpId(), key.getRequiredInclName());
 	}
 
 	/**
@@ -340,11 +340,11 @@ public class CFSecJpaSecSysGrpIncService {
 	/**
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredIncName
+	 *		@param requiredInclName
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByNameIdx(@Param("incName") String requiredIncName) {
-		cfsec31SecSysGrpIncRepository.deleteByNameIdx(requiredIncName);
+	public void deleteByNameIdx(@Param("inclName") String requiredInclName) {
+		cfsec31SecSysGrpIncRepository.deleteByNameIdx(requiredInclName);
 	}
 
 	/**
@@ -354,6 +354,6 @@ public class CFSecJpaSecSysGrpIncService {
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteByNameIdx(ICFSecSecSysGrpIncByNameIdxKey key) {
-		cfsec31SecSysGrpIncRepository.deleteByNameIdx(key.getRequiredIncName());
+		cfsec31SecSysGrpIncRepository.deleteByNameIdx(key.getRequiredInclName());
 	}
 }

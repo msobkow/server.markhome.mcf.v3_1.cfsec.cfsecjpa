@@ -158,15 +158,15 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 *
 	 *	@param	SecTentGrpId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
-	 *	@param	SecUserId	The SecTentGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 */
 	@Override
 	public void deleteSecTentGrpMembByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecTentGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		schema.getJpaHooksSchema().getSecTentGrpMembService().deleteByIdIdx(argSecTentGrpId,
-		argSecUserId);
+		argLoginId);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 		ICFSecSecTentGrpMembPKey argKey )
 	{
 		schema.getJpaHooksSchema().getSecTentGrpMembService().deleteByIdIdx(argKey.getRequiredSecTentGrpId(),
-			argKey.getRequiredSecUserId());
+			argKey.getRequiredLoginId());
 	}
 
 	/**
@@ -218,13 +218,13 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecTentGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 */
 	@Override
 	public void deleteSecTentGrpMembByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
-		schema.getJpaHooksSchema().getSecTentGrpMembService().deleteByUserIdx(argSecUserId);
+		schema.getJpaHooksSchema().getSecTentGrpMembService().deleteByUserIdx(argLoginId);
 	}
 
 
@@ -239,7 +239,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	public void deleteSecTentGrpMembByUserIdx( ICFSecAuthorization Authorization,
 		ICFSecSecTentGrpMembByUserIdxKey argKey )
 	{
-		schema.getJpaHooksSchema().getSecTentGrpMembService().deleteByUserIdx(argKey.getRequiredSecUserId());
+		schema.getJpaHooksSchema().getSecTentGrpMembService().deleteByUserIdx(argKey.getRequiredLoginId());
 	}
 
 
@@ -271,10 +271,10 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	@Override
 	public ICFSecSecTentGrpMemb readDerived( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecTentGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		return( schema.getJpaHooksSchema().getSecTentGrpMembService().find(argSecTentGrpId,
-		argSecUserId) );
+		argLoginId) );
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 *
 	 *	@param	SecTentGrpId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
-	 *	@param	SecUserId	The SecTentGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return The record instance for the specified key, or null if there is
 	 *		no such existing key value.
@@ -327,10 +327,10 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	@Override
 	public ICFSecSecTentGrpMemb readDerivedByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecTentGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		return( schema.getJpaHooksSchema().getSecTentGrpMembService().find(argSecTentGrpId,
-		argSecUserId) );
+		argLoginId) );
 	}
 
 	/**
@@ -360,15 +360,15 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecTentGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
 	 */
 	@Override
 	public ICFSecSecTentGrpMemb[] readDerivedByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
-		List<CFSecJpaSecTentGrpMemb> results = schema.getJpaHooksSchema().getSecTentGrpMembService().findByUserIdx(argSecUserId);
+		List<CFSecJpaSecTentGrpMemb> results = schema.getJpaHooksSchema().getSecTentGrpMembService().findByUserIdx(argLoginId);
 		ICFSecSecTentGrpMemb[] retset = new ICFSecSecTentGrpMemb[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecTentGrpMemb cur: results) {
@@ -411,7 +411,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	@Override
 	public ICFSecSecTentGrpMemb readRec( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecTentGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRec-args");
 	}
@@ -458,7 +458,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	@Override
 	public ICFSecSecTentGrpMemb[] pageAllRec( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 priorSecTentGrpId,
-		CFLibDbKeyHash256 priorSecUserId )
+		String priorLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageAllRec");
 	}
@@ -470,7 +470,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 *
 	 *	@param	SecTentGrpId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
-	 *	@param	SecUserId	The SecTentGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return The record instance for the specified key, or null if there is
 	 *		no such existing key value.
@@ -480,7 +480,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	@Override
 	public ICFSecSecTentGrpMemb readRecByIdIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecTentGrpId,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRecByIdIdx");
 	}
@@ -508,7 +508,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecTentGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
@@ -516,7 +516,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 */
 	@Override
 	public ICFSecSecTentGrpMemb[] readRecByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId )
+		String argLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRecByUserIdx");
 	}
@@ -536,7 +536,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	public ICFSecSecTentGrpMemb[] pageRecByTentGrpIdx( ICFSecAuthorization Authorization,
 		CFLibDbKeyHash256 argSecTentGrpId,
 		CFLibDbKeyHash256 priorSecTentGrpId,
-		CFLibDbKeyHash256 priorSecUserId )
+		String priorLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageRecByTentGrpIdx");
 	}
@@ -546,7 +546,7 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	SecUserId	The SecTentGrpMemb key attribute of the instance generating the id.
+	 *	@param	LoginId	The SecTentGrpMemb key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
@@ -554,9 +554,9 @@ public class CFSecJpaSecTentGrpMembTable implements ICFSecSecTentGrpMembTable
 	 */
 	@Override
 	public ICFSecSecTentGrpMemb[] pageRecByUserIdx( ICFSecAuthorization Authorization,
-		CFLibDbKeyHash256 argSecUserId,
+		String argLoginId,
 		CFLibDbKeyHash256 priorSecTentGrpId,
-		CFLibDbKeyHash256 priorSecUserId )
+		String priorLoginId )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "pageRecByUserIdx");
 	}

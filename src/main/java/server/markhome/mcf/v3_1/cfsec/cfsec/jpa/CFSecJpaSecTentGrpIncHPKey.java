@@ -43,7 +43,7 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 /**
  *	CFSecJpaSecTentGrpIncHPKey History Primary Key for SecTentGrpInc
  *		requiredSecTentGrpId	Required object attribute SecTentGrpId.
- *		requiredIncName	Required object attribute IncName.
+ *		requiredInclName	Required object attribute InclName.
  */
 public class CFSecJpaSecTentGrpIncHPKey
 	implements ICFSecSecTentGrpIncHPKey, Comparable<Object>, Serializable
@@ -72,7 +72,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 	})
 	protected CFLibDbKeyHash256 requiredSecTentGrpId;
 	@Column( name="inc_name", nullable=false, length=64 )
-	protected String requiredIncName;
+	protected String requiredInclName;
 
 	public CFSecJpaSecTentGrpIncHPKey() {
 		auditClusterId = ICFSecCluster.ID_INIT_VALUE;
@@ -81,7 +81,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 		requiredRevision = 1;
 		auditSessionId = CFLibDbKeyHash256.nullGet();
 		requiredSecTentGrpId = CFLibDbKeyHash256.fromHex( ICFSecSecTentGrpInc.SECTENTGRPID_INIT_VALUE.toString() );
-		requiredIncName = ICFSecSecTentGrpInc.INCNAME_INIT_VALUE;
+		requiredInclName = ICFSecSecTentGrpInc.INCLNAME_INIT_VALUE;
 	}
 
 	@Override
@@ -151,27 +151,27 @@ public class CFSecJpaSecTentGrpIncHPKey
 	}
 
 	@Override
-	public String getRequiredIncName() {
-		return( requiredIncName );
+	public String getRequiredInclName() {
+		return( requiredInclName );
 	}
 
 	@Override
-	public void setRequiredIncName( String value ) {
+	public void setRequiredInclName( String value ) {
 		if( value == null ) {
 			throw new CFLibNullArgumentException( getClass(),
-				"setRequiredIncName",
+				"setRequiredInclName",
 				1,
 				"value" );
 		}
 		else if( value.length() > 64 ) {
 			throw new CFLibArgumentOverflowException( getClass(),
-				"setRequiredIncName",
+				"setRequiredInclName",
 				1,
 				"value.length()",
 				value.length(),
 				64 );
 		}
-		requiredIncName = value;
+		requiredInclName = value;
 	}
 
 	@Override
@@ -196,9 +196,9 @@ public class CFSecJpaSecTentGrpIncHPKey
 					return( false );
 				}
 			}
-			if( getRequiredIncName() != null ) {
-				if( rhs.getRequiredIncName() != null ) {
-					if( ! getRequiredIncName().equals( rhs.getRequiredIncName() ) ) {
+			if( getRequiredInclName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
+					if( ! getRequiredInclName().equals( rhs.getRequiredInclName() ) ) {
 						return( false );
 					}
 				}
@@ -207,7 +207,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 				}
 			}
 			else {
-				if( rhs.getRequiredIncName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
 					return( false );
 				}
 			}
@@ -275,9 +275,9 @@ public class CFSecJpaSecTentGrpIncHPKey
 					return( false );
 				}
 			}
-			if( getRequiredIncName() != null ) {
-				if( rhs.getRequiredIncName() != null ) {
-					if( ! getRequiredIncName().equals( rhs.getRequiredIncName() ) ) {
+			if( getRequiredInclName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
+					if( ! getRequiredInclName().equals( rhs.getRequiredInclName() ) ) {
 						return( false );
 					}
 				}
@@ -286,7 +286,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 				}
 			}
 			else {
-				if( rhs.getRequiredIncName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
 					return( false );
 				}
 			}
@@ -354,9 +354,9 @@ public class CFSecJpaSecTentGrpIncHPKey
 					return( false );
 				}
 			}
-			if( getRequiredIncName() != null ) {
-				if( rhs.getRequiredIncName() != null ) {
-					if( ! getRequiredIncName().equals( rhs.getRequiredIncName() ) ) {
+			if( getRequiredInclName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
+					if( ! getRequiredInclName().equals( rhs.getRequiredInclName() ) ) {
 						return( false );
 					}
 				}
@@ -365,7 +365,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 				}
 			}
 			else {
-				if( rhs.getRequiredIncName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
 					return( false );
 				}
 			}
@@ -391,8 +391,8 @@ public class CFSecJpaSecTentGrpIncHPKey
 			hashCode = hashCode + auditSessionId.hashCode();
 		}
 		hashCode = hashCode + getRequiredSecTentGrpId().hashCode();
-		if( getRequiredIncName() != null ) {
-			hashCode = hashCode + getRequiredIncName().hashCode();
+		if( getRequiredInclName() != null ) {
+			hashCode = hashCode + getRequiredInclName().hashCode();
 		}
 		return( hashCode & 0x7fffffff );
 	}
@@ -419,9 +419,9 @@ public class CFSecJpaSecTentGrpIncHPKey
 			else if (rhs.getRequiredSecTentGrpId() != null) {
 				return( -1 );
 			}
-			if (getRequiredIncName() != null) {
-				if (rhs.getRequiredIncName() != null) {
-					cmp = getRequiredIncName().compareTo( rhs.getRequiredIncName() );
+			if (getRequiredInclName() != null) {
+				if (rhs.getRequiredInclName() != null) {
+					cmp = getRequiredInclName().compareTo( rhs.getRequiredInclName() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -430,7 +430,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredIncName() != null) {
+			else if (rhs.getRequiredInclName() != null) {
 				return( -1 );
 			}
 			return( 0 );
@@ -505,9 +505,9 @@ public class CFSecJpaSecTentGrpIncHPKey
 			else if (rhs.getRequiredSecTentGrpId() != null) {
 				return( -1 );
 			}
-			if (getRequiredIncName() != null) {
-				if (rhs.getRequiredIncName() != null) {
-					cmp = getRequiredIncName().compareTo( rhs.getRequiredIncName() );
+			if (getRequiredInclName() != null) {
+				if (rhs.getRequiredInclName() != null) {
+					cmp = getRequiredInclName().compareTo( rhs.getRequiredInclName() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -516,7 +516,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredIncName() != null) {
+			else if (rhs.getRequiredInclName() != null) {
 				return( -1 );
 			}
 			return( 0 );
@@ -591,9 +591,9 @@ public class CFSecJpaSecTentGrpIncHPKey
 			else if (rhs.getRequiredSecTentGrpId() != null) {
 				return( -1 );
 			}
-			if (getRequiredIncName() != null) {
-				if (rhs.getRequiredIncName() != null) {
-					cmp = getRequiredIncName().compareTo( rhs.getRequiredIncName() );
+			if (getRequiredInclName() != null) {
+				if (rhs.getRequiredInclName() != null) {
+					cmp = getRequiredInclName().compareTo( rhs.getRequiredInclName() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -602,7 +602,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredIncName() != null) {
+			else if (rhs.getRequiredInclName() != null) {
 				return( -1 );
 			}
 			return( 0 );
@@ -624,7 +624,7 @@ public class CFSecJpaSecTentGrpIncHPKey
 			+ " requiredRevision=\"" + requiredRevision + "\""
 			+ " auditSessionId=\"" + (getAuditSessionId() != null ? getAuditSessionId().toString() : "null") + "\""
 			+ " RequiredSecTentGrpId=" + "\"" + getRequiredSecTentGrpId().toString() + "\""
-			+ " RequiredIncName=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredIncName() ) + "\"";
+			+ " RequiredInclName=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredInclName() ) + "\"";
 		return( ret );
 	}
 

@@ -18,6 +18,10 @@
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOLangH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOTZone</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaISOTZoneH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUser</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPassword</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPWHistory</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrp</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpInc</class>
@@ -37,10 +41,6 @@
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpMemb</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecTentGrpMembH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSession</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUser</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserH</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPassword</class>
-        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPWHistory</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSysCluster</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenant</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaTenantH</class>

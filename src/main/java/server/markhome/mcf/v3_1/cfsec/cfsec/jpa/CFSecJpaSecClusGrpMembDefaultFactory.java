@@ -66,7 +66,7 @@ public class CFSecJpaSecClusGrpMembDefaultFactory
 		else {
 			CFSecJpaSecClusGrpMembPKey mapped = new CFSecJpaSecClusGrpMembPKey();
 			mapped.setRequiredSecClusGrpId( key.getRequiredSecClusGrpId() );
-			mapped.setRequiredSecUserId( key.getRequiredSecUserId() );
+			mapped.setRequiredLoginId( key.getRequiredLoginId() );
 			return( mapped );
 		}
 	}
@@ -92,7 +92,7 @@ public class CFSecJpaSecClusGrpMembDefaultFactory
 			mapped.setAuditSessionId(key.getAuditSessionId());
 			mapped.setAuditStamp(key.getAuditStamp());
 			mapped.setRequiredSecClusGrpId( key.getRequiredSecClusGrpId() );
-			mapped.setRequiredSecUserId( key.getRequiredSecUserId() );
+			mapped.setRequiredLoginId( key.getRequiredLoginId() );
 			return( mapped );
 		}
 	}
@@ -119,22 +119,22 @@ public class CFSecJpaSecClusGrpMembDefaultFactory
 	}
 
     @Override
-    public ICFSecSecClusGrpMembByUserIdxKey newByUserIdxKey() {
-	ICFSecSecClusGrpMembByUserIdxKey key =
-            new CFSecJpaSecClusGrpMembByUserIdxKey();
+    public ICFSecSecClusGrpMembByLoginIdxKey newByLoginIdxKey() {
+	ICFSecSecClusGrpMembByLoginIdxKey key =
+            new CFSecJpaSecClusGrpMembByLoginIdxKey();
 	return( key );
     }
 
-	public CFSecJpaSecClusGrpMembByUserIdxKey ensureByUserIdxKey(ICFSecSecClusGrpMembByUserIdxKey key) {
+	public CFSecJpaSecClusGrpMembByLoginIdxKey ensureByLoginIdxKey(ICFSecSecClusGrpMembByLoginIdxKey key) {
 		if (key == null) {
 			return( null );
 		}
-		else if (key instanceof CFSecJpaSecClusGrpMembByUserIdxKey) {
-			return( (CFSecJpaSecClusGrpMembByUserIdxKey)key );
+		else if (key instanceof CFSecJpaSecClusGrpMembByLoginIdxKey) {
+			return( (CFSecJpaSecClusGrpMembByLoginIdxKey)key );
 		}
 		else {
-			CFSecJpaSecClusGrpMembByUserIdxKey mapped = new CFSecJpaSecClusGrpMembByUserIdxKey();
-			mapped.setRequiredSecUserId( key.getRequiredSecUserId() );
+			CFSecJpaSecClusGrpMembByLoginIdxKey mapped = new CFSecJpaSecClusGrpMembByLoginIdxKey();
+			mapped.setRequiredLoginId( key.getRequiredLoginId() );
 			return( mapped );
 		}
 	}

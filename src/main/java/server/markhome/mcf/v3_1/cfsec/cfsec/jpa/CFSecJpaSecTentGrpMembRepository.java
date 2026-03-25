@@ -56,13 +56,13 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *	Argument-based get database instance for compatibility with the current MSS code factory code base.
 	 *
 	 *		@param requiredSecTentGrpId
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return The retrieved entity, usually from the JPA cache, or null if no such entity exists.
 	 */
-	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecTentGrpId = :secTentGrpId and r.pkey.requiredSecUserId = :secUserId")
+	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecTentGrpId = :secTentGrpId and r.pkey.requiredLoginId = :loginId")
 	CFSecJpaSecTentGrpMemb get(@Param("secTentGrpId") CFLibDbKeyHash256 requiredSecTentGrpId,
-		@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
+		@Param("loginId") String requiredLoginId);
 
 	/**
 	 *	CFSecSecTentGrpMembPKey based read method for object-based access.
@@ -72,7 +72,7 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *		@return The entity read, usually from the JPA cache, or null if no such entity exists.
 	 */
 	default CFSecJpaSecTentGrpMemb get(ICFSecSecTentGrpMembPKey key) {
-		return( get(key.getRequiredSecTentGrpId(), key.getRequiredSecUserId()));
+		return( get(key.getRequiredSecTentGrpId(), key.getRequiredLoginId()));
 	}
 
 	// CFSecJpaSecTentGrpMemb specified index readers
@@ -101,12 +101,12 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	/**
 	 *	Read zero or more entities into a List using the columns of the CFSecSecTentGrpMembByUserIdxKey as arguments.
 	 *
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return List&lt;CFSecJpaSecTentGrpMemb&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
-	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecUserId = :secUserId")
-	List<CFSecJpaSecTentGrpMemb> findByUserIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
+	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredLoginId = :loginId")
+	List<CFSecJpaSecTentGrpMemb> findByUserIdx(@Param("loginId") String requiredLoginId);
 
 	/**
 	 *	CFSecSecTentGrpMembByUserIdxKey entity list reader convenience method for object-based access.
@@ -116,7 +116,7 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
 	 */
 	default List<CFSecJpaSecTentGrpMemb> findByUserIdx(ICFSecSecTentGrpMembByUserIdxKey key) {
-		return( findByUserIdx(key.getRequiredSecUserId()));
+		return( findByUserIdx(key.getRequiredLoginId()));
 	}
 
 	// CFSecJpaSecTentGrpMemb specified delete-by-index methods
@@ -125,15 +125,15 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecTentGrpId
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecTentGrpId = :secTentGrpId and r.pkey.requiredSecUserId = :secUserId")
+	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecTentGrpId = :secTentGrpId and r.pkey.requiredLoginId = :loginId")
 	CFSecJpaSecTentGrpMemb lockByIdIdx(@Param("secTentGrpId") CFLibDbKeyHash256 requiredSecTentGrpId,
-		@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
+		@Param("loginId") String requiredLoginId);
 
 	/**
 	 *	CFSecSecTentGrpMembByIdIdxKey based lock method for object-based access.
@@ -143,7 +143,7 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
 	 */
 	default CFSecJpaSecTentGrpMemb lockByIdIdx(ICFSecSecTentGrpMembPKey key) {
-		return( lockByIdIdx(key.getRequiredSecTentGrpId(), key.getRequiredSecUserId()));
+		return( lockByIdIdx(key.getRequiredSecTentGrpId(), key.getRequiredLoginId()));
 	}
 
 	/**
@@ -172,14 +172,14 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	/**
 	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecUserId = :secUserId")
-	List<CFSecJpaSecTentGrpMemb> lockByUserIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
+	@Query("select r from CFSecJpaSecTentGrpMemb r where r.pkey.requiredLoginId = :loginId")
+	List<CFSecJpaSecTentGrpMemb> lockByUserIdx(@Param("loginId") String requiredLoginId);
 
 	/**
 	 *	CFSecSecTentGrpMembByUserIdxKey based lock method for object-based access.
@@ -189,7 +189,7 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	default List<CFSecJpaSecTentGrpMemb> lockByUserIdx(ICFSecSecTentGrpMembByUserIdxKey key) {
-		return( lockByUserIdx(key.getRequiredSecUserId()));
+		return( lockByUserIdx(key.getRequiredLoginId()));
 	}
 
 	// CFSecJpaSecTentGrpMemb specified delete-by-index methods
@@ -198,13 +198,13 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecTentGrpId
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecTentGrpId = :secTentGrpId and r.pkey.requiredSecUserId = :secUserId")
+	@Query("delete from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecTentGrpId = :secTentGrpId and r.pkey.requiredLoginId = :loginId")
 	void deleteByIdIdx(@Param("secTentGrpId") CFLibDbKeyHash256 requiredSecTentGrpId,
-		@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
+		@Param("loginId") String requiredLoginId);
 
 	/**
 	 *	CFSecSecTentGrpMembByIdIdxKey based lock method for object-based access.
@@ -212,7 +212,7 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *		@param key The CFSecSecTentGrpMembByIdIdxKey of the entity to be locked.
 	 */
 	default void deleteByIdIdx(ICFSecSecTentGrpMembPKey key) {
-		deleteByIdIdx(key.getRequiredSecTentGrpId(), key.getRequiredSecUserId());
+		deleteByIdIdx(key.getRequiredSecTentGrpId(), key.getRequiredLoginId());
 	}
 
 	/**
@@ -237,12 +237,12 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	/**
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param requiredSecUserId
+	 *		@param requiredLoginId
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecTentGrpMemb r where r.pkey.requiredSecUserId = :secUserId")
-	void deleteByUserIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
+	@Query("delete from CFSecJpaSecTentGrpMemb r where r.pkey.requiredLoginId = :loginId")
+	void deleteByUserIdx(@Param("loginId") String requiredLoginId);
 
 	/**
 	 *	CFSecSecTentGrpMembByUserIdxKey based lock method for object-based access.
@@ -250,7 +250,7 @@ public interface CFSecJpaSecTentGrpMembRepository extends JpaRepository<CFSecJpa
 	 *		@param key The CFSecSecTentGrpMembByUserIdxKey of the entity to be locked.
 	 */
 	default void deleteByUserIdx(ICFSecSecTentGrpMembByUserIdxKey key) {
-		deleteByUserIdx(key.getRequiredSecUserId());
+		deleteByUserIdx(key.getRequiredLoginId());
 	}
 
 }

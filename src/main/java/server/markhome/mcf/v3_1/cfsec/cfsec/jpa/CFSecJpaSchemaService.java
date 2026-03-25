@@ -79,6 +79,15 @@ public class CFSecJpaSchemaService {
 	private CFSecJpaISOTZoneService isotzoneService;
 
 	@Autowired
+	private CFSecJpaSecUserService secuserService;
+
+	@Autowired
+	private CFSecJpaSecUserPasswordService secuserpasswordService;
+
+	@Autowired
+	private CFSecJpaSecUserPWHistoryService secuserpwhistoryService;
+
+	@Autowired
 	private CFSecJpaSecSysGrpService secsysgrpService;
 
 	@Autowired
@@ -109,15 +118,6 @@ public class CFSecJpaSchemaService {
 	private CFSecJpaSecSessionService secsessionService;
 
 	@Autowired
-	private CFSecJpaSecUserService secuserService;
-
-	@Autowired
-	private CFSecJpaSecUserPasswordService secuserpasswordService;
-
-	@Autowired
-	private CFSecJpaSecUserPWHistoryService secuserpwhistoryService;
-
-	@Autowired
 	private CFSecJpaSysClusterService sysclusterService;
 
 	@Autowired
@@ -131,6 +131,7 @@ public class CFSecJpaSchemaService {
 
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
 	public void bootstrapSecurity() {
+/**
 		CFSecJpaSysCluster sysCluster;
 		CFLibDbKeyHash256 systemClusterID;
 		CFSecJpaCluster systemCluster;
@@ -344,6 +345,7 @@ public class CFSecJpaSchemaService {
 			bootstrapSession.setOptionalFinish(LocalDateTime.now());
 			bootstrapSession = secsessionService.update(bootstrapSession);
 		}
+**/
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
@@ -376,6 +378,9 @@ public class CFSecJpaSchemaService {
 		bootstrapTableSecurity(auth, "ISOCtryLang", true, false);
 		bootstrapTableSecurity(auth, "ISOLang", true, false);
 		bootstrapTableSecurity(auth, "ISOTZone", true, false);
+		bootstrapTableSecurity(auth, "SecUser", true, false);
+		bootstrapTableSecurity(auth, "SecUserPassword", false, false);
+		bootstrapTableSecurity(auth, "SecUserPWHistory", false, false);
 		bootstrapTableSecurity(auth, "SecSysGrp", true, false);
 		bootstrapTableSecurity(auth, "SecSysGrpInc", true, false);
 		bootstrapTableSecurity(auth, "SecSysGrpMemb", true, false);
@@ -386,9 +391,6 @@ public class CFSecJpaSchemaService {
 		bootstrapTableSecurity(auth, "SecTentGrpInc", true, false);
 		bootstrapTableSecurity(auth, "SecTentGrpMemb", true, false);
 		bootstrapTableSecurity(auth, "SecSession", false, false);
-		bootstrapTableSecurity(auth, "SecUser", true, false);
-		bootstrapTableSecurity(auth, "SecUserPassword", false, false);
-		bootstrapTableSecurity(auth, "SecUserPWHistory", false, false);
 		bootstrapTableSecurity(auth, "SysCluster", false, false);
 		bootstrapTableSecurity(auth, "Tenant", true, false);
 
@@ -400,6 +402,7 @@ public class CFSecJpaSchemaService {
 
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
 	public void bootstrapTableSecurity(ICFSecAuthorization auth, String tableName, boolean hasHistory, boolean isMutable, boolean isTenantScoped) {
+/**
 		LocalDateTime now = LocalDateTime.now();
 		String lowerTableName = tableName.toLowerCase();
 		String createPermName = "create" + lowerTableName;
@@ -1049,6 +1052,7 @@ public class CFSecJpaSchemaService {
 				}
 			}
 		}
+**/
 	}		
 
 

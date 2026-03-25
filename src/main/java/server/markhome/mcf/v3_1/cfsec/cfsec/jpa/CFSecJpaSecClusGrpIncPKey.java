@@ -43,7 +43,7 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 /**
  *	CFSecJpaSecClusGrpIncPKey Primary Key for SecClusGrpInc
  *		requiredSecClusGrpId	Required object attribute SecClusGrpId.
- *		requiredIncName	Required object attribute IncName.
+ *		requiredInclName	Required object attribute InclName.
  */
 @Embeddable
 public class CFSecJpaSecClusGrpIncPKey
@@ -54,11 +54,11 @@ public class CFSecJpaSecClusGrpIncPKey
 	})
 	protected CFLibDbKeyHash256 requiredSecClusGrpId;
 	@Column( name="inc_name", nullable=false, length=64 )
-	protected String requiredIncName;
+	protected String requiredInclName;
 
 	public CFSecJpaSecClusGrpIncPKey() {
 		requiredSecClusGrpId = CFLibDbKeyHash256.fromHex( ICFSecSecClusGrpInc.SECCLUSGRPID_INIT_VALUE.toString() );
-		requiredIncName = ICFSecSecClusGrpInc.INCNAME_INIT_VALUE;
+		requiredInclName = ICFSecSecClusGrpInc.INCLNAME_INIT_VALUE;
 	}
 
 	@Override
@@ -78,27 +78,27 @@ public class CFSecJpaSecClusGrpIncPKey
 	}
 
 	@Override
-	public String getRequiredIncName() {
-		return( requiredIncName );
+	public String getRequiredInclName() {
+		return( requiredInclName );
 	}
 
 	@Override
-	public void setRequiredIncName( String value ) {
+	public void setRequiredInclName( String value ) {
 		if( value == null ) {
 			throw new CFLibNullArgumentException( getClass(),
-				"setRequiredIncName",
+				"setRequiredInclName",
 				1,
 				"value" );
 		}
 		else if( value.length() > 64 ) {
 			throw new CFLibArgumentOverflowException( getClass(),
-				"setRequiredIncName",
+				"setRequiredInclName",
 				1,
 				"value.length()",
 				value.length(),
 				64 );
 		}
-		requiredIncName = value;
+		requiredInclName = value;
 	}
 
 	@Override
@@ -123,9 +123,9 @@ public class CFSecJpaSecClusGrpIncPKey
 					return( false );
 				}
 			}
-			if( getRequiredIncName() != null ) {
-				if( rhs.getRequiredIncName() != null ) {
-					if( ! getRequiredIncName().equals( rhs.getRequiredIncName() ) ) {
+			if( getRequiredInclName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
+					if( ! getRequiredInclName().equals( rhs.getRequiredInclName() ) ) {
 						return( false );
 					}
 				}
@@ -134,7 +134,7 @@ public class CFSecJpaSecClusGrpIncPKey
 				}
 			}
 			else {
-				if( rhs.getRequiredIncName() != null ) {
+				if( rhs.getRequiredInclName() != null ) {
 					return( false );
 				}
 			}
@@ -149,8 +149,8 @@ public class CFSecJpaSecClusGrpIncPKey
 	public int hashCode() {
 		int hashCode = 0;
 		hashCode = hashCode + getRequiredSecClusGrpId().hashCode();
-		if( getRequiredIncName() != null ) {
-			hashCode = hashCode + getRequiredIncName().hashCode();
+		if( getRequiredInclName() != null ) {
+			hashCode = hashCode + getRequiredInclName().hashCode();
 		}
 		return( hashCode & 0x7fffffff );
 	}
@@ -175,9 +175,9 @@ public class CFSecJpaSecClusGrpIncPKey
 			else if (rhs.getRequiredSecClusGrpId() != null) {
 				return( -1 );
 			}
-			if (getRequiredIncName() != null) {
-				if (rhs.getRequiredIncName() != null) {
-					cmp = getRequiredIncName().compareTo( rhs.getRequiredIncName() );
+			if (getRequiredInclName() != null) {
+				if (rhs.getRequiredInclName() != null) {
+					cmp = getRequiredInclName().compareTo( rhs.getRequiredInclName() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -186,7 +186,7 @@ public class CFSecJpaSecClusGrpIncPKey
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredIncName() != null) {
+			else if (rhs.getRequiredInclName() != null) {
 				return( -1 );
 			}
 		return( 0 );
@@ -196,7 +196,7 @@ public class CFSecJpaSecClusGrpIncPKey
 	public String getXmlAttrFragment() {
 		String ret = "" 
 			+ " RequiredSecClusGrpId=" + "\"" + getRequiredSecClusGrpId().toString() + "\""
-			+ " RequiredIncName=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredIncName() ) + "\"";
+			+ " RequiredInclName=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredInclName() ) + "\"";
 		return( ret );
 	}
 

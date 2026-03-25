@@ -43,7 +43,7 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 /**
  *	CFSecJpaSecSysGrpMembPKey Primary Key for SecSysGrpMemb
  *		requiredSecSysGrpId	Required object attribute SecSysGrpId.
- *		requiredSecUserId	Required object attribute SecUserId.
+ *		requiredLoginId	Required object attribute LoginId.
  */
 @Embeddable
 public class CFSecJpaSecSysGrpMembPKey
@@ -53,7 +53,6 @@ public class CFSecJpaSecSysGrpMembPKey
 	@JoinColumn( name="SecSysGrpId" )
 	protected CFSecJpaSecSysGrp requiredContainerGroup;
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	@JoinColumn( name="SecUserId" )
 	protected CFSecJpaSecUser requiredParentUser;
 
 	public CFSecJpaSecSysGrpMembPKey() {
@@ -111,7 +110,7 @@ public class CFSecJpaSecSysGrpMembPKey
 	}
 
 	@Override
-	public void setRequiredParentUser(CFLibDbKeyHash256 argSecUserId) {
+	public void setRequiredParentUser(String argLoginId) {
 		ICFSecSchema targetBackingSchema = ICFSecSchema.getBackingCFSec();
 		if (targetBackingSchema == null) {
 			throw new CFLibNullArgumentException(getClass(), "setRequiredParentUser", 0, "ICFSecSchema.getBackingCFSec()");
@@ -120,7 +119,7 @@ public class CFSecJpaSecSysGrpMembPKey
 		if (targetTable == null) {
 			throw new CFLibNullArgumentException(getClass(), "setRequiredParentUser", 0, "ICFSecSchema.getBackingCFSec().getTableSecUser()");
 		}
-		ICFSecSecUser targetRec = targetTable.readDerivedByIdIdx(null, argSecUserId);
+		ICFSecSecUser targetRec = targetTable.readDerivedByULoginIdx(null, argLoginId);
 		setRequiredParentUser(targetRec);
 	}
 	@Override
@@ -135,13 +134,13 @@ public class CFSecJpaSecSysGrpMembPKey
 	}
 
 	@Override
-	public CFLibDbKeyHash256 getRequiredSecUserId() {
+	public String getRequiredLoginId() {
 		ICFSecSecUser result = getRequiredParentUser();
 		if (result != null) {
-			return result.getRequiredSecUserId();
+			return result.getRequiredLoginId();
 		}
 		else {
-			throw new CFLibNullArgumentException(getClass(), "getRequiredSecUserId", 0, "getRequiredParentUser()");
+			throw new CFLibNullArgumentException(getClass(), "getRequiredLoginId", 0, "getRequiredParentUser()");
 		}
 	}
 
@@ -167,9 +166,9 @@ public class CFSecJpaSecSysGrpMembPKey
 					return( false );
 				}
 			}
-			if( getRequiredSecUserId() != null ) {
-				if( rhs.getRequiredSecUserId() != null ) {
-					if( ! getRequiredSecUserId().equals( rhs.getRequiredSecUserId() ) ) {
+			if( getRequiredLoginId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
+					if( ! getRequiredLoginId().equals( rhs.getRequiredLoginId() ) ) {
 						return( false );
 					}
 				}
@@ -178,7 +177,7 @@ public class CFSecJpaSecSysGrpMembPKey
 				}
 			}
 			else {
-				if( rhs.getRequiredSecUserId() != null ) {
+				if( rhs.getRequiredLoginId() != null ) {
 					return( false );
 				}
 			}
@@ -193,7 +192,9 @@ public class CFSecJpaSecSysGrpMembPKey
 	public int hashCode() {
 		int hashCode = 0;
 		hashCode = hashCode + getRequiredSecSysGrpId().hashCode();
-		hashCode = hashCode + getRequiredSecUserId().hashCode();
+		if( getRequiredLoginId() != null ) {
+			hashCode = hashCode + getRequiredLoginId().hashCode();
+		}
 		return( hashCode & 0x7fffffff );
 	}
 
@@ -217,9 +218,9 @@ public class CFSecJpaSecSysGrpMembPKey
 			else if (rhs.getRequiredSecSysGrpId() != null) {
 				return( -1 );
 			}
-			if (getRequiredSecUserId() != null) {
-				if (rhs.getRequiredSecUserId() != null) {
-					cmp = getRequiredSecUserId().compareTo( rhs.getRequiredSecUserId() );
+			if (getRequiredLoginId() != null) {
+				if (rhs.getRequiredLoginId() != null) {
+					cmp = getRequiredLoginId().compareTo( rhs.getRequiredLoginId() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -228,7 +229,7 @@ public class CFSecJpaSecSysGrpMembPKey
 					return( 1 );
 				}
 			}
-			else if (rhs.getRequiredSecUserId() != null) {
+			else if (rhs.getRequiredLoginId() != null) {
 				return( -1 );
 			}
 		return( 0 );
@@ -238,7 +239,7 @@ public class CFSecJpaSecSysGrpMembPKey
 	public String getXmlAttrFragment() {
 		String ret = "" 
 			+ " RequiredSecSysGrpId=" + "\"" + getRequiredSecSysGrpId().toString() + "\""
-			+ " RequiredSecUserId=" + "\"" + getRequiredSecUserId().toString() + "\"";
+			+ " RequiredLoginId=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredLoginId() ) + "\"";
 		return( ret );
 	}
 
