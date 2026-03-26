@@ -66,6 +66,10 @@ public class CFSecJpaSecUser
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredParentUser")
 	protected Set<CFSecJpaSecSysGrpMemb> optionalChildrenSysSecGrpMemb;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredParentUser")
+	protected Set<CFSecJpaSecClusGrpMemb> optionalChildrenClusSecGrpMemb;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredParentUser")
+	protected Set<CFSecJpaSecTentGrpMemb> optionalChildrenTentSecGrpMemb;
 
 	@AttributeOverrides({
 		@AttributeOverride( name="bytes", column = @Column( name="CreatedByUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
@@ -123,6 +127,22 @@ public class CFSecJpaSecUser
 	public List<ICFSecSecSysGrpMemb> getOptionalChildrenSysSecGrpMemb() {
 		List<ICFSecSecSysGrpMemb> retlist = new ArrayList<>(optionalChildrenSysSecGrpMemb.size());
 		for (CFSecJpaSecSysGrpMemb cur: optionalChildrenSysSecGrpMemb) {
+			retlist.add(cur);
+		}
+		return( retlist );
+	}
+	@Override
+	public List<ICFSecSecClusGrpMemb> getOptionalChildrenClusSecGrpMemb() {
+		List<ICFSecSecClusGrpMemb> retlist = new ArrayList<>(optionalChildrenClusSecGrpMemb.size());
+		for (CFSecJpaSecClusGrpMemb cur: optionalChildrenClusSecGrpMemb) {
+			retlist.add(cur);
+		}
+		return( retlist );
+	}
+	@Override
+	public List<ICFSecSecTentGrpMemb> getOptionalChildrenTentSecGrpMemb() {
+		List<ICFSecSecTentGrpMemb> retlist = new ArrayList<>(optionalChildrenTentSecGrpMemb.size());
+		for (CFSecJpaSecTentGrpMemb cur: optionalChildrenTentSecGrpMemb) {
 			retlist.add(cur);
 		}
 		return( retlist );

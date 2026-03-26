@@ -62,8 +62,15 @@ public class CFSecJpaSecTentGrp
 		@AttributeOverride(name="bytes", column = @Column( name="SecTentGrpId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
 	})
 	protected CFLibDbKeyHash256 requiredSecTentGrpId;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredContainerGroup")
+	protected Set<CFSecJpaSecTentGrpInc> optionalChildrenIncByGrp;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredContainerGroup")
+	protected Set<CFSecJpaSecTentGrpMemb> optionalChildrenMembByGrp;
 	protected int requiredRevision;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@JoinColumn( name="TenantId" )
+	protected CFSecJpaTenant requiredOwnerTenant;
 
 	@AttributeOverrides({
 		@AttributeOverride( name="bytes", column = @Column( name="CreatedByUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
@@ -80,22 +87,64 @@ public class CFSecJpaSecTentGrp
 
 	@Column(name="UpdatedAt", nullable=false)
 	protected LocalDateTime updatedAt = LocalDateTime.now();
-	@AttributeOverrides({
-		@AttributeOverride(name="bytes", column = @Column( name="TenantId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
-	})
-	protected CFLibDbKeyHash256 requiredTenantId;
 	@Column( name="safe_name", nullable=false, length=64 )
 	protected String requiredName;
 
 	public CFSecJpaSecTentGrp() {
 		requiredSecTentGrpId = CFLibDbKeyHash256.fromHex( ICFSecSecTentGrp.SECTENTGRPID_INIT_VALUE.toString() );
-		requiredTenantId = CFLibDbKeyHash256.fromHex( ICFSecSecTentGrp.TENANTID_INIT_VALUE.toString() );
 		requiredName = ICFSecSecTentGrp.NAME_INIT_VALUE;
 	}
 
 	@Override
 	public int getClassCode() {
 		return( ICFSecSecTentGrp.CLASS_CODE );
+	}
+
+	@Override
+	public List<ICFSecSecTentGrpInc> getOptionalChildrenIncByGrp() {
+		List<ICFSecSecTentGrpInc> retlist = new ArrayList<>(optionalChildrenIncByGrp.size());
+		for (CFSecJpaSecTentGrpInc cur: optionalChildrenIncByGrp) {
+			retlist.add(cur);
+		}
+		return( retlist );
+	}
+	@Override
+	public List<ICFSecSecTentGrpMemb> getOptionalChildrenMembByGrp() {
+		List<ICFSecSecTentGrpMemb> retlist = new ArrayList<>(optionalChildrenMembByGrp.size());
+		for (CFSecJpaSecTentGrpMemb cur: optionalChildrenMembByGrp) {
+			retlist.add(cur);
+		}
+		return( retlist );
+	}
+	@Override
+	public ICFSecTenant getRequiredOwnerTenant() {
+		return( requiredOwnerTenant );
+	}
+	@Override
+	public void setRequiredOwnerTenant(ICFSecTenant argObj) {
+		if(argObj == null) {
+			throw new CFLibNullArgumentException(getClass(), "setOwnerTenant", 1, "argObj");
+		}
+		else if (argObj instanceof CFSecJpaTenant) {
+			requiredOwnerTenant = (CFSecJpaTenant)argObj;
+		}
+		else {
+			throw new CFLibUnsupportedClassException(getClass(), "setOwnerTenant", "argObj", argObj, "CFSecJpaTenant");
+		}
+	}
+
+	@Override
+	public void setRequiredOwnerTenant(CFLibDbKeyHash256 argTenantId) {
+		ICFSecSchema targetBackingSchema = ICFSecSchema.getBackingCFSec();
+		if (targetBackingSchema == null) {
+			throw new CFLibNullArgumentException(getClass(), "setRequiredOwnerTenant", 0, "ICFSecSchema.getBackingCFSec()");
+		}
+		ICFSecTenantTable targetTable = targetBackingSchema.getTableTenant();
+		if (targetTable == null) {
+			throw new CFLibNullArgumentException(getClass(), "setRequiredOwnerTenant", 0, "ICFSecSchema.getBackingCFSec().getTableTenant()");
+		}
+		ICFSecTenant targetRec = targetTable.readDerived(null, argTenantId);
+		setRequiredOwnerTenant(targetRec);
 	}
 
 	@Override
@@ -191,18 +240,13 @@ public class CFSecJpaSecTentGrp
 
 	@Override
 	public CFLibDbKeyHash256 getRequiredTenantId() {
-		return( requiredTenantId );
-	}
-
-	@Override
-	public void setRequiredTenantId( CFLibDbKeyHash256 value ) {
-		if( value == null || value.isNull() ) {
-			throw new CFLibNullArgumentException( getClass(),
-				"setRequiredTenantId",
-				1,
-				"value" );
+		ICFSecTenant result = getRequiredOwnerTenant();
+		if (result != null) {
+			return result.getRequiredId();
 		}
-		requiredTenantId = value;
+		else {
+			return( ICFSecTenant.ID_INIT_VALUE );
+		}
 	}
 
 	@Override
@@ -707,7 +751,7 @@ public class CFSecJpaSecTentGrp
 		setCreatedAt( src.getCreatedAt() );
 		setUpdatedByUserId( src.getUpdatedByUserId() );
 		setUpdatedAt( src.getUpdatedAt() );
-		setRequiredTenantId(src.getRequiredTenantId());
+		setRequiredOwnerTenant(src.getRequiredOwnerTenant());
 		setRequiredName(src.getRequiredName());
 	}
 
@@ -719,7 +763,7 @@ public class CFSecJpaSecTentGrp
 	@Override
 	public void setSecTentGrp( ICFSecSecTentGrpH src ) {
 		setRequiredSecTentGrpId(src.getRequiredSecTentGrpId());
-		setRequiredTenantId(src.getRequiredTenantId());
+		setRequiredOwnerTenant(src.getRequiredTenantId());
 		setRequiredName(src.getRequiredName());
 	}
 

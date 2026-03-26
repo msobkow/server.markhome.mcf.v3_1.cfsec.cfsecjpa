@@ -61,6 +61,8 @@ public class CFSecJpaTenant
 		@AttributeOverride(name="bytes", column = @Column( name="Id", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
 	})
 	protected CFLibDbKeyHash256 requiredId;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="requiredOwnerTenant")
+	protected Set<CFSecJpaSecTentGrp> optionalComponentsSecGroup;
 	protected int requiredRevision;
 
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
@@ -97,26 +99,11 @@ public class CFSecJpaTenant
 
 	@Override
 	public List<ICFSecSecTentGrp> getOptionalComponentsSecGroup() {
-		ICFSecSchema targetBackingSchema = ICFSecSchema.getBackingCFSec();
-		if (targetBackingSchema == null) {
-			throw new CFLibNullArgumentException(getClass(), "setOptionalComponentsSecGroup", 0, "ICFSecSchema.getBackingCFSec()");
+		List<ICFSecSecTentGrp> retlist = new ArrayList<>(optionalComponentsSecGroup.size());
+		for (CFSecJpaSecTentGrp cur: optionalComponentsSecGroup) {
+			retlist.add(cur);
 		}
-		ICFSecSecTentGrpTable targetTable = targetBackingSchema.getTableSecTentGrp();
-		if (targetTable == null) {
-			throw new CFLibNullArgumentException(getClass(), "setOptionalComponentsSecGroup", 0, "ICFSecSchema.getBackingCFSec().getTableSecTentGrp()");
-		}
-		ICFSecSecTentGrp[] targetArr = targetTable.readDerivedByTenantIdx(null, getRequiredId());
-		if( targetArr != null ) {
-			List<ICFSecSecTentGrp> results = new ArrayList<>(targetArr.length);
-			for (int idx = 0; idx < targetArr.length; idx++) {
-				results.add(targetArr[idx]);
-			}
-			return( results );
-		}
-		else {
-			List<ICFSecSecTentGrp> results = new ArrayList<>();
-			return( results );
-		}
+		return( retlist );
 	}
 	@Override
 	public ICFSecCluster getRequiredContainerCluster() {

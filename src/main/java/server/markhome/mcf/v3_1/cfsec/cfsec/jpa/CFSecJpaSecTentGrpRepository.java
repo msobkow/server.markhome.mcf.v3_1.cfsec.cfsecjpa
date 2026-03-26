@@ -71,7 +71,7 @@ public interface CFSecJpaSecTentGrpRepository extends JpaRepository<CFSecJpaSecT
 	 *
 	 *		@return List&lt;CFSecJpaSecTentGrp&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
-	@Query("select r from CFSecJpaSecTentGrp r where r.requiredTenantId = :tenantId")
+	@Query("select r from CFSecJpaSecTentGrp r where r.requiredOwnerTenant.requiredId = :tenantId")
 	List<CFSecJpaSecTentGrp> findByTenantIdx(@Param("tenantId") CFLibDbKeyHash256 requiredTenantId);
 
 	/**
@@ -114,7 +114,7 @@ public interface CFSecJpaSecTentGrpRepository extends JpaRepository<CFSecJpaSecT
 	 *
 	 *		@return The found entity, typically from the JPA cache, or null if no such entity exists.
 	 */
-	@Query("select r from CFSecJpaSecTentGrp r where r.requiredTenantId = :tenantId and r.requiredName = :name")
+	@Query("select r from CFSecJpaSecTentGrp r where r.requiredOwnerTenant.requiredId = :tenantId and r.requiredName = :name")
 	CFSecJpaSecTentGrp findByUNameIdx(@Param("tenantId") CFLibDbKeyHash256 requiredTenantId,
 		@Param("name") String requiredName);
 
@@ -152,7 +152,7 @@ public interface CFSecJpaSecTentGrpRepository extends JpaRepository<CFSecJpaSecT
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecTentGrp r where r.requiredTenantId = :tenantId")
+	@Query("select r from CFSecJpaSecTentGrp r where r.requiredOwnerTenant.requiredId = :tenantId")
 	List<CFSecJpaSecTentGrp> lockByTenantIdx(@Param("tenantId") CFLibDbKeyHash256 requiredTenantId);
 
 	/**
@@ -199,7 +199,7 @@ public interface CFSecJpaSecTentGrpRepository extends JpaRepository<CFSecJpaSecT
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecTentGrp r where r.requiredTenantId = :tenantId and r.requiredName = :name")
+	@Query("select r from CFSecJpaSecTentGrp r where r.requiredOwnerTenant.requiredId = :tenantId and r.requiredName = :name")
 	CFSecJpaSecTentGrp lockByUNameIdx(@Param("tenantId") CFLibDbKeyHash256 requiredTenantId,
 		@Param("name") String requiredName);
 
@@ -233,7 +233,7 @@ public interface CFSecJpaSecTentGrpRepository extends JpaRepository<CFSecJpaSecT
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecTentGrp r where r.requiredTenantId = :tenantId")
+	@Query("delete from CFSecJpaSecTentGrp r where r.requiredOwnerTenant.requiredId = :tenantId")
 	void deleteByTenantIdx(@Param("tenantId") CFLibDbKeyHash256 requiredTenantId);
 
 	/**
@@ -272,7 +272,7 @@ public interface CFSecJpaSecTentGrpRepository extends JpaRepository<CFSecJpaSecT
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecTentGrp r where r.requiredTenantId = :tenantId and r.requiredName = :name")
+	@Query("delete from CFSecJpaSecTentGrp r where r.requiredOwnerTenant.requiredId = :tenantId and r.requiredName = :name")
 	void deleteByUNameIdx(@Param("tenantId") CFLibDbKeyHash256 requiredTenantId,
 		@Param("name") String requiredName);
 

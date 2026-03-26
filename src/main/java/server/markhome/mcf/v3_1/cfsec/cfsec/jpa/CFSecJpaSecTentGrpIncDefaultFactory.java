@@ -65,8 +65,8 @@ public class CFSecJpaSecTentGrpIncDefaultFactory
 		}
 		else {
 			CFSecJpaSecTentGrpIncPKey mapped = new CFSecJpaSecTentGrpIncPKey();
-			mapped.setRequiredSecTentGrpId( key.getRequiredSecTentGrpId() );
-			mapped.setRequiredInclName( key.getRequiredInclName() );
+			mapped.setRequiredContainerGroup( key.getRequiredSecTentGrpId() );
+			mapped.setRequiredParentSubGroup( key.getRequiredInclName() );
 			return( mapped );
 		}
 	}

@@ -60,7 +60,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *
 	 *		@return The retrieved entity, usually from the JPA cache, or null if no such entity exists.
 	 */
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredInclName = :inclName")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredContainerGroup.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredParentSubGroup.requiredName = :inclName")
 	CFSecJpaSecClusGrpInc get(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId,
 		@Param("inclName") String requiredInclName);
 
@@ -84,7 +84,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *
 	 *		@return List&lt;CFSecJpaSecClusGrpInc&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredContainerGroup.requiredSecClusGrpId = :secClusGrpId")
 	List<CFSecJpaSecClusGrpInc> findByClusGrpIdx(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId);
 
 	/**
@@ -105,7 +105,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 *
 	 *		@return List&lt;CFSecJpaSecClusGrpInc&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredInclName = :inclName")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredParentSubGroup.requiredName = :inclName")
 	List<CFSecJpaSecClusGrpInc> findByNameIdx(@Param("inclName") String requiredInclName);
 
 	/**
@@ -131,7 +131,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredInclName = :inclName")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredContainerGroup.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredParentSubGroup.requiredName = :inclName")
 	CFSecJpaSecClusGrpInc lockByIdIdx(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId,
 		@Param("inclName") String requiredInclName);
 
@@ -155,7 +155,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredContainerGroup.requiredSecClusGrpId = :secClusGrpId")
 	List<CFSecJpaSecClusGrpInc> lockByClusGrpIdx(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId);
 
 	/**
@@ -178,7 +178,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredInclName = :inclName")
+	@Query("select r from CFSecJpaSecClusGrpInc r where r.pkey.requiredParentSubGroup.requiredName = :inclName")
 	List<CFSecJpaSecClusGrpInc> lockByNameIdx(@Param("inclName") String requiredInclName);
 
 	/**
@@ -202,7 +202,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredInclName = :inclName")
+	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredContainerGroup.requiredSecClusGrpId = :secClusGrpId and r.pkey.requiredParentSubGroup.requiredName = :inclName")
 	void deleteByIdIdx(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId,
 		@Param("inclName") String requiredInclName);
 
@@ -222,7 +222,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredSecClusGrpId = :secClusGrpId")
+	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredContainerGroup.requiredSecClusGrpId = :secClusGrpId")
 	void deleteByClusGrpIdx(@Param("secClusGrpId") CFLibDbKeyHash256 requiredSecClusGrpId);
 
 	/**
@@ -241,7 +241,7 @@ public interface CFSecJpaSecClusGrpIncRepository extends JpaRepository<CFSecJpaS
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredInclName = :inclName")
+	@Query("delete from CFSecJpaSecClusGrpInc r where r.pkey.requiredParentSubGroup.requiredName = :inclName")
 	void deleteByNameIdx(@Param("inclName") String requiredInclName);
 
 	/**

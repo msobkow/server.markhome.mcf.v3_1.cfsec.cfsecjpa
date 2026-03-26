@@ -92,6 +92,32 @@ public class CFSecJpaSecClusGrpInc
 	}
 
 	@Override
+	public ICFSecSecClusGrp getRequiredContainerGroup() {
+		return( pkey.getRequiredContainerGroup() );
+	}
+	@Override
+	public void setRequiredContainerGroup(ICFSecSecClusGrp argObj) {
+		pkey.setRequiredContainerGroup(argObj);
+	}
+
+	@Override
+	public void setRequiredContainerGroup(CFLibDbKeyHash256 argSecClusGrpId) {
+		pkey.setRequiredContainerGroup(argSecClusGrpId);
+	}
+	@Override
+	public ICFSecSecSysGrp getRequiredParentSubGroup() {
+		return( pkey.getRequiredParentSubGroup() );
+	}
+	@Override
+	public void setRequiredParentSubGroup(ICFSecSecSysGrp argObj) {
+		pkey.setRequiredParentSubGroup(argObj);
+	}
+
+	@Override
+	public void setRequiredParentSubGroup(String argInclName) {
+		pkey.setRequiredParentSubGroup(argInclName);
+	}
+	@Override
 	public CFLibDbKeyHash256 getCreatedByUserId() {
 		return( createdByUserId );
 	}
@@ -165,18 +191,8 @@ public class CFSecJpaSecClusGrpInc
 	}
 
 	@Override
-	public void setRequiredSecClusGrpId( CFLibDbKeyHash256 requiredSecClusGrpId ) {
-		pkey.setRequiredSecClusGrpId( requiredSecClusGrpId );
-	}
-
-	@Override
 	public String getRequiredInclName() {
 		return( pkey.getRequiredInclName() );
-	}
-
-	@Override
-	public void setRequiredInclName( String requiredInclName ) {
-		pkey.setRequiredInclName( requiredInclName );
 	}
 
 	@Override
@@ -551,8 +567,8 @@ public class CFSecJpaSecClusGrpInc
 
 	@Override
 	public void setSecClusGrpInc( ICFSecSecClusGrpInc src ) {
-		setRequiredSecClusGrpId(src.getRequiredSecClusGrpId());
-		setRequiredInclName(src.getRequiredInclName());
+		setRequiredContainerGroup(src.getRequiredContainerGroup());
+		setRequiredParentSubGroup(src.getRequiredParentSubGroup());
 		setRequiredRevision( src.getRequiredRevision() );
 		setCreatedByUserId( src.getCreatedByUserId() );
 		setCreatedAt( src.getCreatedAt() );
@@ -567,8 +583,8 @@ public class CFSecJpaSecClusGrpInc
 
 	@Override
 	public void setSecClusGrpInc( ICFSecSecClusGrpIncH src ) {
-		setRequiredSecClusGrpId(src.getRequiredSecClusGrpId());
-		setRequiredInclName(src.getRequiredInclName());
+		setRequiredContainerGroup(src.getRequiredSecClusGrpId());
+		setRequiredParentSubGroup(src.getRequiredInclName());
 	}
 
 	@Override

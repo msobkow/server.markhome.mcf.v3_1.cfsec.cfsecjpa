@@ -92,6 +92,32 @@ public class CFSecJpaSecTentGrpMemb
 	}
 
 	@Override
+	public ICFSecSecTentGrp getRequiredContainerGroup() {
+		return( pkey.getRequiredContainerGroup() );
+	}
+	@Override
+	public void setRequiredContainerGroup(ICFSecSecTentGrp argObj) {
+		pkey.setRequiredContainerGroup(argObj);
+	}
+
+	@Override
+	public void setRequiredContainerGroup(CFLibDbKeyHash256 argSecTentGrpId) {
+		pkey.setRequiredContainerGroup(argSecTentGrpId);
+	}
+	@Override
+	public ICFSecSecUser getRequiredParentUser() {
+		return( pkey.getRequiredParentUser() );
+	}
+	@Override
+	public void setRequiredParentUser(ICFSecSecUser argObj) {
+		pkey.setRequiredParentUser(argObj);
+	}
+
+	@Override
+	public void setRequiredParentUser(String argLoginId) {
+		pkey.setRequiredParentUser(argLoginId);
+	}
+	@Override
 	public CFLibDbKeyHash256 getCreatedByUserId() {
 		return( createdByUserId );
 	}
@@ -165,18 +191,8 @@ public class CFSecJpaSecTentGrpMemb
 	}
 
 	@Override
-	public void setRequiredSecTentGrpId( CFLibDbKeyHash256 requiredSecTentGrpId ) {
-		pkey.setRequiredSecTentGrpId( requiredSecTentGrpId );
-	}
-
-	@Override
 	public String getRequiredLoginId() {
 		return( pkey.getRequiredLoginId() );
-	}
-
-	@Override
-	public void setRequiredLoginId( String requiredLoginId ) {
-		pkey.setRequiredLoginId( requiredLoginId );
 	}
 
 	@Override
@@ -551,8 +567,8 @@ public class CFSecJpaSecTentGrpMemb
 
 	@Override
 	public void setSecTentGrpMemb( ICFSecSecTentGrpMemb src ) {
-		setRequiredSecTentGrpId(src.getRequiredSecTentGrpId());
-		setRequiredLoginId(src.getRequiredLoginId());
+		setRequiredContainerGroup(src.getRequiredContainerGroup());
+		setRequiredParentUser(src.getRequiredParentUser());
 		setRequiredRevision( src.getRequiredRevision() );
 		setCreatedByUserId( src.getCreatedByUserId() );
 		setCreatedAt( src.getCreatedAt() );
@@ -567,8 +583,8 @@ public class CFSecJpaSecTentGrpMemb
 
 	@Override
 	public void setSecTentGrpMemb( ICFSecSecTentGrpMembH src ) {
-		setRequiredSecTentGrpId(src.getRequiredSecTentGrpId());
-		setRequiredLoginId(src.getRequiredLoginId());
+		setRequiredContainerGroup(src.getRequiredSecTentGrpId());
+		setRequiredParentUser(src.getRequiredLoginId());
 	}
 
 	@Override
