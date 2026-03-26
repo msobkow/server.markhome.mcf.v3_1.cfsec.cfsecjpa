@@ -306,7 +306,6 @@ public class CFSecJpaSchemaService {
 			bootstrapSession.setRequiredSecSessionId(bootstrapSessionID);
 			bootstrapSession.setRequiredSecUserId(adminUID);
 			bootstrapSession.setOptionalSecProxyId(adminUID);
-			bootstrapSession.setOptionalSecDevName(null);
 			bootstrapSession.setRequiredStart(now);
 			bootstrapSession.setOptionalFinish(null);
 			bootstrapSession = secsessionService.create(bootstrapSession);
@@ -365,34 +364,33 @@ public class CFSecJpaSchemaService {
 		bootstrapSession.setRequiredSecSessionId(bootstrapSessionID);
 		bootstrapSession.setRequiredSecUserId(ICFSecSchema.getSysAdminId());
 		bootstrapSession.setOptionalSecProxyId(ICFSecSchema.getSysAdminId());
-		bootstrapSession.setOptionalSecDevName(null);
 		bootstrapSession.setRequiredStart(now);
 		bootstrapSession.setOptionalFinish(null);
 		bootstrapSession = ICFSecSchema.getBackingCFSec().getTableSecSession().createSecSession(auth, bootstrapSession);
 		bootstrapSessionID = bootstrapSession.getRequiredSecSessionId();
 
-		bootstrapTableSecurity(auth, "Cluster", true, false);
-		bootstrapTableSecurity(auth, "Tenant", true, false);
-		bootstrapTableSecurity(auth, "ISOCcy", true, false);
-		bootstrapTableSecurity(auth, "ISOCtry", true, false);
-		bootstrapTableSecurity(auth, "ISOCtryCcy", true, false);
-		bootstrapTableSecurity(auth, "ISOCtryLang", true, false);
-		bootstrapTableSecurity(auth, "ISOLang", true, false);
-		bootstrapTableSecurity(auth, "ISOTZone", true, false);
-		bootstrapTableSecurity(auth, "SecUser", true, false);
-		bootstrapTableSecurity(auth, "SecUserPassword", false, false);
-		bootstrapTableSecurity(auth, "SecUserPWHistory", false, false);
-		bootstrapTableSecurity(auth, "SecSysGrp", true, false);
-		bootstrapTableSecurity(auth, "SecSysGrpInc", true, false);
-		bootstrapTableSecurity(auth, "SecSysGrpMemb", true, false);
-		bootstrapTableSecurity(auth, "SecClusGrp", true, false);
-		bootstrapTableSecurity(auth, "SecClusGrpInc", true, false);
-		bootstrapTableSecurity(auth, "SecClusGrpMemb", true, false);
-		bootstrapTableSecurity(auth, "SecTentGrp", true, false);
-		bootstrapTableSecurity(auth, "SecTentGrpInc", true, false);
-		bootstrapTableSecurity(auth, "SecTentGrpMemb", true, false);
-		bootstrapTableSecurity(auth, "SecSession", false, false);
-		bootstrapTableSecurity(auth, "SysCluster", false, false);
+		bootstrapTableSecurity(auth, "Cluster", true, false, "Global");
+		bootstrapTableSecurity(auth, "Tenant", true, false, "System");
+		bootstrapTableSecurity(auth, "ISOCcy", true, false, "Global");
+		bootstrapTableSecurity(auth, "ISOCtry", true, false, "Global");
+		bootstrapTableSecurity(auth, "ISOCtryCcy", true, false, "Global");
+		bootstrapTableSecurity(auth, "ISOCtryLang", true, false, "Global");
+		bootstrapTableSecurity(auth, "ISOLang", true, false, "Global");
+		bootstrapTableSecurity(auth, "ISOTZone", true, false, "Global");
+		bootstrapTableSecurity(auth, "SecUser", true, false, "System");
+		bootstrapTableSecurity(auth, "SecUserPassword", false, false, "System");
+		bootstrapTableSecurity(auth, "SecUserPWHistory", false, false, "System");
+		bootstrapTableSecurity(auth, "SecSysGrp", true, false, "System");
+		bootstrapTableSecurity(auth, "SecSysGrpInc", true, false, "System");
+		bootstrapTableSecurity(auth, "SecSysGrpMemb", true, false, "Cluster");
+		bootstrapTableSecurity(auth, "SecClusGrp", true, false, "Cluster");
+		bootstrapTableSecurity(auth, "SecClusGrpInc", true, false, "Cluster");
+		bootstrapTableSecurity(auth, "SecClusGrpMemb", true, false, "Cluster");
+		bootstrapTableSecurity(auth, "SecTentGrp", true, false, "Tenant");
+		bootstrapTableSecurity(auth, "SecTentGrpInc", true, false, "Tenant");
+		bootstrapTableSecurity(auth, "SecTentGrpMemb", true, false, "Tenant");
+		bootstrapTableSecurity(auth, "SecSession", false, false, "System");
+		bootstrapTableSecurity(auth, "SysCluster", false, false, "System");
 
 		if (bootstrapSession != null && bootstrapSessionID != null && !bootstrapSessionID.isNull() && bootstrapSession.getOptionalFinish() == null) {
 			bootstrapSession.setOptionalFinish(LocalDateTime.now());
@@ -401,7 +399,7 @@ public class CFSecJpaSchemaService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
-	public void bootstrapTableSecurity(ICFSecAuthorization auth, String tableName, boolean hasHistory, boolean isMutable, boolean isTenantScoped) {
+	public void bootstrapTableSecurity(ICFSecAuthorization auth, String tableName, boolean hasHistory, boolean isMutable, String secScope) {
 /**
 		LocalDateTime now = LocalDateTime.now();
 		String lowerTableName = tableName.toLowerCase();

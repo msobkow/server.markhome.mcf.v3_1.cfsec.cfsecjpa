@@ -52,12 +52,12 @@ public class CFSecJpaSecSysGrpIncPKey
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	@JoinColumn( name="SecSysGrpId" )
 	protected CFSecJpaSecSysGrp requiredContainerGroup;
-	@Column( name="inc_name", nullable=false, length=64 )
-	protected String requiredInclName;
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	protected CFSecJpaSecSysGrp requiredParentSubGroup;
 
 	public CFSecJpaSecSysGrpIncPKey() {
 		requiredContainerGroup = null;
-		requiredInclName = ICFSecSecSysGrpInc.INCLNAME_INIT_VALUE;
+		requiredParentSubGroup = null;
 	}
 
 	@Override
@@ -92,6 +92,37 @@ public class CFSecJpaSecSysGrpIncPKey
 		setRequiredContainerGroup(targetRec);
 	}
 	@Override
+	public ICFSecSecSysGrp getRequiredParentSubGroup() {
+		return( requiredParentSubGroup );
+	}
+	@Override
+	public void setRequiredParentSubGroup(ICFSecSecSysGrp argObj) {
+		if(argObj == null) {
+			throw new CFLibNullArgumentException(getClass(), "setParentSubGroup", 1, "argObj");
+		}
+		else if (argObj instanceof CFSecJpaSecSysGrp) {
+			requiredParentSubGroup = (CFSecJpaSecSysGrp)argObj;
+		}
+		else {
+			throw new CFLibUnsupportedClassException(getClass(), "setParentSubGroup", "argObj", argObj, "CFSecJpaSecSysGrp");
+		}
+	
+	}
+
+	@Override
+	public void setRequiredParentSubGroup(String argInclName) {
+		ICFSecSchema targetBackingSchema = ICFSecSchema.getBackingCFSec();
+		if (targetBackingSchema == null) {
+			throw new CFLibNullArgumentException(getClass(), "setRequiredParentSubGroup", 0, "ICFSecSchema.getBackingCFSec()");
+		}
+		ICFSecSecSysGrpTable targetTable = targetBackingSchema.getTableSecSysGrp();
+		if (targetTable == null) {
+			throw new CFLibNullArgumentException(getClass(), "setRequiredParentSubGroup", 0, "ICFSecSchema.getBackingCFSec().getTableSecSysGrp()");
+		}
+		ICFSecSecSysGrp targetRec = targetTable.readDerivedByUNameIdx(null, argInclName);
+		setRequiredParentSubGroup(targetRec);
+	}
+	@Override
 	public CFLibDbKeyHash256 getRequiredSecSysGrpId() {
 		ICFSecSecSysGrp result = getRequiredContainerGroup();
 		if (result != null) {
@@ -104,26 +135,13 @@ public class CFSecJpaSecSysGrpIncPKey
 
 	@Override
 	public String getRequiredInclName() {
-		return( requiredInclName );
-	}
-
-	@Override
-	public void setRequiredInclName( String value ) {
-		if( value == null ) {
-			throw new CFLibNullArgumentException( getClass(),
-				"setRequiredInclName",
-				1,
-				"value" );
+		ICFSecSecSysGrp result = getRequiredParentSubGroup();
+		if (result != null) {
+			return result.getRequiredName();
 		}
-		else if( value.length() > 64 ) {
-			throw new CFLibArgumentOverflowException( getClass(),
-				"setRequiredInclName",
-				1,
-				"value.length()",
-				value.length(),
-				64 );
+		else {
+			throw new CFLibNullArgumentException(getClass(), "getRequiredInclName", 0, "getRequiredParentSubGroup()");
 		}
-		requiredInclName = value;
 	}
 
 	@Override

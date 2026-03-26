@@ -68,6 +68,8 @@ public class CFSecJpaSecSysGrp
 	protected Set<CFSecJpaSecSysGrpMemb> optionalChildrenMembByGrp;
 	protected int requiredRevision;
 
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="pkey.requiredParentSubGroup")
+	protected Set<CFSecJpaSecSysGrpInc> optionalChildrenSysGrpByName;
 
 	@AttributeOverrides({
 		@AttributeOverride( name="bytes", column = @Column( name="CreatedByUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
@@ -112,6 +114,14 @@ public class CFSecJpaSecSysGrp
 	public List<ICFSecSecSysGrpMemb> getOptionalChildrenMembByGrp() {
 		List<ICFSecSecSysGrpMemb> retlist = new ArrayList<>(optionalChildrenMembByGrp.size());
 		for (CFSecJpaSecSysGrpMemb cur: optionalChildrenMembByGrp) {
+			retlist.add(cur);
+		}
+		return( retlist );
+	}
+	@Override
+	public List<ICFSecSecSysGrpInc> getOptionalChildrenSysGrpByName() {
+		List<ICFSecSecSysGrpInc> retlist = new ArrayList<>(optionalChildrenSysGrpByName.size());
+		for (CFSecJpaSecSysGrpInc cur: optionalChildrenSysGrpByName) {
 			retlist.add(cur);
 		}
 		return( retlist );
