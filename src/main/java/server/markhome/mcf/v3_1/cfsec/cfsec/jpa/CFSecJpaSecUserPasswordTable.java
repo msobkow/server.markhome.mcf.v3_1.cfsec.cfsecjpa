@@ -265,20 +265,25 @@ public class CFSecJpaSecUserPasswordTable implements ICFSecSecUserPasswordTable
 	}
 
 	/**
-	 *	Read the derived SecUserPassword record instance identified by the unique key SetStampIdx.
+	 *	Read an array of the derived SecUserPassword record instances identified by the duplicate key SetStampIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
 	 *	@param	PWSetStamp	The SecUserPassword key attribute of the instance generating the id.
 	 *
-	 *	@return The record instance for the specified key, or null if there is
-	 *		no such existing key value.
+	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
 	 */
 	@Override
-	public ICFSecSecUserPassword readDerivedBySetStampIdx( ICFSecAuthorization Authorization,
+	public ICFSecSecUserPassword[] readDerivedBySetStampIdx( ICFSecAuthorization Authorization,
 		LocalDateTime argPWSetStamp )
 	{
-		return( schema.getJpaHooksSchema().getSecUserPasswordService().findBySetStampIdx(argPWSetStamp) );
+		List<CFSecJpaSecUserPassword> results = schema.getJpaHooksSchema().getSecUserPasswordService().findBySetStampIdx(argPWSetStamp);
+		ICFSecSecUserPassword[] retset = new ICFSecSecUserPassword[results.size()];
+		int idx = 0;
+		for (CFSecJpaSecUserPassword cur: results) {
+			retset[idx++] = cur;
+		}
+		return( retset );
 	}
 
 	/**
@@ -352,19 +357,18 @@ public class CFSecJpaSecUserPasswordTable implements ICFSecSecUserPasswordTable
 	}
 
 	/**
-	 *	Read the specific SecUserPassword record instance identified by the unique key SetStampIdx.
+	 *	Read an array of the specific SecUserPassword record instances identified by the duplicate key SetStampIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
 	 *	@param	PWSetStamp	The SecUserPassword key attribute of the instance generating the id.
 	 *
-	 *	@return The record instance for the specified key, or null if there is
-	 *		no such existing key value.
+	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
 	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
 	 */
 	@Override
-	public ICFSecSecUserPassword readRecBySetStampIdx( ICFSecAuthorization Authorization,
+	public ICFSecSecUserPassword[] readRecBySetStampIdx( ICFSecAuthorization Authorization,
 		LocalDateTime argPWSetStamp )
 	{
 		throw new CFLibNotImplementedYetException(getClass(), "readRecBySetStampIdx");

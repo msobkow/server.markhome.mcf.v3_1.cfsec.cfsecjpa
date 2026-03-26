@@ -44,10 +44,10 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 @Table(
 	name = "SecUserPWHistory", schema = "CFSec31",
 	indexes = {
-		@Index(name = "SecUserIdIdx", columnList = "SecUserId, PWSetStamp", unique = true),
-		@Index(name = "SecUserUserIdx", columnList = "SecUserId", unique = true),
-		@Index(name = "SecUserSetStampIdx", columnList = "PWSetStamp", unique = true),
-		@Index(name = "SecUserReplacedStampIdx", columnList = "PWReplacedStamp", unique = true)
+		@Index(name = "SecUserPWHistIdIdx", columnList = "SecUserId, PWSetStamp", unique = true),
+		@Index(name = "SecUserPWHistUserIdx", columnList = "SecUserId", unique = true),
+		@Index(name = "SecUserPWHistSetStampIdx", columnList = "PWSetStamp", unique = true),
+		@Index(name = "SecUserPWHistReplacedStampIdx", columnList = "PWReplacedStamp", unique = true)
 	}
 )
 @Transactional(Transactional.TxType.SUPPORTS)

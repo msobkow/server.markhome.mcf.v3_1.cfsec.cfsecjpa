@@ -168,26 +168,26 @@ public class CFSecJpaSecUserPasswordService {
 	// CFSecSecUserPassword specified index finders
 
 	/**
-	 *	Find an entity using the columns of the ICFSecSecUserPasswordBySetStampIdxKey as arguments.
+	 *	Find zero or more entities into a List using the columns of the ICFSecSecUserPasswordBySetStampIdxKey as arguments.
 	 *
 	 *		@param requiredPWSetStamp
 	 *
-	 *		@return The found entity, or null if no such entity exists.
+	 *		@return List&lt;CFSecJpaSecUserPassword&gt; of the found entities, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecUserPassword findBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp) {
+	public List<CFSecJpaSecUserPassword> findBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp) {
 		return( cfsec31SecUserPasswordRepository.findBySetStampIdx(requiredPWSetStamp));
 	}
 
 	/**
-	 *	ICFSecSecUserPasswordBySetStampIdxKey entity finder convenience method for object-based access.
+	 *	ICFSecSecUserPasswordBySetStampIdxKey entity list finder convenience method for object-based access.
 	 *
 	 *		@param key The ICFSecSecUserPasswordBySetStampIdxKey instance to use for the query arguments.
 	 *
-	 *		@return The found entity, or null if no such entity exists.
+	 *		@return The found entity list, which may be empty.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecUserPassword findBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
+	public List<CFSecJpaSecUserPassword> findBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
 		return( cfsec31SecUserPasswordRepository.findBySetStampIdx(key.getRequiredPWSetStamp()));
 	}
 
@@ -206,14 +206,14 @@ public class CFSecJpaSecUserPasswordService {
 	}
 
 	/**
-	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
+	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredPWSetStamp
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecUserPassword lockBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp) {
+	public List<CFSecJpaSecUserPassword> lockBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp) {
 		return( cfsec31SecUserPasswordRepository.lockBySetStampIdx(requiredPWSetStamp));
 	}
 
@@ -222,10 +222,10 @@ public class CFSecJpaSecUserPasswordService {
 	 *
 	 *		@param key The key of the entity to be locked.
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecUserPassword lockBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
+	public List<CFSecJpaSecUserPassword> lockBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
 		return( cfsec31SecUserPasswordRepository.lockBySetStampIdx(key.getRequiredPWSetStamp()));
 	}
 

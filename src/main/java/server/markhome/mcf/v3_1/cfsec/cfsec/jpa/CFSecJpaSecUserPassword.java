@@ -45,7 +45,7 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 	name = "SecUserPW", schema = "CFSec31",
 	indexes = {
 		@Index(name = "SecUserIdIdx", columnList = "SecUserId", unique = true),
-		@Index(name = "SecUserSetStampIdx", columnList = "PWSetStamp", unique = true)
+		@Index(name = "SecUserSetStampIdx", columnList = "PWSetStamp", unique = false)
 	}
 )
 @Transactional(Transactional.TxType.SUPPORTS)

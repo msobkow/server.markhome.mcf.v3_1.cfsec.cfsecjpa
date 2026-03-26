@@ -65,23 +65,23 @@ public interface CFSecJpaSecUserPasswordRepository extends JpaRepository<CFSecJp
 	// CFSecJpaSecUserPassword specified index readers
 
 	/**
-	 *	Read an entity using the columns of the CFSecSecUserPasswordBySetStampIdxKey as arguments.
+	 *	Read zero or more entities into a List using the columns of the CFSecSecUserPasswordBySetStampIdxKey as arguments.
 	 *
 	 *		@param requiredPWSetStamp
 	 *
-	 *		@return The found entity, typically from the JPA cache, or null if no such entity exists.
+	 *		@return List&lt;CFSecJpaSecUserPassword&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
 	@Query("select r from CFSecJpaSecUserPassword r where r.requiredPWSetStamp = :pWSetStamp")
-	CFSecJpaSecUserPassword findBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp);
+	List<CFSecJpaSecUserPassword> findBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp);
 
 	/**
-	 *	CFSecSecUserPasswordBySetStampIdxKey entity reader convenience method for object-based access.
+	 *	CFSecSecUserPasswordBySetStampIdxKey entity list reader convenience method for object-based access.
 	 *
 	 *		@param key The CFSecSecUserPasswordBySetStampIdxKey instance to use for the query arguments.
 	 *
-	 *		@return The found entity, typically from the JPA cache, or null if no such entity exists.
+	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
 	 */
-	default CFSecJpaSecUserPassword findBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
+	default List<CFSecJpaSecUserPassword> findBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
 		return( findBySetStampIdx(key.getRequiredPWSetStamp()));
 	}
 
@@ -100,25 +100,25 @@ public interface CFSecJpaSecUserPasswordRepository extends JpaRepository<CFSecJp
 	CFSecJpaSecUserPassword lockByIdIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
 
 	/**
-	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
+	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredPWSetStamp
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
 	@Query("select r from CFSecJpaSecUserPassword r where r.requiredPWSetStamp = :pWSetStamp")
-	CFSecJpaSecUserPassword lockBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp);
+	List<CFSecJpaSecUserPassword> lockBySetStampIdx(@Param("pWSetStamp") LocalDateTime requiredPWSetStamp);
 
 	/**
 	 *	CFSecSecUserPasswordBySetStampIdxKey based lock method for object-based access.
 	 *
 	 *		@param key The key of the entity to be locked.
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
-	default CFSecJpaSecUserPassword lockBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
+	default List<CFSecJpaSecUserPassword> lockBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
 		return( lockBySetStampIdx(key.getRequiredPWSetStamp()));
 	}
 
