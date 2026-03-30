@@ -174,9 +174,7 @@ public class CFSecJpaISOCtry
 
 	@Override
 	public void setPKey(Short requiredISOCtryId) {
-		if (requiredISOCtryId != null) {
-			setRequiredISOCtryId(requiredISOCtryId);
-		}
+		this.requiredISOCtryId = requiredISOCtryId;
 	}
 	
 	@Override

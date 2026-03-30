@@ -206,9 +206,7 @@ public class CFSecJpaSecTentGrp
 
 	@Override
 	public void setPKey(CFLibDbKeyHash256 requiredSecTentGrpId) {
-		if (requiredSecTentGrpId != null) {
-			setRequiredSecTentGrpId(requiredSecTentGrpId);
-		}
+		this.requiredSecTentGrpId = requiredSecTentGrpId;
 	}
 	
 	@Override

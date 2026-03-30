@@ -167,9 +167,7 @@ public class CFSecJpaISOLang
 
 	@Override
 	public void setPKey(Short requiredISOLangId) {
-		if (requiredISOLangId != null) {
-			setRequiredISOLangId(requiredISOLangId);
-		}
+		this.requiredISOLangId = requiredISOLangId;
 	}
 	
 	@Override

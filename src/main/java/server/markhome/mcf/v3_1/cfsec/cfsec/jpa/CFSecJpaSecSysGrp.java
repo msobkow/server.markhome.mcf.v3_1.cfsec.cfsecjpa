@@ -205,9 +205,7 @@ public class CFSecJpaSecSysGrp
 
 	@Override
 	public void setPKey(CFLibDbKeyHash256 requiredSecSysGrpId) {
-		if (requiredSecSysGrpId != null) {
-			setRequiredSecSysGrpId(requiredSecSysGrpId);
-		}
+		this.requiredSecSysGrpId = requiredSecSysGrpId;
 	}
 	
 	@Override

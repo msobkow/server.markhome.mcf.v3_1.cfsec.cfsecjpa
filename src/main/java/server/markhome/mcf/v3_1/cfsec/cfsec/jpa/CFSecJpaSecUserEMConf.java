@@ -198,25 +198,12 @@ public class CFSecJpaSecUserEMConf
 
 	@Override
 	public void setPKey(CFLibDbKeyHash256 requiredSecUserId) {
-		if (requiredSecUserId != null) {
-			setRequiredSecUserId(requiredSecUserId);
-		}
+		this.requiredSecUserId = requiredSecUserId;
 	}
 	
 	@Override
 	public CFLibDbKeyHash256 getRequiredSecUserId() {
 		return( requiredSecUserId );
-	}
-
-	@Override
-	public void setRequiredSecUserId( CFLibDbKeyHash256 value ) {
-		if( value == null || value.isNull() ) {
-			throw new CFLibNullArgumentException( getClass(),
-				"setRequiredSecUserId",
-				1,
-				"value" );
-		}
-		requiredSecUserId = value;
 	}
 
 	

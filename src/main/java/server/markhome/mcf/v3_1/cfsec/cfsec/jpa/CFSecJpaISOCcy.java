@@ -170,9 +170,7 @@ public class CFSecJpaISOCcy
 
 	@Override
 	public void setPKey(Short requiredISOCcyId) {
-		if (requiredISOCcyId != null) {
-			setRequiredISOCcyId(requiredISOCcyId);
-		}
+		this.requiredISOCcyId = requiredISOCcyId;
 	}
 	
 	@Override

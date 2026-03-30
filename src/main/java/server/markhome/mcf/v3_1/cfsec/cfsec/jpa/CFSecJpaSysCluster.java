@@ -112,9 +112,7 @@ public class CFSecJpaSysCluster
 
 	@Override
 	public void setPKey(Integer requiredSingletonId) {
-		if (requiredSingletonId != null) {
-			setRequiredSingletonId(requiredSingletonId);
-		}
+		this.requiredSingletonId = requiredSingletonId;
 	}
 	
 	@Override

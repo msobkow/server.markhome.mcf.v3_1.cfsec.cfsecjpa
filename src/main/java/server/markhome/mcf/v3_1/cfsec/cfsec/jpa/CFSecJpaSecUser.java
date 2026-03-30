@@ -217,9 +217,7 @@ public class CFSecJpaSecUser
 
 	@Override
 	public void setPKey(CFLibDbKeyHash256 requiredSecUserId) {
-		if (requiredSecUserId != null) {
-			setRequiredSecUserId(requiredSecUserId);
-		}
+		this.requiredSecUserId = requiredSecUserId;
 	}
 	
 	@Override
