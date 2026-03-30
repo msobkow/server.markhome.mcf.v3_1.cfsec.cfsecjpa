@@ -59,7 +59,7 @@ public interface CFSecJpaSecUserPasswordRepository extends JpaRepository<CFSecJp
 	 *
 	 *		@return The retrieved entity, usually from the JPA cache, or null if no such entity exists.
 	 */
-	@Query("select r from CFSecJpaSecUserPassword r where r.requiredSecUserId = :secUserId")
+	@Query("select r from CFSecJpaSecUserPassword r where r.requiredContainerUser.requiredSecUserId = :secUserId")
 	CFSecJpaSecUserPassword get(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
 
 	// CFSecJpaSecUserPassword specified index readers
@@ -96,7 +96,7 @@ public interface CFSecJpaSecUserPasswordRepository extends JpaRepository<CFSecJp
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecUserPassword r where r.requiredSecUserId = :secUserId")
+	@Query("select r from CFSecJpaSecUserPassword r where r.requiredContainerUser.requiredSecUserId = :secUserId")
 	CFSecJpaSecUserPassword lockByIdIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
 
 	/**
@@ -131,7 +131,7 @@ public interface CFSecJpaSecUserPasswordRepository extends JpaRepository<CFSecJp
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecUserPassword r where r.requiredSecUserId = :secUserId")
+	@Query("delete from CFSecJpaSecUserPassword r where r.requiredContainerUser.requiredSecUserId = :secUserId")
 	void deleteByIdIdx(@Param("secUserId") CFLibDbKeyHash256 requiredSecUserId);
 
 	/**

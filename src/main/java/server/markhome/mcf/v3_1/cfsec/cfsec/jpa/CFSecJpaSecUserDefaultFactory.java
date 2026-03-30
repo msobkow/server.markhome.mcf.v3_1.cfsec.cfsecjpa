@@ -96,43 +96,22 @@ public class CFSecJpaSecUserDefaultFactory
 	}
 
     @Override
-    public ICFSecSecUserByEMConfIdxKey newByEMConfIdxKey() {
-	ICFSecSecUserByEMConfIdxKey key =
-            new CFSecJpaSecUserByEMConfIdxKey();
+    public ICFSecSecUserByEMAddrIdxKey newByEMAddrIdxKey() {
+	ICFSecSecUserByEMAddrIdxKey key =
+            new CFSecJpaSecUserByEMAddrIdxKey();
 	return( key );
     }
 
-	public CFSecJpaSecUserByEMConfIdxKey ensureByEMConfIdxKey(ICFSecSecUserByEMConfIdxKey key) {
+	public CFSecJpaSecUserByEMAddrIdxKey ensureByEMAddrIdxKey(ICFSecSecUserByEMAddrIdxKey key) {
 		if (key == null) {
 			return( null );
 		}
-		else if (key instanceof CFSecJpaSecUserByEMConfIdxKey) {
-			return( (CFSecJpaSecUserByEMConfIdxKey)key );
+		else if (key instanceof CFSecJpaSecUserByEMAddrIdxKey) {
+			return( (CFSecJpaSecUserByEMAddrIdxKey)key );
 		}
 		else {
-			CFSecJpaSecUserByEMConfIdxKey mapped = new CFSecJpaSecUserByEMConfIdxKey();
-			mapped.setOptionalEMailConfirmUuid6( key.getOptionalEMailConfirmUuid6() );
-			return( mapped );
-		}
-	}
-
-    @Override
-    public ICFSecSecUserByPwdResetIdxKey newByPwdResetIdxKey() {
-	ICFSecSecUserByPwdResetIdxKey key =
-            new CFSecJpaSecUserByPwdResetIdxKey();
-	return( key );
-    }
-
-	public CFSecJpaSecUserByPwdResetIdxKey ensureByPwdResetIdxKey(ICFSecSecUserByPwdResetIdxKey key) {
-		if (key == null) {
-			return( null );
-		}
-		else if (key instanceof CFSecJpaSecUserByPwdResetIdxKey) {
-			return( (CFSecJpaSecUserByPwdResetIdxKey)key );
-		}
-		else {
-			CFSecJpaSecUserByPwdResetIdxKey mapped = new CFSecJpaSecUserByPwdResetIdxKey();
-			mapped.setOptionalPasswordResetUuid6( key.getOptionalPasswordResetUuid6() );
+			CFSecJpaSecUserByEMAddrIdxKey mapped = new CFSecJpaSecUserByEMAddrIdxKey();
+			mapped.setRequiredEMailAddress( key.getRequiredEMailAddress() );
 			return( mapped );
 		}
 	}

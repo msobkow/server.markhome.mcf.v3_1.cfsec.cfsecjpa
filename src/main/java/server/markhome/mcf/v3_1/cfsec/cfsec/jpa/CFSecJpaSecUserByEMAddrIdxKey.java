@@ -1,4 +1,4 @@
-// Description: Java 25 JPA implementation of a SecUser by PwdResetIdx index key object.
+// Description: Java 25 JPA implementation of a SecUser by EMAddrIdx index key object.
 
 /*
  *	server.markhome.mcf.CFSec
@@ -40,22 +40,36 @@ import server.markhome.mcf.v3_1.cflib.dbutil.*;
 import server.markhome.mcf.v3_1.cflib.xml.CFLibXmlUtil;
 import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 
-public class CFSecJpaSecUserByPwdResetIdxKey
-	implements ICFSecSecUserByPwdResetIdxKey, Comparable<Object>, Serializable
+public class CFSecJpaSecUserByEMAddrIdxKey
+	implements ICFSecSecUserByEMAddrIdxKey, Comparable<Object>, Serializable
 {
-	protected CFLibUuid6 optionalPasswordResetUuid6;
-	public CFSecJpaSecUserByPwdResetIdxKey() {
-		optionalPasswordResetUuid6 = null;
+	protected String requiredEMailAddress;
+	public CFSecJpaSecUserByEMAddrIdxKey() {
+		requiredEMailAddress = ICFSecSecUser.EMAILADDRESS_INIT_VALUE;
 	}
 
 	@Override
-	public CFLibUuid6 getOptionalPasswordResetUuid6() {
-		return( optionalPasswordResetUuid6 );
+	public String getRequiredEMailAddress() {
+		return( requiredEMailAddress );
 	}
 
 	@Override
-	public void setOptionalPasswordResetUuid6( CFLibUuid6 value ) {
-		optionalPasswordResetUuid6 = value;
+	public void setRequiredEMailAddress( String value ) {
+		if( value == null ) {
+			throw new CFLibNullArgumentException( getClass(),
+				"setRequiredEMailAddress",
+				1,
+				"value" );
+		}
+		else if( value.length() > 512 ) {
+			throw new CFLibArgumentOverflowException( getClass(),
+				"setRequiredEMailAddress",
+				1,
+				"value.length()",
+				value.length(),
+				512 );
+		}
+		requiredEMailAddress = value;
 	}
 
 	@Override
@@ -63,11 +77,11 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 		if (obj == null) {
 			return( false );
 		}
-		else if (obj instanceof ICFSecSecUserByPwdResetIdxKey) {
-			ICFSecSecUserByPwdResetIdxKey rhs = (ICFSecSecUserByPwdResetIdxKey)obj;
-			if( getOptionalPasswordResetUuid6() != null ) {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					if( ! getOptionalPasswordResetUuid6().equals( rhs.getOptionalPasswordResetUuid6() ) ) {
+		else if (obj instanceof ICFSecSecUserByEMAddrIdxKey) {
+			ICFSecSecUserByEMAddrIdxKey rhs = (ICFSecSecUserByEMAddrIdxKey)obj;
+			if( getRequiredEMailAddress() != null ) {
+				if( rhs.getRequiredEMailAddress() != null ) {
+					if( ! getRequiredEMailAddress().equals( rhs.getRequiredEMailAddress() ) ) {
 						return( false );
 					}
 				}
@@ -76,7 +90,7 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 				}
 			}
 			else {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
+				if( rhs.getRequiredEMailAddress() != null ) {
 					return( false );
 				}
 			}
@@ -84,9 +98,9 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 		}
 		else if (obj instanceof ICFSecSecUser) {
 			ICFSecSecUser rhs = (ICFSecSecUser)obj;
-			if( getOptionalPasswordResetUuid6() != null ) {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					if( ! getOptionalPasswordResetUuid6().equals( rhs.getOptionalPasswordResetUuid6() ) ) {
+			if( getRequiredEMailAddress() != null ) {
+				if( rhs.getRequiredEMailAddress() != null ) {
+					if( ! getRequiredEMailAddress().equals( rhs.getRequiredEMailAddress() ) ) {
 						return( false );
 					}
 				}
@@ -95,7 +109,7 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 				}
 			}
 			else {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
+				if( rhs.getRequiredEMailAddress() != null ) {
 					return( false );
 				}
 			}
@@ -103,9 +117,9 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 		}
 		else if (obj instanceof ICFSecSecUserH) {
 			ICFSecSecUserH rhs = (ICFSecSecUserH)obj;
-			if( getOptionalPasswordResetUuid6() != null ) {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					if( ! getOptionalPasswordResetUuid6().equals( rhs.getOptionalPasswordResetUuid6() ) ) {
+			if( getRequiredEMailAddress() != null ) {
+				if( rhs.getRequiredEMailAddress() != null ) {
+					if( ! getRequiredEMailAddress().equals( rhs.getRequiredEMailAddress() ) ) {
 						return( false );
 					}
 				}
@@ -114,7 +128,7 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 				}
 			}
 			else {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
+				if( rhs.getRequiredEMailAddress() != null ) {
 					return( false );
 				}
 			}
@@ -128,8 +142,8 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		if( getOptionalPasswordResetUuid6() != null ) {
-			hashCode = hashCode + getOptionalPasswordResetUuid6().hashCode();
+		if( getRequiredEMailAddress() != null ) {
+			hashCode = hashCode + getRequiredEMailAddress().hashCode();
 		}
 		return( hashCode & 0x7fffffff );
 	}
@@ -140,11 +154,11 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 		if (obj == null) {
 			return( 1 );
 		}
-		else if (obj instanceof ICFSecSecUserByPwdResetIdxKey) {
-			ICFSecSecUserByPwdResetIdxKey rhs = (ICFSecSecUserByPwdResetIdxKey)obj;
-			if( getOptionalPasswordResetUuid6() != null ) {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					cmp = getOptionalPasswordResetUuid6().compareTo( rhs.getOptionalPasswordResetUuid6() );
+		else if (obj instanceof ICFSecSecUserByEMAddrIdxKey) {
+			ICFSecSecUserByEMAddrIdxKey rhs = (ICFSecSecUserByEMAddrIdxKey)obj;
+			if (getRequiredEMailAddress() != null) {
+				if (rhs.getRequiredEMailAddress() != null) {
+					cmp = getRequiredEMailAddress().compareTo( rhs.getRequiredEMailAddress() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -153,18 +167,16 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 					return( 1 );
 				}
 			}
-			else {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					return( -1 );
-				}
+			else if (rhs.getRequiredEMailAddress() != null) {
+				return( -1 );
 			}
 			return( 0 );
 		}
 		else if (obj instanceof ICFSecSecUser) {
 			ICFSecSecUser rhs = (ICFSecSecUser)obj;
-			if( getOptionalPasswordResetUuid6() != null ) {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					cmp = getOptionalPasswordResetUuid6().compareTo( rhs.getOptionalPasswordResetUuid6() );
+			if (getRequiredEMailAddress() != null) {
+				if (rhs.getRequiredEMailAddress() != null) {
+					cmp = getRequiredEMailAddress().compareTo( rhs.getRequiredEMailAddress() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -173,18 +185,16 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 					return( 1 );
 				}
 			}
-			else {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					return( -1 );
-				}
+			else if (rhs.getRequiredEMailAddress() != null) {
+				return( -1 );
 			}
 			return( 0 );
 		}
 		else if (obj instanceof ICFSecSecUserH) {
 			ICFSecSecUserH rhs = (ICFSecSecUserH)obj;
-			if( getOptionalPasswordResetUuid6() != null ) {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					cmp = getOptionalPasswordResetUuid6().compareTo( rhs.getOptionalPasswordResetUuid6() );
+			if (getRequiredEMailAddress() != null) {
+				if (rhs.getRequiredEMailAddress() != null) {
+					cmp = getRequiredEMailAddress().compareTo( rhs.getRequiredEMailAddress() );
 					if( cmp != 0 ) {
 						return( cmp );
 					}
@@ -193,10 +203,8 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 					return( 1 );
 				}
 			}
-			else {
-				if( rhs.getOptionalPasswordResetUuid6() != null ) {
-					return( -1 );
-				}
+			else if (rhs.getRequiredEMailAddress() != null) {
+				return( -1 );
 			}
 			return( 0 );
 		}
@@ -205,19 +213,19 @@ public class CFSecJpaSecUserByPwdResetIdxKey
 				"compareTo",
 				"obj",
 				obj,
-				"ICFSecSecUserByPwdResetIdxKey, ICFSecSecUser, ICFSecSecUserH");
+				"ICFSecSecUserByEMAddrIdxKey, ICFSecSecUser, ICFSecSecUserH");
 		}
 	}
 
 	public String getXmlAttrFragment() {
 		String ret = "" 
-			+ " OptionalPasswordResetUuid6=" + ( ( getOptionalPasswordResetUuid6() == null ) ? "null" : "\"" + getOptionalPasswordResetUuid6().toString() + "\"" );
+			+ " RequiredEMailAddress=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredEMailAddress() ) + "\"";
 		return( ret );
 	}
 
 	@Override
 	public String toString() {
-		String ret = "<CFSecSecUserByPwdResetIdxKey" + getXmlAttrFragment() + "/>";
+		String ret = "<CFSecSecUserByEMAddrIdxKey" + getXmlAttrFragment() + "/>";
 		return( ret );
 	}
 }

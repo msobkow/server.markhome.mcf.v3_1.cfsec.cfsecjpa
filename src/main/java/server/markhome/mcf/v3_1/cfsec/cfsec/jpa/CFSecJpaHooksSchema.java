@@ -88,6 +88,12 @@ public class CFSecJpaHooksSchema {
 	private CFSecJpaSecUserPasswordRepository secUserPasswordRepository;
 
 	@Autowired
+	private CFSecJpaSecUserEMConfRepository secUserEMConfRepository;
+
+	@Autowired
+	private CFSecJpaSecUserPWResetRepository secUserPWResetRepository;
+
+	@Autowired
 	private CFSecJpaSecUserPWHistoryRepository secUserPWHistoryRepository;
 
 	@Autowired
@@ -170,6 +176,14 @@ public class CFSecJpaHooksSchema {
 	@Autowired
 	@Qualifier("cfsec31JpaSecUserPasswordService")
 	private CFSecJpaSecUserPasswordService secUserPasswordService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaSecUserEMConfService")
+	private CFSecJpaSecUserEMConfService secUserEMConfService;
+
+	@Autowired
+	@Qualifier("cfsec31JpaSecUserPWResetService")
+	private CFSecJpaSecUserPWResetService secUserPWResetService;
 
 	@Autowired
 	@Qualifier("cfsec31JpaSecUserPWHistoryService")
@@ -347,6 +361,26 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( secUserPasswordRepository );
+	}
+
+	public CFSecJpaSecUserEMConfRepository getSecUserEMConfRepository() {
+		if ( secUserEMConfRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserEMConfRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secUserEMConfRepository );
+	}
+
+	public CFSecJpaSecUserPWResetRepository getSecUserPWResetRepository() {
+		if ( secUserPWResetRepository == null ) {
+			// Dynamically resolve the repository by interface type
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserPWResetRepository",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secUserPWResetRepository );
 	}
 
 	public CFSecJpaSecUserPWHistoryRepository getSecUserPWHistoryRepository() {
@@ -567,6 +601,26 @@ public class CFSecJpaHooksSchema {
 				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
 		}
 		return( secUserPasswordService );
+	}
+
+	public CFSecJpaSecUserEMConfService getSecUserEMConfService() {
+		if ( secUserEMConfService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserEMConfService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secUserEMConfService );
+	}
+
+	public CFSecJpaSecUserPWResetService getSecUserPWResetService() {
+		if ( secUserPWResetService == null ) {
+			// Dynamically resolve the repository by qualifier name
+			throw new CFLibNotImplementedYetException( getClass(), "getSecUserPWResetService",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either",
+				"ERROR - do not know how to dynamically resolve Spring beans from POJO code yet and AspectJ did not resolve it either" );
+		}
+		return( secUserPWResetService );
 	}
 
 	public CFSecJpaSecUserPWHistoryService getSecUserPWHistoryService() {

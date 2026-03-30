@@ -88,6 +88,12 @@ public class CFSecJpaSchemaService {
 	private CFSecJpaSecUserPasswordService secuserpasswordService;
 
 	@Autowired
+	private CFSecJpaSecUserEMConfService secuseremconfService;
+
+	@Autowired
+	private CFSecJpaSecUserPWResetService secuserpwresetService;
+
+	@Autowired
 	private CFSecJpaSecUserPWHistoryService secuserpwhistoryService;
 
 	@Autowired
@@ -379,6 +385,8 @@ public class CFSecJpaSchemaService {
 		bootstrapTableSecurity(auth, "ISOTZone", true, false, "Global");
 		bootstrapTableSecurity(auth, "SecUser", true, false, "System");
 		bootstrapTableSecurity(auth, "SecUserPassword", false, false, "System");
+		bootstrapTableSecurity(auth, "SecUserEMConf", true, false, "System");
+		bootstrapTableSecurity(auth, "SecUserPWReset", true, false, "System");
 		bootstrapTableSecurity(auth, "SecUserPWHistory", false, false, "System");
 		bootstrapTableSecurity(auth, "SecSysGrp", true, false, "System");
 		bootstrapTableSecurity(auth, "SecSysGrpInc", true, false, "System");

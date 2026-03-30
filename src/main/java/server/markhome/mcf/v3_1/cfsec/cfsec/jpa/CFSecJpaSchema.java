@@ -73,7 +73,9 @@ public class CFSecJpaSchema
 	protected ICFSecSecTentGrpIncTable tableSecTentGrpInc;
 	protected ICFSecSecTentGrpMembTable tableSecTentGrpMemb;
 	protected ICFSecSecUserTable tableSecUser;
+	protected ICFSecSecUserEMConfTable tableSecUserEMConf;
 	protected ICFSecSecUserPWHistoryTable tableSecUserPWHistory;
+	protected ICFSecSecUserPWResetTable tableSecUserPWReset;
 	protected ICFSecSecUserPasswordTable tableSecUserPassword;
 	protected ICFSecSysClusterTable tableSysCluster;
 	protected ICFSecTenantTable tableTenant;
@@ -96,7 +98,9 @@ public class CFSecJpaSchema
 	protected ICFSecSecTentGrpIncFactory factorySecTentGrpInc;
 	protected ICFSecSecTentGrpMembFactory factorySecTentGrpMemb;
 	protected ICFSecSecUserFactory factorySecUser;
+	protected ICFSecSecUserEMConfFactory factorySecUserEMConf;
 	protected ICFSecSecUserPWHistoryFactory factorySecUserPWHistory;
+	protected ICFSecSecUserPWResetFactory factorySecUserPWReset;
 	protected ICFSecSecUserPasswordFactory factorySecUserPassword;
 	protected ICFSecSysClusterFactory factorySysCluster;
 	protected ICFSecTenantFactory factoryTenant;
@@ -248,6 +252,34 @@ public class CFSecJpaSchema
 		}
 		else {
 			throw new CFLibNullArgumentException(CFSecJpaSchema.class, "wireRecConstructors", 0, "ICFSecSchema.getClassMapByBackingClassCode(ICFSecSecUserPassword.CLASS_CODE)[" + ICFSecSecUserPassword.CLASS_CODE + "]");
+		}
+	
+		entry = ICFSecSchema.getClassMapByBackingClassCode(ICFSecSecUserEMConf.CLASS_CODE);
+		if (entry != null) {
+			entry.setBackingRecConstructor( new BackingRecConstructor() {
+				@Override
+				public Object instantiate() {
+					ICFSecSecUserEMConf ret = new CFSecJpaSecUserEMConf();
+					return(ret);
+				}
+			});
+		}
+		else {
+			throw new CFLibNullArgumentException(CFSecJpaSchema.class, "wireRecConstructors", 0, "ICFSecSchema.getClassMapByBackingClassCode(ICFSecSecUserEMConf.CLASS_CODE)[" + ICFSecSecUserEMConf.CLASS_CODE + "]");
+		}
+	
+		entry = ICFSecSchema.getClassMapByBackingClassCode(ICFSecSecUserPWReset.CLASS_CODE);
+		if (entry != null) {
+			entry.setBackingRecConstructor( new BackingRecConstructor() {
+				@Override
+				public Object instantiate() {
+					ICFSecSecUserPWReset ret = new CFSecJpaSecUserPWReset();
+					return(ret);
+				}
+			});
+		}
+		else {
+			throw new CFLibNullArgumentException(CFSecJpaSchema.class, "wireRecConstructors", 0, "ICFSecSchema.getClassMapByBackingClassCode(ICFSecSecUserPWReset.CLASS_CODE)[" + ICFSecSecUserPWReset.CLASS_CODE + "]");
 		}
 	
 		entry = ICFSecSchema.getClassMapByBackingClassCode(ICFSecSecUserPWHistory.CLASS_CODE);
@@ -452,6 +484,12 @@ public class CFSecJpaSchema
 		if (tableSecUserPassword == null || !(tableSecUserPassword instanceof CFSecJpaSecUserPasswordTable)) {
 			tableSecUserPassword = new CFSecJpaSecUserPasswordTable(this);
 		}
+		if (tableSecUserEMConf == null || !(tableSecUserEMConf instanceof CFSecJpaSecUserEMConfTable)) {
+			tableSecUserEMConf = new CFSecJpaSecUserEMConfTable(this);
+		}
+		if (tableSecUserPWReset == null || !(tableSecUserPWReset instanceof CFSecJpaSecUserPWResetTable)) {
+			tableSecUserPWReset = new CFSecJpaSecUserPWResetTable(this);
+		}
 		if (tableSecUserPWHistory == null || !(tableSecUserPWHistory instanceof CFSecJpaSecUserPWHistoryTable)) {
 			tableSecUserPWHistory = new CFSecJpaSecUserPWHistoryTable(this);
 		}
@@ -533,7 +571,9 @@ public class CFSecJpaSchema
 		tableSecTentGrpInc = null;
 		tableSecTentGrpMemb = null;
 		tableSecUser = null;
+		tableSecUserEMConf = null;
 		tableSecUserPWHistory = null;
+		tableSecUserPWReset = null;
 		tableSecUserPassword = null;
 		tableSysCluster = null;
 		tableTenant = null;
@@ -556,7 +596,9 @@ public class CFSecJpaSchema
 		factorySecTentGrpInc = new CFSecJpaSecTentGrpIncDefaultFactory();
 		factorySecTentGrpMemb = new CFSecJpaSecTentGrpMembDefaultFactory();
 		factorySecUser = new CFSecJpaSecUserDefaultFactory();
+		factorySecUserEMConf = new CFSecJpaSecUserEMConfDefaultFactory();
 		factorySecUserPWHistory = new CFSecJpaSecUserPWHistoryDefaultFactory();
+		factorySecUserPWReset = new CFSecJpaSecUserPWResetDefaultFactory();
 		factorySecUserPassword = new CFSecJpaSecUserPasswordDefaultFactory();
 		factorySysCluster = new CFSecJpaSysClusterDefaultFactory();
 		factoryTenant = new CFSecJpaTenantDefaultFactory();	}
@@ -916,6 +958,22 @@ public class CFSecJpaSchema
 		factorySecUser = value;
 	}
 
+	public ICFSecSecUserEMConfTable getTableSecUserEMConf() {
+		return( tableSecUserEMConf );
+	}
+
+	public void setTableSecUserEMConf( ICFSecSecUserEMConfTable value ) {
+		tableSecUserEMConf = value;
+	}
+
+	public ICFSecSecUserEMConfFactory getFactorySecUserEMConf() {
+		return( factorySecUserEMConf );
+	}
+
+	public void setFactorySecUserEMConf( ICFSecSecUserEMConfFactory value ) {
+		factorySecUserEMConf = value;
+	}
+
 	public ICFSecSecUserPWHistoryTable getTableSecUserPWHistory() {
 		return( tableSecUserPWHistory );
 	}
@@ -930,6 +988,22 @@ public class CFSecJpaSchema
 
 	public void setFactorySecUserPWHistory( ICFSecSecUserPWHistoryFactory value ) {
 		factorySecUserPWHistory = value;
+	}
+
+	public ICFSecSecUserPWResetTable getTableSecUserPWReset() {
+		return( tableSecUserPWReset );
+	}
+
+	public void setTableSecUserPWReset( ICFSecSecUserPWResetTable value ) {
+		tableSecUserPWReset = value;
+	}
+
+	public ICFSecSecUserPWResetFactory getFactorySecUserPWReset() {
+		return( factorySecUserPWReset );
+	}
+
+	public void setFactorySecUserPWReset( ICFSecSecUserPWResetFactory value ) {
+		factorySecUserPWReset = value;
 	}
 
 	public ICFSecSecUserPasswordTable getTableSecUserPassword() {

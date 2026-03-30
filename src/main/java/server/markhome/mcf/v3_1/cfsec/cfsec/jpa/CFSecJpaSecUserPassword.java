@@ -44,8 +44,8 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
 @Table(
 	name = "SecUserPW", schema = "CFSec31",
 	indexes = {
-		@Index(name = "SecUserIdIdx", columnList = "SecUserId", unique = true),
-		@Index(name = "SecUserSetStampIdx", columnList = "PWSetStamp", unique = false)
+		@Index(name = "SecUserPasswordIdIdx", columnList = "SecUserId", unique = true),
+		@Index(name = "SecUserPasswordSetStampIdx", columnList = "PWSetStamp", unique = false)
 	}
 )
 @Transactional(Transactional.TxType.SUPPORTS)
@@ -60,6 +60,10 @@ public class CFSecJpaSecUserPassword
 		@AttributeOverride(name="bytes", column = @Column( name="SecUserId", nullable=false, length=CFLibDbKeyHash256.HASH_LENGTH ) )
 	})
 	protected CFLibDbKeyHash256 requiredSecUserId;
+		
+	@OneToOne(fetch=FetchType.LAZY, optional=false)
+	@JoinColumn( name="SecUserId" )
+	protected CFSecJpaSecUser requiredContainerUser;
 	protected int requiredRevision;
 
 
@@ -78,6 +82,37 @@ public class CFSecJpaSecUserPassword
 		return( ICFSecSecUserPassword.CLASS_CODE );
 	}
 
+	@Override
+	public ICFSecSecUser getRequiredContainerUser() {
+		return( requiredContainerUser );
+	}
+	@Override
+	public void setRequiredContainerUser(ICFSecSecUser argObj) {
+		if(argObj == null) {
+			throw new CFLibNullArgumentException(getClass(), "setContainerUser", 1, "argObj");
+		}
+		else if (argObj instanceof CFSecJpaSecUser) {
+			requiredContainerUser = (CFSecJpaSecUser)argObj;
+		}
+		else {
+			throw new CFLibUnsupportedClassException(getClass(), "setContainerUser", "argObj", argObj, "CFSecJpaSecUser");
+		}
+	
+	}
+
+	@Override
+	public void setRequiredContainerUser(CFLibDbKeyHash256 argSecUserId) {
+		ICFSecSchema targetBackingSchema = ICFSecSchema.getBackingCFSec();
+		if (targetBackingSchema == null) {
+			throw new CFLibNullArgumentException(getClass(), "setRequiredContainerUser", 0, "ICFSecSchema.getBackingCFSec()");
+		}
+		ICFSecSecUserTable targetTable = targetBackingSchema.getTableSecUser();
+		if (targetTable == null) {
+			throw new CFLibNullArgumentException(getClass(), "setRequiredContainerUser", 0, "ICFSecSchema.getBackingCFSec().getTableSecUser()");
+		}
+		ICFSecSecUser targetRec = targetTable.readDerivedByIdIdx(null, argSecUserId);
+		setRequiredContainerUser(targetRec);
+	}
 	@Override
 	public CFLibDbKeyHash256 getPKey() {
 		return getRequiredSecUserId();
@@ -336,7 +371,7 @@ public class CFSecJpaSecUserPassword
 
 	@Override
 	public void setSecUserPassword( ICFSecSecUserPassword src ) {
-		setRequiredSecUserId(src.getRequiredSecUserId());
+		setRequiredContainerUser(src.getRequiredContainerUser());
 		setRequiredRevision( src.getRequiredRevision() );
 		setRequiredPWSetStamp(src.getRequiredPWSetStamp());
 		setRequiredPasswordHash(src.getRequiredPasswordHash());

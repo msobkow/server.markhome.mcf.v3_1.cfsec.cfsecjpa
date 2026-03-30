@@ -195,61 +195,32 @@ public class CFSecJpaSecUserTable implements ICFSecSecUserTable
 	}
 
 	/**
-	 *	Delete the SecUser instances identified by the key EMConfIdx.
+	 *	Delete the SecUser instances identified by the key EMAddrIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	EMailConfirmUuid6	The SecUser key attribute of the instance generating the id.
+	 *	@param	EMailAddress	The SecUser key attribute of the instance generating the id.
 	 */
 	@Override
-	public void deleteSecUserByEMConfIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argEMailConfirmUuid6 )
+	public void deleteSecUserByEMAddrIdx( ICFSecAuthorization Authorization,
+		String argEMailAddress )
 	{
-		schema.getJpaHooksSchema().getSecUserService().deleteByEMConfIdx(argEMailConfirmUuid6);
+		schema.getJpaHooksSchema().getSecUserService().deleteByEMAddrIdx(argEMailAddress);
 	}
 
 
 	/**
-	 *	Delete the SecUser instances identified by the key EMConfIdx.
+	 *	Delete the SecUser instances identified by the key EMAddrIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
 	 *	@param	argKey	The key identifying the instances to be deleted.
 	 */
 	@Override
-	public void deleteSecUserByEMConfIdx( ICFSecAuthorization Authorization,
-		ICFSecSecUserByEMConfIdxKey argKey )
+	public void deleteSecUserByEMAddrIdx( ICFSecAuthorization Authorization,
+		ICFSecSecUserByEMAddrIdxKey argKey )
 	{
-		schema.getJpaHooksSchema().getSecUserService().deleteByEMConfIdx(argKey.getOptionalEMailConfirmUuid6());
-	}
-
-	/**
-	 *	Delete the SecUser instances identified by the key PwdResetIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	PasswordResetUuid6	The SecUser key attribute of the instance generating the id.
-	 */
-	@Override
-	public void deleteSecUserByPwdResetIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argPasswordResetUuid6 )
-	{
-		schema.getJpaHooksSchema().getSecUserService().deleteByPwdResetIdx(argPasswordResetUuid6);
-	}
-
-
-	/**
-	 *	Delete the SecUser instances identified by the key PwdResetIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	argKey	The key identifying the instances to be deleted.
-	 */
-	@Override
-	public void deleteSecUserByPwdResetIdx( ICFSecAuthorization Authorization,
-		ICFSecSecUserByPwdResetIdxKey argKey )
-	{
-		schema.getJpaHooksSchema().getSecUserService().deleteByPwdResetIdx(argKey.getOptionalPasswordResetUuid6());
+		schema.getJpaHooksSchema().getSecUserService().deleteByEMAddrIdx(argKey.getRequiredEMailAddress());
 	}
 
 
@@ -340,41 +311,19 @@ public class CFSecJpaSecUserTable implements ICFSecSecUserTable
 	}
 
 	/**
-	 *	Read an array of the derived SecUser record instances identified by the duplicate key EMConfIdx.
+	 *	Read an array of the derived SecUser record instances identified by the duplicate key EMAddrIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	EMailConfirmUuid6	The SecUser key attribute of the instance generating the id.
+	 *	@param	EMailAddress	The SecUser key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
 	 */
 	@Override
-	public ICFSecSecUser[] readDerivedByEMConfIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argEMailConfirmUuid6 )
+	public ICFSecSecUser[] readDerivedByEMAddrIdx( ICFSecAuthorization Authorization,
+		String argEMailAddress )
 	{
-		List<CFSecJpaSecUser> results = schema.getJpaHooksSchema().getSecUserService().findByEMConfIdx(argEMailConfirmUuid6);
-		ICFSecSecUser[] retset = new ICFSecSecUser[results.size()];
-		int idx = 0;
-		for (CFSecJpaSecUser cur: results) {
-			retset[idx++] = cur;
-		}
-		return( retset );
-	}
-
-	/**
-	 *	Read an array of the derived SecUser record instances identified by the duplicate key PwdResetIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	PasswordResetUuid6	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
-	 */
-	@Override
-	public ICFSecSecUser[] readDerivedByPwdResetIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argPasswordResetUuid6 )
-	{
-		List<CFSecJpaSecUser> results = schema.getJpaHooksSchema().getSecUserService().findByPwdResetIdx(argPasswordResetUuid6);
+		List<CFSecJpaSecUser> results = schema.getJpaHooksSchema().getSecUserService().findByEMAddrIdx(argEMailAddress);
 		ICFSecSecUser[] retset = new ICFSecSecUser[results.size()];
 		int idx = 0;
 		for (CFSecJpaSecUser cur: results) {
@@ -487,76 +436,39 @@ public class CFSecJpaSecUserTable implements ICFSecSecUserTable
 	}
 
 	/**
-	 *	Read an array of the specific SecUser record instances identified by the duplicate key EMConfIdx.
+	 *	Read an array of the specific SecUser record instances identified by the duplicate key EMAddrIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	EMailConfirmUuid6	The SecUser key attribute of the instance generating the id.
+	 *	@param	EMailAddress	The SecUser key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
 	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
 	 */
 	@Override
-	public ICFSecSecUser[] readRecByEMConfIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argEMailConfirmUuid6 )
+	public ICFSecSecUser[] readRecByEMAddrIdx( ICFSecAuthorization Authorization,
+		String argEMailAddress )
 	{
-		throw new CFLibNotImplementedYetException(getClass(), "readRecByEMConfIdx");
+		throw new CFLibNotImplementedYetException(getClass(), "readRecByEMAddrIdx");
 	}
 
 	/**
-	 *	Read an array of the specific SecUser record instances identified by the duplicate key PwdResetIdx.
+	 *	Read a page array of the specific SecUser record instances identified by the duplicate key EMAddrIdx.
 	 *
 	 *	@param	Authorization	The session authorization information.
 	 *
-	 *	@param	PasswordResetUuid6	The SecUser key attribute of the instance generating the id.
+	 *	@param	EMailAddress	The SecUser key attribute of the instance generating the id.
 	 *
 	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
 	 *
 	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
 	 */
 	@Override
-	public ICFSecSecUser[] readRecByPwdResetIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argPasswordResetUuid6 )
-	{
-		throw new CFLibNotImplementedYetException(getClass(), "readRecByPwdResetIdx");
-	}
-
-	/**
-	 *	Read a page array of the specific SecUser record instances identified by the duplicate key EMConfIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	EMailConfirmUuid6	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
-	 *
-	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
-	 */
-	@Override
-	public ICFSecSecUser[] pageRecByEMConfIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argEMailConfirmUuid6,
+	public ICFSecSecUser[] pageRecByEMAddrIdx( ICFSecAuthorization Authorization,
+		String argEMailAddress,
 		CFLibDbKeyHash256 priorSecUserId )
 	{
-		throw new CFLibNotImplementedYetException(getClass(), "pageRecByEMConfIdx");
-	}
-
-	/**
-	 *	Read a page array of the specific SecUser record instances identified by the duplicate key PwdResetIdx.
-	 *
-	 *	@param	Authorization	The session authorization information.
-	 *
-	 *	@param	PasswordResetUuid6	The SecUser key attribute of the instance generating the id.
-	 *
-	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
-	 *
-	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
-	 */
-	@Override
-	public ICFSecSecUser[] pageRecByPwdResetIdx( ICFSecAuthorization Authorization,
-		CFLibUuid6 argPasswordResetUuid6,
-		CFLibDbKeyHash256 priorSecUserId )
-	{
-		throw new CFLibNotImplementedYetException(getClass(), "pageRecByPwdResetIdx");
+		throw new CFLibNotImplementedYetException(getClass(), "pageRecByEMAddrIdx");
 	}
 }

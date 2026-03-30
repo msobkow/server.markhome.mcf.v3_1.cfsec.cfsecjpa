@@ -81,35 +81,11 @@ public class CFSecJpaSecUserService {
 				0,
 				"data.requiredLoginId");
 		}
-		if(data.getRequiredDfltSysGrpName() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredDfltSysGrpName");
-		}
-		if(data.getRequiredDfltClusGrpName() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredDfltClusGrpName");
-		}
-		if(data.getRequiredDfltTentGrpName() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredDfltTentGrpName");
-		}
 		if(data.getRequiredEMailAddress() == null) {
 			throw new CFLibNullArgumentException(getClass(),
 				S_ProcName,
 				0,
 				"data.requiredEMailAddress");
-		}
-		if(data.getRequiredPasswordHash() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredPasswordHash");
 		}
 		try {
 			if (data.getRequiredSecUserId() == null || data.getRequiredSecUserId().isNull()) {
@@ -159,35 +135,11 @@ public class CFSecJpaSecUserService {
 				0,
 				"data.requiredLoginId");
 		}
-		if(data.getRequiredDfltSysGrpName() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredDfltSysGrpName");
-		}
-		if(data.getRequiredDfltClusGrpName() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredDfltClusGrpName");
-		}
-		if(data.getRequiredDfltTentGrpName() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredDfltTentGrpName");
-		}
 		if(data.getRequiredEMailAddress() == null) {
 			throw new CFLibNullArgumentException(getClass(),
 				S_ProcName,
 				0,
 				"data.requiredEMailAddress");
-		}
-		if(data.getRequiredPasswordHash() == null) {
-			throw new CFLibNullArgumentException(getClass(),
-				S_ProcName,
-				0,
-				"data.requiredPasswordHash");
 		}
 		// Ensure the entity exists and that the revision matches
 		CFSecJpaSecUser existing = cfsec31SecUserRepository.findById((CFLibDbKeyHash256)(data.getPKey()))
@@ -198,13 +150,10 @@ public class CFSecJpaSecUserService {
 		// Apply superior data relationships of CFSecSecUser to existing object
 		// Apply data columns of CFSecSecUser to existing object
 		existing.setRequiredLoginId(data.getRequiredLoginId());
-		existing.setRequiredDfltSysGrpName(data.getRequiredDfltSysGrpName());
-		existing.setRequiredDfltClusGrpName(data.getRequiredDfltClusGrpName());
-		existing.setRequiredDfltTentGrpName(data.getRequiredDfltTentGrpName());
+		existing.setOptionalDfltSysGrpName(data.getOptionalDfltSysGrpName());
+		existing.setOptionalDfltClusGrpName(data.getOptionalDfltClusGrpName());
+		existing.setOptionalDfltTentGrpName(data.getOptionalDfltTentGrpName());
 		existing.setRequiredEMailAddress(data.getRequiredEMailAddress());
-		existing.setOptionalEMailConfirmUuid6(data.getOptionalEMailConfirmUuid6());
-		existing.setRequiredPasswordHash(data.getRequiredPasswordHash());
-		existing.setOptionalPasswordResetUuid6(data.getOptionalPasswordResetUuid6());
 		// Update the audit columns
 		data.setUpdatedAt(LocalDateTime.now());
 		// Save the changes we've made
@@ -260,51 +209,27 @@ public class CFSecJpaSecUserService {
 	}
 
 	/**
-	 *	Find zero or more entities into a List using the columns of the ICFSecSecUserByEMConfIdxKey as arguments.
+	 *	Find zero or more entities into a List using the columns of the ICFSecSecUserByEMAddrIdxKey as arguments.
 	 *
-	 *		@param optionalEMailConfirmUuid6
-	 *
-	 *		@return List&lt;CFSecJpaSecUser&gt; of the found entities, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> findByEMConfIdx(@Param("eMailConfirmUuid6") CFLibUuid6 optionalEMailConfirmUuid6) {
-		return( cfsec31SecUserRepository.findByEMConfIdx(optionalEMailConfirmUuid6));
-	}
-
-	/**
-	 *	ICFSecSecUserByEMConfIdxKey entity list finder convenience method for object-based access.
-	 *
-	 *		@param key The ICFSecSecUserByEMConfIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity list, which may be empty.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> findByEMConfIdx(ICFSecSecUserByEMConfIdxKey key) {
-		return( cfsec31SecUserRepository.findByEMConfIdx(key.getOptionalEMailConfirmUuid6()));
-	}
-
-	/**
-	 *	Find zero or more entities into a List using the columns of the ICFSecSecUserByPwdResetIdxKey as arguments.
-	 *
-	 *		@param optionalPasswordResetUuid6
+	 *		@param requiredEMailAddress
 	 *
 	 *		@return List&lt;CFSecJpaSecUser&gt; of the found entities, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> findByPwdResetIdx(@Param("passwordResetUuid6") CFLibUuid6 optionalPasswordResetUuid6) {
-		return( cfsec31SecUserRepository.findByPwdResetIdx(optionalPasswordResetUuid6));
+	public List<CFSecJpaSecUser> findByEMAddrIdx(@Param("eMailAddress") String requiredEMailAddress) {
+		return( cfsec31SecUserRepository.findByEMAddrIdx(requiredEMailAddress));
 	}
 
 	/**
-	 *	ICFSecSecUserByPwdResetIdxKey entity list finder convenience method for object-based access.
+	 *	ICFSecSecUserByEMAddrIdxKey entity list finder convenience method for object-based access.
 	 *
-	 *		@param key The ICFSecSecUserByPwdResetIdxKey instance to use for the query arguments.
+	 *		@param key The ICFSecSecUserByEMAddrIdxKey instance to use for the query arguments.
 	 *
 	 *		@return The found entity list, which may be empty.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> findByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
-		return( cfsec31SecUserRepository.findByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
+	public List<CFSecJpaSecUser> findByEMAddrIdx(ICFSecSecUserByEMAddrIdxKey key) {
+		return( cfsec31SecUserRepository.findByEMAddrIdx(key.getRequiredEMailAddress()));
 	}
 
 	// CFSecSecUser specified lock-by-index methods
@@ -348,49 +273,25 @@ public class CFSecJpaSecUserService {
 	/**
 	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param optionalEMailConfirmUuid6
+	 *		@param requiredEMailAddress
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> lockByEMConfIdx(@Param("eMailConfirmUuid6") CFLibUuid6 optionalEMailConfirmUuid6) {
-		return( cfsec31SecUserRepository.lockByEMConfIdx(optionalEMailConfirmUuid6));
+	public List<CFSecJpaSecUser> lockByEMAddrIdx(@Param("eMailAddress") String requiredEMailAddress) {
+		return( cfsec31SecUserRepository.lockByEMAddrIdx(requiredEMailAddress));
 	}
 
 	/**
-	 *	ICFSecSecUserByEMConfIdxKey based lock method for object-based access.
+	 *	ICFSecSecUserByEMAddrIdxKey based lock method for object-based access.
 	 *
 	 *		@param key The key of the entity to be locked.
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> lockByEMConfIdx(ICFSecSecUserByEMConfIdxKey key) {
-		return( cfsec31SecUserRepository.lockByEMConfIdx(key.getOptionalEMailConfirmUuid6()));
-	}
-
-	/**
-	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalPasswordResetUuid6
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> lockByPwdResetIdx(@Param("passwordResetUuid6") CFLibUuid6 optionalPasswordResetUuid6) {
-		return( cfsec31SecUserRepository.lockByPwdResetIdx(optionalPasswordResetUuid6));
-	}
-
-	/**
-	 *	ICFSecSecUserByPwdResetIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public List<CFSecJpaSecUser> lockByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
-		return( cfsec31SecUserRepository.lockByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
+	public List<CFSecJpaSecUser> lockByEMAddrIdx(ICFSecSecUserByEMAddrIdxKey key) {
+		return( cfsec31SecUserRepository.lockByEMAddrIdx(key.getRequiredEMailAddress()));
 	}
 
 	// CFSecSecUser specified delete-by-index methods
@@ -428,40 +329,20 @@ public class CFSecJpaSecUserService {
 	/**
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param optionalEMailConfirmUuid6
+	 *		@param requiredEMailAddress
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByEMConfIdx(@Param("eMailConfirmUuid6") CFLibUuid6 optionalEMailConfirmUuid6) {
-		cfsec31SecUserRepository.deleteByEMConfIdx(optionalEMailConfirmUuid6);
+	public void deleteByEMAddrIdx(@Param("eMailAddress") String requiredEMailAddress) {
+		cfsec31SecUserRepository.deleteByEMAddrIdx(requiredEMailAddress);
 	}
 
 	/**
-	 *	ICFSecSecUserByEMConfIdxKey based lock method for object-based access.
+	 *	ICFSecSecUserByEMAddrIdxKey based lock method for object-based access.
 	 *
-	 *		@param key The ICFSecSecUserByEMConfIdxKey of the entity to be locked.
+	 *		@param key The ICFSecSecUserByEMAddrIdxKey of the entity to be locked.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByEMConfIdx(ICFSecSecUserByEMConfIdxKey key) {
-		cfsec31SecUserRepository.deleteByEMConfIdx(key.getOptionalEMailConfirmUuid6());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalPasswordResetUuid6
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByPwdResetIdx(@Param("passwordResetUuid6") CFLibUuid6 optionalPasswordResetUuid6) {
-		cfsec31SecUserRepository.deleteByPwdResetIdx(optionalPasswordResetUuid6);
-	}
-
-	/**
-	 *	ICFSecSecUserByPwdResetIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The ICFSecSecUserByPwdResetIdxKey of the entity to be locked.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
-		cfsec31SecUserRepository.deleteByPwdResetIdx(key.getOptionalPasswordResetUuid6());
+	public void deleteByEMAddrIdx(ICFSecSecUserByEMAddrIdxKey key) {
+		cfsec31SecUserRepository.deleteByEMAddrIdx(key.getRequiredEMailAddress());
 	}
 }

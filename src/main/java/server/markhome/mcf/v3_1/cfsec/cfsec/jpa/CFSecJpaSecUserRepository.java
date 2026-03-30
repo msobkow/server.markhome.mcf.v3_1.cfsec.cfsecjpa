@@ -86,45 +86,24 @@ public interface CFSecJpaSecUserRepository extends JpaRepository<CFSecJpaSecUser
 	}
 
 	/**
-	 *	Read zero or more entities into a List using the columns of the CFSecSecUserByEMConfIdxKey as arguments.
+	 *	Read zero or more entities into a List using the columns of the CFSecSecUserByEMAddrIdxKey as arguments.
 	 *
-	 *		@param optionalEMailConfirmUuid6
-	 *
-	 *		@return List&lt;CFSecJpaSecUser&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
-	 */
-	@Query("select r from CFSecJpaSecUser r where r.optionalEMailConfirmUuid6 = :eMailConfirmUuid6")
-	List<CFSecJpaSecUser> findByEMConfIdx(@Param("eMailConfirmUuid6") CFLibUuid6 optionalEMailConfirmUuid6);
-
-	/**
-	 *	CFSecSecUserByEMConfIdxKey entity list reader convenience method for object-based access.
-	 *
-	 *		@param key The CFSecSecUserByEMConfIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
-	 */
-	default List<CFSecJpaSecUser> findByEMConfIdx(ICFSecSecUserByEMConfIdxKey key) {
-		return( findByEMConfIdx(key.getOptionalEMailConfirmUuid6()));
-	}
-
-	/**
-	 *	Read zero or more entities into a List using the columns of the CFSecSecUserByPwdResetIdxKey as arguments.
-	 *
-	 *		@param optionalPasswordResetUuid6
+	 *		@param requiredEMailAddress
 	 *
 	 *		@return List&lt;CFSecJpaSecUser&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
-	@Query("select r from CFSecJpaSecUser r where r.optionalPasswordResetUuid6 = :passwordResetUuid6")
-	List<CFSecJpaSecUser> findByPwdResetIdx(@Param("passwordResetUuid6") CFLibUuid6 optionalPasswordResetUuid6);
+	@Query("select r from CFSecJpaSecUser r where r.requiredEMailAddress = :eMailAddress")
+	List<CFSecJpaSecUser> findByEMAddrIdx(@Param("eMailAddress") String requiredEMailAddress);
 
 	/**
-	 *	CFSecSecUserByPwdResetIdxKey entity list reader convenience method for object-based access.
+	 *	CFSecSecUserByEMAddrIdxKey entity list reader convenience method for object-based access.
 	 *
-	 *		@param key The CFSecSecUserByPwdResetIdxKey instance to use for the query arguments.
+	 *		@param key The CFSecSecUserByEMAddrIdxKey instance to use for the query arguments.
 	 *
 	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
 	 */
-	default List<CFSecJpaSecUser> findByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
-		return( findByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
+	default List<CFSecJpaSecUser> findByEMAddrIdx(ICFSecSecUserByEMAddrIdxKey key) {
+		return( findByEMAddrIdx(key.getRequiredEMailAddress()));
 	}
 
 	// CFSecJpaSecUser specified delete-by-index methods
@@ -167,47 +146,24 @@ public interface CFSecJpaSecUserRepository extends JpaRepository<CFSecJpaSecUser
 	/**
 	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param optionalEMailConfirmUuid6
+	 *		@param requiredEMailAddress
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecUser r where r.optionalEMailConfirmUuid6 = :eMailConfirmUuid6")
-	List<CFSecJpaSecUser> lockByEMConfIdx(@Param("eMailConfirmUuid6") CFLibUuid6 optionalEMailConfirmUuid6);
+	@Query("select r from CFSecJpaSecUser r where r.requiredEMailAddress = :eMailAddress")
+	List<CFSecJpaSecUser> lockByEMAddrIdx(@Param("eMailAddress") String requiredEMailAddress);
 
 	/**
-	 *	CFSecSecUserByEMConfIdxKey based lock method for object-based access.
+	 *	CFSecSecUserByEMAddrIdxKey based lock method for object-based access.
 	 *
 	 *		@param key The key of the entity to be locked.
 	 *
 	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
-	default List<CFSecJpaSecUser> lockByEMConfIdx(ICFSecSecUserByEMConfIdxKey key) {
-		return( lockByEMConfIdx(key.getOptionalEMailConfirmUuid6()));
-	}
-
-	/**
-	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalPasswordResetUuid6
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	@Transactional
-	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecUser r where r.optionalPasswordResetUuid6 = :passwordResetUuid6")
-	List<CFSecJpaSecUser> lockByPwdResetIdx(@Param("passwordResetUuid6") CFLibUuid6 optionalPasswordResetUuid6);
-
-	/**
-	 *	CFSecSecUserByPwdResetIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
-	 */
-	default List<CFSecJpaSecUser> lockByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
-		return( lockByPwdResetIdx(key.getOptionalPasswordResetUuid6()));
+	default List<CFSecJpaSecUser> lockByEMAddrIdx(ICFSecSecUserByEMAddrIdxKey key) {
+		return( lockByEMAddrIdx(key.getRequiredEMailAddress()));
 	}
 
 	// CFSecJpaSecUser specified delete-by-index methods
@@ -244,39 +200,20 @@ public interface CFSecJpaSecUserRepository extends JpaRepository<CFSecJpaSecUser
 	/**
 	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
 	 *
-	 *		@param optionalEMailConfirmUuid6
+	 *		@param requiredEMailAddress
 	 */
 	@Transactional
 	@Modifying
-	@Query("delete from CFSecJpaSecUser r where r.optionalEMailConfirmUuid6 = :eMailConfirmUuid6")
-	void deleteByEMConfIdx(@Param("eMailConfirmUuid6") CFLibUuid6 optionalEMailConfirmUuid6);
+	@Query("delete from CFSecJpaSecUser r where r.requiredEMailAddress = :eMailAddress")
+	void deleteByEMAddrIdx(@Param("eMailAddress") String requiredEMailAddress);
 
 	/**
-	 *	CFSecSecUserByEMConfIdxKey based lock method for object-based access.
+	 *	CFSecSecUserByEMAddrIdxKey based lock method for object-based access.
 	 *
-	 *		@param key The CFSecSecUserByEMConfIdxKey of the entity to be locked.
+	 *		@param key The CFSecSecUserByEMAddrIdxKey of the entity to be locked.
 	 */
-	default void deleteByEMConfIdx(ICFSecSecUserByEMConfIdxKey key) {
-		deleteByEMConfIdx(key.getOptionalEMailConfirmUuid6());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param optionalPasswordResetUuid6
-	 */
-	@Transactional
-	@Modifying
-	@Query("delete from CFSecJpaSecUser r where r.optionalPasswordResetUuid6 = :passwordResetUuid6")
-	void deleteByPwdResetIdx(@Param("passwordResetUuid6") CFLibUuid6 optionalPasswordResetUuid6);
-
-	/**
-	 *	CFSecSecUserByPwdResetIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The CFSecSecUserByPwdResetIdxKey of the entity to be locked.
-	 */
-	default void deleteByPwdResetIdx(ICFSecSecUserByPwdResetIdxKey key) {
-		deleteByPwdResetIdx(key.getOptionalPasswordResetUuid6());
+	default void deleteByEMAddrIdx(ICFSecSecUserByEMAddrIdxKey key) {
+		deleteByEMAddrIdx(key.getRequiredEMailAddress());
 	}
 
 }

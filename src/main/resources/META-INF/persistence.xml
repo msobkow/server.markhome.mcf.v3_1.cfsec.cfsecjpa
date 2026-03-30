@@ -23,6 +23,10 @@
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUser</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPassword</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserEMConf</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserEMConfH</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPWReset</class>
+        <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPWResetH</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecUserPWHistory</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrp</class>
         <class>server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaSecSysGrpH</class>

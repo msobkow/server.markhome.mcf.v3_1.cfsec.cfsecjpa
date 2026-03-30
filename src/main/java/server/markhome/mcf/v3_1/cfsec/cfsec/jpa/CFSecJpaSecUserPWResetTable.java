@@ -1,0 +1,562 @@
+
+// Description: Java 25 DbIO implementation for SecUserPWReset.
+
+/*
+ *	server.markhome.mcf.CFSec
+ *
+ *	Copyright (c) 2016-2026 Mark Stephen Sobkow
+ *	
+ *	Mark's Code Fractal 3.1 CFSec - Security Services
+ *	
+ *	Copyright (c) 2016-2026 Mark Stephen Sobkow mark.sobkow@gmail.com
+ *	
+ *	These files are part of Mark's Code Fractal CFSec.
+ *	
+ *	Licensed under the Apache License, Version 2.0 (the "License");
+ *	you may not use this file except in compliance with the License.
+ *	You may obtain a copy of the License at
+ *	
+ *	http://www.apache.org/licenses/LICENSE-2.0
+ *	
+ *	Unless required by applicable law or agreed to in writing, software
+ *	distributed under the License is distributed on an "AS IS" BASIS,
+ *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *	See the License for the specific language governing permissions and
+ *	limitations under the License.
+ *	
+ */
+
+package server.markhome.mcf.v3_1.cfsec.cfsec.jpa;
+
+import java.lang.reflect.*;
+import java.net.*;
+import java.rmi.*;
+import java.sql.*;
+import java.text.*;
+import java.time.*;
+import java.util.*;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.text.StringEscapeUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+
+import server.markhome.mcf.v3_1.cflib.*;
+import server.markhome.mcf.v3_1.cflib.dbutil.*;
+import server.markhome.mcf.v3_1.cfsec.cfsec.*;
+import server.markhome.mcf.v3_1.cfsec.cfsecobj.*;
+import server.markhome.mcf.v3_1.cfsec.cfsec.jpa.CFSecJpaHooksSchema;
+
+/*
+ *	CFSecJpaSecUserPWResetTable database implementation for SecUserPWReset
+ */
+public class CFSecJpaSecUserPWResetTable implements ICFSecSecUserPWResetTable
+{
+	protected CFSecJpaSchema schema;
+
+
+	public CFSecJpaSecUserPWResetTable(ICFSecSchema schema) {
+		if( schema == null ) {
+			throw new CFLibNullArgumentException(getClass(), "constructor", 1, "schema" );
+		}
+		if (schema instanceof CFSecJpaSchema) {
+			this.schema = (CFSecJpaSchema)schema;
+		}
+		else {
+			throw new CFLibUnsupportedClassException(getClass(), "constructor", "schema", schema, "CFSecJpaSchema");
+		}
+	}
+
+	/**
+	 *	Create the instance in the database, and update the specified record
+	 *	with the assigned primary key.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	rec	The instance interface to be created.
+	 */
+	@Override
+	public ICFSecSecUserPWReset createSecUserPWReset( ICFSecAuthorization Authorization,
+		ICFSecSecUserPWReset rec )
+	{
+		if (rec == null) {
+			throw new CFLibNullArgumentException(getClass(), "createSecUserPWReset", 1, "rec");
+		}
+		else if (rec instanceof CFSecJpaSecUserPWReset) {
+			CFSecJpaSecUserPWReset jparec = (CFSecJpaSecUserPWReset)rec;
+			CFSecJpaSecUserPWReset created = schema.getJpaHooksSchema().getSecUserPWResetService().create(jparec);
+			return( created );
+		}
+		else {
+			throw new CFLibUnsupportedClassException(getClass(), "createSecUserPWReset", "rec", rec, "CFSecJpaSecUserPWReset");
+		}
+	}
+
+	/**
+	 *	Update the instance in the database, and update the specified record
+	 *	with any calculated changes imposed by the associated stored procedure.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	rec	The instance interface to be updated
+	 */
+	@Override
+	public ICFSecSecUserPWReset updateSecUserPWReset( ICFSecAuthorization Authorization,
+		ICFSecSecUserPWReset rec )
+	{
+		if (rec == null) {
+			throw new CFLibNullArgumentException(getClass(), "updateSecUserPWReset", 1, "rec");
+		}
+		else if (rec instanceof CFSecJpaSecUserPWReset) {
+			CFSecJpaSecUserPWReset jparec = (CFSecJpaSecUserPWReset)rec;
+			CFSecJpaSecUserPWReset updated = schema.getJpaHooksSchema().getSecUserPWResetService().update(jparec);
+			return( updated );
+		}
+		else {
+			throw new CFLibUnsupportedClassException(getClass(), "updateSecUserPWReset", "rec", rec, "CFSecJpaSecUserPWReset");
+		}
+	}
+
+	/**
+	 *	Delete the instance from the database.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	rec	The instance interface to be deleted.
+	 */
+	@Override
+	public void deleteSecUserPWReset( ICFSecAuthorization Authorization,
+		ICFSecSecUserPWReset rec )
+	{
+		if (rec == null) {
+			return;
+		}
+		if (rec instanceof CFSecJpaSecUserPWReset) {
+			CFSecJpaSecUserPWReset jparec = (CFSecJpaSecUserPWReset)rec;
+			schema.getJpaHooksSchema().getSecUserPWResetService().deleteByIdIdx(jparec.getPKey());
+		}
+		else {
+			throw new CFLibUnsupportedClassException(getClass(), "deleteSecUserPWReset", "rec", rec, "CFSecJpaSecUserPWReset");
+		}
+
+		throw new CFLibNotImplementedYetException(getClass(), "deleteSecUserPWReset");
+	}
+
+	/**
+	 *	Delete the SecUserPWReset instance identified by the primary key.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	argKey	The primary key identifying the instance to be deleted.
+	 */
+	@Override
+	public void deleteSecUserPWResetByIdIdx( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 argKey )
+	{
+		schema.getJpaHooksSchema().getSecUserPWResetService().deleteByIdIdx(argKey);
+	}
+
+	/**
+	 *	Delete the SecUserPWReset instances identified by the key UUuid6Idx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	PasswordResetUuid6	The SecUserPWReset key attribute of the instance generating the id.
+	 */
+	@Override
+	public void deleteSecUserPWResetByUUuid6Idx( ICFSecAuthorization Authorization,
+		CFLibUuid6 argPasswordResetUuid6 )
+	{
+		schema.getJpaHooksSchema().getSecUserPWResetService().deleteByUUuid6Idx(argPasswordResetUuid6);
+	}
+
+
+	/**
+	 *	Delete the SecUserPWReset instances identified by the key UUuid6Idx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	argKey	The key identifying the instances to be deleted.
+	 */
+	@Override
+	public void deleteSecUserPWResetByUUuid6Idx( ICFSecAuthorization Authorization,
+		ICFSecSecUserPWResetByUUuid6IdxKey argKey )
+	{
+		schema.getJpaHooksSchema().getSecUserPWResetService().deleteByUUuid6Idx(argKey.getRequiredPasswordResetUuid6());
+	}
+
+	/**
+	 *	Delete the SecUserPWReset instances identified by the key SentEMAddrIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	SentToEMailAddr	The SecUserPWReset key attribute of the instance generating the id.
+	 */
+	@Override
+	public void deleteSecUserPWResetBySentEMAddrIdx( ICFSecAuthorization Authorization,
+		String argSentToEMailAddr )
+	{
+		schema.getJpaHooksSchema().getSecUserPWResetService().deleteBySentEMAddrIdx(argSentToEMailAddr);
+	}
+
+
+	/**
+	 *	Delete the SecUserPWReset instances identified by the key SentEMAddrIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	argKey	The key identifying the instances to be deleted.
+	 */
+	@Override
+	public void deleteSecUserPWResetBySentEMAddrIdx( ICFSecAuthorization Authorization,
+		ICFSecSecUserPWResetBySentEMAddrIdxKey argKey )
+	{
+		schema.getJpaHooksSchema().getSecUserPWResetService().deleteBySentEMAddrIdx(argKey.getRequiredSentToEMailAddr());
+	}
+
+	/**
+	 *	Delete the SecUserPWReset instances identified by the key NewAcctIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	NewAccount	The SecUserPWReset key attribute of the instance generating the id.
+	 */
+	@Override
+	public void deleteSecUserPWResetByNewAcctIdx( ICFSecAuthorization Authorization,
+		boolean argNewAccount )
+	{
+		schema.getJpaHooksSchema().getSecUserPWResetService().deleteByNewAcctIdx(argNewAccount);
+	}
+
+
+	/**
+	 *	Delete the SecUserPWReset instances identified by the key NewAcctIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	argKey	The key identifying the instances to be deleted.
+	 */
+	@Override
+	public void deleteSecUserPWResetByNewAcctIdx( ICFSecAuthorization Authorization,
+		ICFSecSecUserPWResetByNewAcctIdxKey argKey )
+	{
+		schema.getJpaHooksSchema().getSecUserPWResetService().deleteByNewAcctIdx(argKey.getRequiredNewAccount());
+	}
+
+
+	/**
+	 *	Read the derived SecUserPWReset record instance by primary key.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	PKey	The primary key of the SecUserPWReset instance to be read.
+	 *
+	 *	@return The record instance for the specified primary key, or null if there is
+	 *		no such existing key value.
+	 */
+	@Override
+	public ICFSecSecUserPWReset readDerived( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 PKey )
+	{
+		return( schema.getJpaHooksSchema().getSecUserPWResetService().find(PKey) );
+	}
+
+	/**
+	 *	Lock the derived SecUserPWReset record instance by primary key.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	PKey	The primary key of the SecUserPWReset instance to be locked.
+	 *
+	 *	@return The record instance for the specified primary key, or null if there is
+	 *		no such existing key value.
+	 */
+	@Override
+	public ICFSecSecUserPWReset lockDerived( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 PKey )
+	{
+		return( schema.getJpaHooksSchema().getSecUserPWResetService().lockByIdIdx(PKey) );
+	}
+
+	/**
+	 *	Read all SecUserPWReset instances.
+	 *
+	 *	@param	Authorization	The session authorization information.	
+	 *
+	 *	@return An array of derived record instances, potentially with 0 elements in the set.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] readAllDerived( ICFSecAuthorization Authorization ) {
+		List<CFSecJpaSecUserPWReset> results = schema.getJpaHooksSchema().getSecUserPWResetService().findAll();
+		ICFSecSecUserPWReset[] retset = new ICFSecSecUserPWReset[results.size()];
+		int idx = 0;
+		for (CFSecJpaSecUserPWReset cur: results) {
+			retset[idx++] = cur;
+		}
+		return( retset );
+	}
+
+	/**
+	 *	Read the derived SecUserPWReset record instance identified by the unique key IdIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	SecUserId	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return The record instance for the specified key, or null if there is
+	 *		no such existing key value.
+	 */
+	@Override
+	public ICFSecSecUserPWReset readDerivedByIdIdx( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 argSecUserId )
+	{
+		return( schema.getJpaHooksSchema().getSecUserPWResetService().find(argSecUserId) );
+	}
+
+	/**
+	 *	Read the derived SecUserPWReset record instance identified by the unique key UUuid6Idx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	PasswordResetUuid6	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return The record instance for the specified key, or null if there is
+	 *		no such existing key value.
+	 */
+	@Override
+	public ICFSecSecUserPWReset readDerivedByUUuid6Idx( ICFSecAuthorization Authorization,
+		CFLibUuid6 argPasswordResetUuid6 )
+	{
+		return( schema.getJpaHooksSchema().getSecUserPWResetService().findByUUuid6Idx(argPasswordResetUuid6) );
+	}
+
+	/**
+	 *	Read an array of the derived SecUserPWReset record instances identified by the duplicate key SentEMAddrIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	SentToEMailAddr	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] readDerivedBySentEMAddrIdx( ICFSecAuthorization Authorization,
+		String argSentToEMailAddr )
+	{
+		List<CFSecJpaSecUserPWReset> results = schema.getJpaHooksSchema().getSecUserPWResetService().findBySentEMAddrIdx(argSentToEMailAddr);
+		ICFSecSecUserPWReset[] retset = new ICFSecSecUserPWReset[results.size()];
+		int idx = 0;
+		for (CFSecJpaSecUserPWReset cur: results) {
+			retset[idx++] = cur;
+		}
+		return( retset );
+	}
+
+	/**
+	 *	Read an array of the derived SecUserPWReset record instances identified by the duplicate key NewAcctIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	NewAccount	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return An array of derived instances for the specified key, potentially with 0 elements in the set.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] readDerivedByNewAcctIdx( ICFSecAuthorization Authorization,
+		boolean argNewAccount )
+	{
+		List<CFSecJpaSecUserPWReset> results = schema.getJpaHooksSchema().getSecUserPWResetService().findByNewAcctIdx(argNewAccount);
+		ICFSecSecUserPWReset[] retset = new ICFSecSecUserPWReset[results.size()];
+		int idx = 0;
+		for (CFSecJpaSecUserPWReset cur: results) {
+			retset[idx++] = cur;
+		}
+		return( retset );
+	}
+
+	/**
+	 *	Read the specific SecUserPWReset record instance identified by the primary key.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	PKey	The primary key of the SecUserPWReset instance to be locked.
+	 *
+	 *	@return The record instance for the specified primary key, or null if there is
+	 *		no such existing key value.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset readRec( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 PKey )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "readRec");
+	}
+
+	/**
+	 *	Lock the specific SecUserPWReset record instance identified by the primary key.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	PKey	The primary key of the SecUserPWReset instance to be locked.
+	 *
+	 *	@return The record instance for the specified primary key, or null if there is
+	 *		no such existing key value.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset lockRec( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 PKey )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "lockRec");
+	}
+
+	/**
+	 *	Read all the specific SecUserPWReset record instances.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@return All the specific SecUserPWReset instances in the database accessible for the Authorization.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] readAllRec( ICFSecAuthorization Authorization ) {
+		throw new CFLibNotImplementedYetException(getClass(), "readAllRec");
+	}
+
+
+	/**
+	 *	Read a page of all the specific SecUserPWReset record instances.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@return All the specific SecUserPWReset instances in the database accessible for the Authorization.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] pageAllRec( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 priorSecUserId )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "pageAllRec");
+	}
+
+	/**
+	 *	Read the specific SecUserPWReset record instance identified by the unique key IdIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	SecUserId	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return The record instance for the specified key, or null if there is
+	 *		no such existing key value.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset readRecByIdIdx( ICFSecAuthorization Authorization,
+		CFLibDbKeyHash256 argSecUserId )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "readRecByIdIdx");
+	}
+
+	/**
+	 *	Read the specific SecUserPWReset record instance identified by the unique key UUuid6Idx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	PasswordResetUuid6	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return The record instance for the specified key, or null if there is
+	 *		no such existing key value.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset readRecByUUuid6Idx( ICFSecAuthorization Authorization,
+		CFLibUuid6 argPasswordResetUuid6 )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "readRecByUUuid6Idx");
+	}
+
+	/**
+	 *	Read an array of the specific SecUserPWReset record instances identified by the duplicate key SentEMAddrIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	SentToEMailAddr	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] readRecBySentEMAddrIdx( ICFSecAuthorization Authorization,
+		String argSentToEMailAddr )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "readRecBySentEMAddrIdx");
+	}
+
+	/**
+	 *	Read an array of the specific SecUserPWReset record instances identified by the duplicate key NewAcctIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	NewAccount	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] readRecByNewAcctIdx( ICFSecAuthorization Authorization,
+		boolean argNewAccount )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "readRecByNewAcctIdx");
+	}
+
+	/**
+	 *	Read a page array of the specific SecUserPWReset record instances identified by the duplicate key SentEMAddrIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	SentToEMailAddr	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] pageRecBySentEMAddrIdx( ICFSecAuthorization Authorization,
+		String argSentToEMailAddr,
+		CFLibDbKeyHash256 priorSecUserId )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "pageRecBySentEMAddrIdx");
+	}
+
+	/**
+	 *	Read a page array of the specific SecUserPWReset record instances identified by the duplicate key NewAcctIdx.
+	 *
+	 *	@param	Authorization	The session authorization information.
+	 *
+	 *	@param	NewAccount	The SecUserPWReset key attribute of the instance generating the id.
+	 *
+	 *	@return An array of derived record instances for the specified key, potentially with 0 elements in the set.
+	 *
+	 *	@throws	CFLibNotSupportedException thrown by client-side implementations.
+	 */
+	@Override
+	public ICFSecSecUserPWReset[] pageRecByNewAcctIdx( ICFSecAuthorization Authorization,
+		boolean argNewAccount,
+		CFLibDbKeyHash256 priorSecUserId )
+	{
+		throw new CFLibNotImplementedYetException(getClass(), "pageRecByNewAcctIdx");
+	}
+}
