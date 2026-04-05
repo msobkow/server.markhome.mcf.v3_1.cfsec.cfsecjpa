@@ -149,6 +149,9 @@ public class CFSecJpaSchemaService {
 		CFSecJpaSecSysGrp secSysGroupSysAdmin;
 		CFLibDbKeyHash256 secSysGroupSysAdminID;
 		CFSecJpaSecSysGrpMemb secSysGroupSysAdminMembSysadmin;
+		CFSecJpaSecSysGrp secSysGroupPublic;
+		CFLibDbKeyHash256 secSysGroupPublicID;
+		CFSecJpaSecSysGrpInc secSysGroupPublicIncSysadmin;
 		CFSecJpaSecSysGrp secSysGroupSysClusAdmin;
 		CFLibDbKeyHash256 secSysGroupSysClusAdminID;
 		CFSecJpaSecClusGrpInc secSysGroupSysClusAdminIncSysclusadmin;
@@ -210,6 +213,12 @@ public class CFSecJpaSchemaService {
 			}
 			secSysGroupSysAdminID = secSysGroupSysAdmin.getRequiredSecSysGrpId();
 
+			secSysGroupPublic = (CFSecJpaSecSysGrp)(secsysgrpService.findByUNameIdx( "public"));
+			if (secSysGroupPublic == null) {
+				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "secSysGroupPublic");
+			}
+			secSysGroupPublicID = secSysGroupPublic.getRequiredSecSysGrpId();
+
 			secSysGroupSysClusAdmin = (CFSecJpaSecSysGrp)(secsysgrpService.findByUNameIdx( "sysclusteradmin"));
 			if (secSysGroupSysClusAdmin == null) {
 				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "secSysGroupSysClusAdmin");
@@ -225,6 +234,11 @@ public class CFSecJpaSchemaService {
 			secSysGroupSysAdminMembSysadmin = (CFSecJpaSecSysGrpMemb)(secsysgrpmembService.find(secSysGroupSysAdminID, sysAdminUser.getRequiredLoginId()));
 			if (secSysGroupSysAdminMembSysadmin == null) {
 				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "secSysGroupSysAdminMembSysadmin");
+			}
+			
+			secSysGroupPublicIncSysadmin = (CFSecJpaSecSysGrpInc)(secsysgrpincService.find(secSysGroupPublicID, secSysGroupSysAdmin.getRequiredName()));
+			if (secSysGroupPublicIncSysadmin == null) {
+				throw new CFLibNullArgumentException(getClass(), "bootstrapSchema", 0, "secSysGroupPublicIncSysadmin");
 			}
 
 			secSysClusGroupSysAdmin = (CFSecJpaSecClusGrp)(secclusgrpService.findByUNameIdx(systemClusterID, "sysclusteradmin"));
@@ -262,6 +276,9 @@ public class CFSecJpaSchemaService {
 			secSysGroupSysAdmin = null;
 			secSysGroupSysAdminID = null;
 			secSysGroupSysAdminMembSysadmin = null;
+			secSysGroupPublic = null;
+			secSysGroupPublicID = null;
+			secSysGroupPublicIncSysadmin = null;
 			secSysGroupSysClusAdmin = null;
 			secSysGroupSysClusAdminID = null;
 			secSysGroupSysTentAdmin = null;
@@ -294,6 +311,9 @@ public class CFSecJpaSchemaService {
 		}
 		if (secSysGroupSysAdminID == null || secSysGroupSysAdminID.isNull()) {
 			secSysGroupSysAdminID = new CFLibDbKeyHash256(0);
+		}
+		if (secSysGroupPublicID == null || secSysGroupPublicID.isNull()) {
+			secSysGroupPublicID = new CFLibDbKeyHash256(0);
 		}
 		if (secSysGroupSysClusAdminID == null || secSysGroupSysClusAdminID.isNull()) {
 			secSysGroupSysClusAdminID = new CFLibDbKeyHash256(0);
@@ -419,6 +439,32 @@ public class CFSecJpaSchemaService {
 			secSysGroupSysAdminMembSysadmin = (CFSecJpaSecSysGrpMemb)(secsysgrpmembService.create(secSysGroupSysAdminMembSysadmin));
 		}
 
+		if (secSysGroupPublic == null) {
+			secSysGroupPublic = new CFSecJpaSecSysGrp();
+			secSysGroupPublic.setRequiredRevision(1);
+			secSysGroupPublic.setCreatedAt(now);
+			secSysGroupPublic.setCreatedByUserId(sysAdminUID);
+			secSysGroupPublic.setUpdatedAt(now);
+			secSysGroupPublic.setUpdatedByUserId(sysAdminUID);
+			secSysGroupPublic.setRequiredName("public");
+			secSysGroupPublic.setRequiredSecLevel(ICFSecSchema.SecLevelEnum.System);
+			secSysGroupPublic.setRequiredSecSysGrpId(secSysGroupPublicID);
+			secSysGroupPublic = (CFSecJpaSecSysGrp)(secsysgrpService.create(secSysGroupPublic));
+			secSysGroupPublicID = secSysGroupPublic.getRequiredSecSysGrpId();
+		}
+
+		if (secSysGroupPublicIncSysadmin == null) {
+			secSysGroupPublicIncSysadmin = new CFSecJpaSecSysGrpInc();
+			secSysGroupPublicIncSysadmin.setRequiredContainerGroup(secSysGroupPublicID);
+			secSysGroupPublicIncSysadmin.setCreatedAt(now);
+			secSysGroupPublicIncSysadmin.setCreatedByUserId(sysAdminUID);
+			secSysGroupPublicIncSysadmin.setUpdatedAt(now);
+			secSysGroupPublicIncSysadmin.setUpdatedByUserId(sysAdminUID);
+			secSysGroupPublicIncSysadmin.setRequiredParentSubGroup(secSysGroupSysAdmin.getRequiredName());
+			secSysGroupPublicIncSysadmin.setRequiredRevision(1);
+			secSysGroupPublicIncSysadmin = (CFSecJpaSecSysGrpInc)(secsysgrpincService.create(secSysGroupPublicIncSysadmin));
+		}
+		
 		if (secSysGroupSysClusAdmin == null) {
 			secSysGroupSysClusAdmin = new CFSecJpaSecSysGrp();
 			secSysGroupSysClusAdmin.setRequiredRevision(1);
@@ -531,6 +577,11 @@ public class CFSecJpaSchemaService {
 			throw new CFLibNullArgumentException(getClass(), "bootstrapAllTablesSecurity", 0, "secSysGroupSysAdmin");
 		}
 
+		ICFSecSecSysGrp secSysGroupPublic = ICFSecSchema.getBackingCFSec().getTableSecSysGrp().readDerivedByUNameIdx( auth, "public");
+		if (secSysGroupPublic == null) {
+			throw new CFLibNullArgumentException(getClass(), "bootstrapAllTablesSecurity", 0, "secSysGroupPublic");
+		}
+		
 		ICFSecSecClusGrp secSysClusGroupSysAdmin = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().readDerivedByUNameIdx(auth, ICFSecSchema.getSysClusterId(), "sysclusteradmin");
 		if (secSysClusGroupSysAdmin == null) {
 			throw new CFLibNullArgumentException(getClass(), "bootstrapAllTablesSecurity", 0, "secSysClusGroupSysAdmin");
@@ -541,30 +592,30 @@ public class CFSecJpaSchemaService {
 			throw new CFLibNullArgumentException(getClass(), "bootstrapAllTablesSecurity", 0, "secSysTentGroupSysAdmin");
 		}
 
-		bootstrapTableSecurity(auth, now, "Cluster", true, false, "Global", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "Tenant", true, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "ISOCcy", true, false, "Global", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "ISOCtry", true, false, "Global", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "ISOCtryCcy", true, false, "Global", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "ISOCtryLang", true, false, "Global", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "ISOLang", true, false, "Global", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "ISOTZone", true, false, "Global", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecUser", true, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecUserPassword", false, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecUserEMConf", true, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecUserPWReset", true, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecUserPWHistory", false, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecSysGrp", true, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecSysGrpInc", true, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecSysGrpMemb", true, false, "Cluster", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecClusGrp", true, false, "Cluster", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecClusGrpInc", true, false, "Cluster", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecClusGrpMemb", true, false, "Cluster", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecTentGrp", true, false, "Tenant", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecTentGrpInc", true, false, "Tenant", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecTentGrpMemb", true, false, "Tenant", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SecSession", false, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
-		bootstrapTableSecurity(auth, now, "SysCluster", false, false, "System", secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "Cluster", true, false, "Global", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "Tenant", true, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "ISOCcy", true, false, "Global", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "ISOCtry", true, false, "Global", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "ISOCtryCcy", true, false, "Global", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "ISOCtryLang", true, false, "Global", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "ISOLang", true, false, "Global", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "ISOTZone", true, false, "Global", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecUser", true, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecUserPassword", false, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecUserEMConf", true, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecUserPWReset", true, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecUserPWHistory", false, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecSysGrp", true, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecSysGrpInc", true, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecSysGrpMemb", true, false, "Cluster", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecClusGrp", true, false, "Cluster", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecClusGrpInc", true, false, "Cluster", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecClusGrpMemb", true, false, "Cluster", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecTentGrp", true, false, "Tenant", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecTentGrpInc", true, false, "Tenant", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecTentGrpMemb", true, false, "Tenant", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SecSession", false, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
+		bootstrapTableSecurity(auth, now, "SysCluster", false, false, "System", secSysGroupPublic, secSysGroupSysAdmin, secSysClusGroupSysAdmin, secSysTentGroupSysAdmin);
 		if (bootstrapSession != null && bootstrapSessionID != null && !bootstrapSessionID.isNull() && bootstrapSession.getOptionalFinish() == null) {
 			bootstrapSession.setOptionalFinish(LocalDateTime.now());
 			bootstrapSession = ICFSecSchema.getBackingCFSec().getTableSecSession().updateSecSession(auth, bootstrapSession);
@@ -578,6 +629,7 @@ public class CFSecJpaSchemaService {
 		boolean hasHistory,
 		boolean isMutable,
 		String secScope,
+		ICFSecSecSysGrp secSysGroupPublic,
 		ICFSecSecSysGrp secSysGroupSysAdmin,
 		ICFSecSecClusGrp secSysClusGroupSysAdmin,
 		ICFSecSecTentGrp secSysTentGroupSysAdmin )
@@ -606,13 +658,15 @@ public class CFSecJpaSchemaService {
 		String sysadminGroup = secSysGroupSysAdmin.getRequiredName();
 		String sysclusadminGroup = secSysClusGroupSysAdmin.getRequiredName();
 		String systentadminGroup = secSysTentGroupSysAdmin.getRequiredName();
-
+		String publicGroup = secSysGroupPublic.getRequiredName();
+		
 		ICFSecSecSysGrp secGroupCreate;
 		CFLibDbKeyHash256 secGroupCreateID;
 		ICFSecSecSysGrpInc secGroupCreateIncSysadmin;
 		ICFSecSecSysGrp secGroupRead;
 		CFLibDbKeyHash256 secGroupReadID;
 		ICFSecSecSysGrpInc secGroupReadIncSysadmin;
+		ICFSecSecSysGrpInc secGroupReadIncPublic;
 		ICFSecSecSysGrp secGroupUpdate;
 		CFLibDbKeyHash256 secGroupUpdateID;
 		ICFSecSecSysGrpInc secGroupUpdateIncSysadmin;
@@ -684,6 +738,13 @@ public class CFSecJpaSchemaService {
 			secGroupReadIncSysadmin = null;
 		}
 
+		if (secGroupRead != null && level == ICFSecSchema.SecLevelEnum.Global) {
+			secGroupReadIncPublic = ICFSecSchema.getBackingCFSec().getTableSecSysGrpInc().readDerived(auth, secGroupReadID, publicGroup);
+		}
+		else {
+			secGroupReadIncPublic = null;
+		}
+		
 		secGroupUpdate = ICFSecSchema.getBackingCFSec().getTableSecSysGrp().readDerivedByUNameIdx(auth, updatePermName);
 		if (secGroupUpdate != null) {
 			secGroupUpdateID = secGroupUpdate.getRequiredSecSysGrpId();
@@ -811,6 +872,21 @@ public class CFSecJpaSchemaService {
 			secGroupReadIncSysadmin.setRequiredContainerGroup(secGroupReadID);
 			secGroupReadIncSysadmin.setRequiredParentSubGroup(sysadminGroup);
 			secGroupReadIncSysadmin = ICFSecSchema.getBackingCFSec().getTableSecSysGrpInc().createSecSysGrpInc(auth, secGroupReadIncSysadmin);
+		}
+
+		if (secGroupRead != null && level == ICFSecSchema.SecLevelEnum.Global && secGroupReadIncPublic == null) {
+			secGroupReadIncPublic = ICFSecSchema.getBackingCFSec().getFactorySecSysGrpInc().newRec();
+			secGroupReadIncPublic.setRequiredRevision(1);
+			secGroupReadIncPublic.setCreatedAt(now);
+			secGroupReadIncPublic.setCreatedByUserId(auth.getSecUserId());
+			secGroupReadIncPublic.setUpdatedAt(now);
+			secGroupReadIncPublic.setUpdatedByUserId(auth.getSecUserId());
+			secGroupReadIncPublic.setRequiredContainerGroup(secGroupReadID);
+			secGroupReadIncPublic.setRequiredParentSubGroup(publicGroup);
+			secGroupReadIncPublic = ICFSecSchema.getBackingCFSec().getTableSecSysGrpInc().createSecSysGrpInc(auth, secGroupReadIncPublic);
+		}
+		else {
+			secGroupReadIncPublic = null;
 		}
 
 		if (secGroupUpdate == null) {
