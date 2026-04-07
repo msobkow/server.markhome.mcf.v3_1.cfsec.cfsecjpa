@@ -997,7 +997,7 @@ public class CFSecJpaSchemaService {
 			}
 		}
 		
-		if (level == ICFSecSchema.SecLevelEnum.Cluster ) {
+		if (level == ICFSecSchema.SecLevelEnum.Cluster || level == ICFSecSchema.SecLevelEnum.Tenant) {
 			csecGroupCreate = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().readDerivedByUNameIdx(auth, ICFSecSchema.getSysClusterId(), createPermName);
 			if (csecGroupCreate != null) {
 				csecGroupCreateID = csecGroupCreate.getRequiredSecClusGrpId();
