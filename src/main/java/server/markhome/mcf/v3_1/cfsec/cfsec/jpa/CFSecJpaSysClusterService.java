@@ -247,4 +247,5 @@ public class CFSecJpaSysClusterService {
 	public void deleteByClusterIdx(ICFSecSysClusterByClusterIdxKey key) {
 		cfsec31SysClusterRepository.deleteByClusterIdx(key.getRequiredClusterId());
 	}
+
 }

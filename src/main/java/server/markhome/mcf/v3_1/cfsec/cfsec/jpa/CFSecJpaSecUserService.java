@@ -345,4 +345,5 @@ public class CFSecJpaSecUserService {
 	public void deleteByEMAddrIdx(ICFSecSecUserByEMAddrIdxKey key) {
 		cfsec31SecUserRepository.deleteByEMAddrIdx(key.getRequiredEMailAddress());
 	}
+
 }

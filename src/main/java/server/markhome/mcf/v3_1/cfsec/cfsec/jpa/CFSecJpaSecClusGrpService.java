@@ -419,4 +419,5 @@ public class CFSecJpaSecClusGrpService {
 	public void deleteByUNameIdx(ICFSecSecClusGrpByUNameIdxKey key) {
 		cfsec31SecClusGrpRepository.deleteByUNameIdx(key.getRequiredClusterId(), key.getRequiredName());
 	}
+
 }

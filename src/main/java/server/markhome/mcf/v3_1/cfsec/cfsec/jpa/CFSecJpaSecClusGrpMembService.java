@@ -356,4 +356,5 @@ public class CFSecJpaSecClusGrpMembService {
 	public void deleteByLoginIdx(ICFSecSecClusGrpMembByLoginIdxKey key) {
 		cfsec31SecClusGrpMembRepository.deleteByLoginIdx(key.getRequiredLoginId());
 	}
+
 }

@@ -495,4 +495,5 @@ public class CFSecJpaISOTZoneService {
 	public void deleteByIso8601Idx(ICFSecISOTZoneByIso8601IdxKey key) {
 		cfsec31ISOTZoneRepository.deleteByIso8601Idx(key.getRequiredIso8601());
 	}
+
 }

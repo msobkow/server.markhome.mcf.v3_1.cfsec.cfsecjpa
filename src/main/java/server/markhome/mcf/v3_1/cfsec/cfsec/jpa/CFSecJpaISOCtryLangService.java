@@ -356,4 +356,5 @@ public class CFSecJpaISOCtryLangService {
 	public void deleteByLangIdx(ICFSecISOCtryLangByLangIdxKey key) {
 		cfsec31ISOCtryLangRepository.deleteByLangIdx(key.getRequiredISOLangId());
 	}
+
 }

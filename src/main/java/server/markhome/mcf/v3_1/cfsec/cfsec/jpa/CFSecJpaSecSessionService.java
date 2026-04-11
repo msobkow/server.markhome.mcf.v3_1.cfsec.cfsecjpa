@@ -493,4 +493,5 @@ public class CFSecJpaSecSessionService {
 	public void deleteBySecProxyIdx(ICFSecSecSessionBySecProxyIdxKey key) {
 		cfsec31SecSessionRepository.deleteBySecProxyIdx(key.getOptionalSecProxyId());
 	}
+
 }

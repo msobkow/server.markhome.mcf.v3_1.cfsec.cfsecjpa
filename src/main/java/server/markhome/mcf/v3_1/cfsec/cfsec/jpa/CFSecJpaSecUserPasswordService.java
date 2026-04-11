@@ -260,4 +260,5 @@ public class CFSecJpaSecUserPasswordService {
 	public void deleteBySetStampIdx(ICFSecSecUserPasswordBySetStampIdxKey key) {
 		cfsec31SecUserPasswordRepository.deleteBySetStampIdx(key.getRequiredPWSetStamp());
 	}
+
 }

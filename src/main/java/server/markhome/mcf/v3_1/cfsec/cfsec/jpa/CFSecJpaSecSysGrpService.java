@@ -419,4 +419,5 @@ public class CFSecJpaSecSysGrpService {
 	public void deleteBySecLevelNmIdx(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
 		cfsec31SecSysGrpRepository.deleteBySecLevelNmIdx(key.getRequiredSecLevel(), key.getRequiredName());
 	}
+
 }

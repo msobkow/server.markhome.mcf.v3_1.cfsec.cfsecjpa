@@ -342,4 +342,6 @@ public class CFSecJpaClusterService {
 	public void deleteByUDescrIdx(ICFSecClusterByUDescrIdxKey key) {
 		cfsec31ClusterRepository.deleteByUDescrIdx(key.getRequiredDescription());
 	}
+
+		// Customized tabletweak [CFSec::CFSec].[Cluster::Cluster].JpaTableServiceCustomServices
 }

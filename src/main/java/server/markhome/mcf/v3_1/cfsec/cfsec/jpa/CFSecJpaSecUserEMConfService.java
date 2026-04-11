@@ -483,4 +483,5 @@ public class CFSecJpaSecUserEMConfService {
 	public void deleteByNewAcctIdx(ICFSecSecUserEMConfByNewAcctIdxKey key) {
 		cfsec31SecUserEMConfRepository.deleteByNewAcctIdx(key.getRequiredNewAccount());
 	}
+
 }

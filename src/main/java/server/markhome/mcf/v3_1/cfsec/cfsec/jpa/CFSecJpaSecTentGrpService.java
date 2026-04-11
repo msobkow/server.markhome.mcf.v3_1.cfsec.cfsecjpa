@@ -419,4 +419,5 @@ public class CFSecJpaSecTentGrpService {
 	public void deleteByUNameIdx(ICFSecSecTentGrpByUNameIdxKey key) {
 		cfsec31SecTentGrpRepository.deleteByUNameIdx(key.getRequiredTenantId(), key.getRequiredName());
 	}
+
 }

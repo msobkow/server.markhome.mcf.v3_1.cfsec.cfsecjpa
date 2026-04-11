@@ -339,4 +339,5 @@ public class CFSecJpaISOLangService {
 	public void deleteByCode2Idx(ICFSecISOLangByCode2IdxKey key) {
 		cfsec31ISOLangRepository.deleteByCode2Idx(key.getOptionalISO6391Code());
 	}
+
 }

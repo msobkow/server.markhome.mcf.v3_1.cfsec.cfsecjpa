@@ -402,4 +402,5 @@ public class CFSecJpaSecUserPWResetService {
 	public void deleteByNewAcctIdx(ICFSecSecUserPWResetByNewAcctIdxKey key) {
 		cfsec31SecUserPWResetRepository.deleteByNewAcctIdx(key.getRequiredNewAccount());
 	}
+
 }

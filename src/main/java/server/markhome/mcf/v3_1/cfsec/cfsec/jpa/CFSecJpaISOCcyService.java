@@ -372,4 +372,5 @@ public class CFSecJpaISOCcyService {
 	public void deleteByCcyNmIdx(ICFSecISOCcyByCcyNmIdxKey key) {
 		cfsec31ISOCcyRepository.deleteByCcyNmIdx(key.getRequiredName());
 	}
+
 }

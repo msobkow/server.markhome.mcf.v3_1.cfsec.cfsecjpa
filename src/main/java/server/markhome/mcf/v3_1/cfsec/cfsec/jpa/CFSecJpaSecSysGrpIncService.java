@@ -356,4 +356,5 @@ public class CFSecJpaSecSysGrpIncService {
 	public void deleteByNameIdx(ICFSecSecSysGrpIncByNameIdxKey key) {
 		cfsec31SecSysGrpIncRepository.deleteByNameIdx(key.getRequiredInclName());
 	}
+
 }

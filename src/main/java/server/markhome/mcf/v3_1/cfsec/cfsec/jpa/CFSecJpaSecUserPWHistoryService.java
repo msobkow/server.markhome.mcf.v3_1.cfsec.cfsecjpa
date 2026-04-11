@@ -445,4 +445,5 @@ public class CFSecJpaSecUserPWHistoryService {
 	public void deleteByReplacedStampIdx(ICFSecSecUserPWHistoryByReplacedStampIdxKey key) {
 		cfsec31SecUserPWHistoryRepository.deleteByReplacedStampIdx(key.getRequiredPWReplacedStamp());
 	}
+
 }
