@@ -53,6 +53,7 @@ public class CFSecJpaSecSysGrpMembPKey
 	@JoinColumn( name="SecSysGrpId" )
 	protected CFSecJpaSecSysGrp requiredContainerGroup;
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
+	@JoinColumn( name="login_id", referencedColumnName="login_id" )
 	protected CFSecJpaSecUser requiredParentUser;
 
 	public CFSecJpaSecSysGrpMembPKey() {

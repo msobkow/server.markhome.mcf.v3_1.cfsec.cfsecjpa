@@ -135,7 +135,7 @@ public class CFSecJpaSchemaService {
 		bootstrapAllTablesSecurity(tableInfo);
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secschemadbname$TransactionManager")
 	public void bootstrapSecurity() {
 		CFSecJpaSysCluster sysCluster;
 		CFLibDbKeyHash256 systemClusterID;
@@ -372,6 +372,7 @@ public class CFSecJpaSchemaService {
 			sysAdminUser.setRequiredSecUserId(sysAdminUID);
 			sysAdminUser.setRequiredLoginId("sysadmin");
 			sysAdminUser.setRequiredEMailAddress("sysadmin@" + fqdn);
+			sysAdminUser.setRequiredAccountStatus(ICFSecSchema.SecAccountStatusEnum.ResettingPassword);
 			sysAdminUser = secuserService.create(sysAdminUser);
 			sysAdminUID = sysAdminUser.getPKey();
 		}
@@ -549,7 +550,7 @@ public class CFSecJpaSchemaService {
 		}
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secschemadbname$TransactionManager")
 	public void bootstrapTableSecurity(ICFSecAuthorization auth,
 		LocalDateTime now,
 		String tableName,
@@ -1031,6 +1032,7 @@ public class CFSecJpaSchemaService {
 				csecGroupCreate.setUpdatedByUserId(auth.getSecUserId());
 				csecGroupCreate.setRequiredName(createPermName);
 				csecGroupCreate.setRequiredSecClusGrpId(csecGroupCreateID);
+				csecGroupCreate.setRequiredOwnerCluster(secSysClusGroupSysAdmin.getRequiredOwnerCluster());
 				csecGroupCreate = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().createSecClusGrp(auth, csecGroupCreate);
 				csecGroupCreateID = csecGroupCreate.getRequiredSecClusGrpId();
 			}
@@ -1056,6 +1058,7 @@ public class CFSecJpaSchemaService {
 				csecGroupRead.setUpdatedByUserId(auth.getSecUserId());
 				csecGroupRead.setRequiredName(readPermName);
 				csecGroupRead.setRequiredSecClusGrpId(csecGroupReadID);
+				csecGroupRead.setRequiredOwnerCluster(secSysClusGroupSysAdmin.getRequiredOwnerCluster());
 				csecGroupRead = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().createSecClusGrp(auth, csecGroupRead);
 				csecGroupReadID = csecGroupRead.getRequiredSecClusGrpId();
 			}
@@ -1081,6 +1084,7 @@ public class CFSecJpaSchemaService {
 				csecGroupUpdate.setUpdatedByUserId(auth.getSecUserId());
 				csecGroupUpdate.setRequiredName(updatePermName);
 				csecGroupUpdate.setRequiredSecClusGrpId(csecGroupUpdateID);
+				csecGroupUpdate.setRequiredOwnerCluster(secSysClusGroupSysAdmin.getRequiredOwnerCluster());
 				csecGroupUpdate = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().createSecClusGrp(auth, csecGroupUpdate);
 				csecGroupUpdateID = csecGroupUpdate.getRequiredSecClusGrpId();
 			}
@@ -1106,6 +1110,7 @@ public class CFSecJpaSchemaService {
 				csecGroupDelete.setUpdatedByUserId(auth.getSecUserId());
 				csecGroupDelete.setRequiredName(deletePermName);
 				csecGroupDelete.setRequiredSecClusGrpId(csecGroupDeleteID);
+				csecGroupDelete.setRequiredOwnerCluster(secSysClusGroupSysAdmin.getRequiredOwnerCluster());
 				csecGroupDelete = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().createSecClusGrp(auth, csecGroupDelete);
 				csecGroupDeleteID = csecGroupDelete.getRequiredSecClusGrpId();
 			}
@@ -1132,6 +1137,7 @@ public class CFSecJpaSchemaService {
 					csecGroupRestore.setUpdatedByUserId(auth.getSecUserId());
 					csecGroupRestore.setRequiredName(restorePermName);
 					csecGroupRestore.setRequiredSecClusGrpId(csecGroupRestoreID);
+					csecGroupRestore.setRequiredOwnerCluster(secSysClusGroupSysAdmin.getRequiredOwnerCluster());
 					csecGroupRestore = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().createSecClusGrp(auth, csecGroupRestore);
 					csecGroupRestoreID = csecGroupRestore.getRequiredSecClusGrpId();
 				}
@@ -1159,6 +1165,7 @@ public class CFSecJpaSchemaService {
 					csecGroupMutate.setUpdatedByUserId(auth.getSecUserId());
 					csecGroupMutate.setRequiredName(mutatePermName);
 					csecGroupMutate.setRequiredSecClusGrpId(csecGroupMutateID);
+					csecGroupMutate.setRequiredOwnerCluster(secSysClusGroupSysAdmin.getRequiredOwnerCluster());
 					csecGroupMutate = ICFSecSchema.getBackingCFSec().getTableSecClusGrp().createSecClusGrp(auth, csecGroupMutate);
 					csecGroupMutateID = csecGroupMutate.getRequiredSecClusGrpId();
 				}
@@ -1176,7 +1183,8 @@ public class CFSecJpaSchemaService {
 				}
 			}
 		}
-		else if (level == ICFSecSchema.SecLevelEnum.Tenant ) {
+
+		if (level == ICFSecSchema.SecLevelEnum.Tenant ) {
 			tsecGroupCreate = ICFSecSchema.getBackingCFSec().getTableSecTentGrp().readDerivedByUNameIdx(auth, ICFSecSchema.getSysTenantId(), createPermName);
 			if (tsecGroupCreate != null) {
 				tsecGroupCreateID = tsecGroupCreate.getRequiredSecTentGrpId();
@@ -1283,6 +1291,7 @@ public class CFSecJpaSchemaService {
 				tsecGroupCreate.setUpdatedByUserId(auth.getSecUserId());
 				tsecGroupCreate.setRequiredName(createPermName);
 				tsecGroupCreate.setRequiredSecTentGrpId(tsecGroupCreateID);
+				tsecGroupCreate.setRequiredOwnerTenant(secSysTentGroupSysAdmin.getRequiredOwnerTenant());
 				tsecGroupCreate = ICFSecSchema.getBackingCFSec().getTableSecTentGrp().createSecTentGrp(auth, tsecGroupCreate);
 				tsecGroupCreateID = tsecGroupCreate.getRequiredSecTentGrpId();
 			}
@@ -1308,6 +1317,7 @@ public class CFSecJpaSchemaService {
 				tsecGroupRead.setUpdatedByUserId(auth.getSecUserId());
 				tsecGroupRead.setRequiredName(readPermName);
 				tsecGroupRead.setRequiredSecTentGrpId(tsecGroupReadID);
+				tsecGroupRead.setRequiredOwnerTenant(secSysTentGroupSysAdmin.getRequiredOwnerTenant());
 				tsecGroupRead = ICFSecSchema.getBackingCFSec().getTableSecTentGrp().createSecTentGrp(auth, tsecGroupRead);
 				tsecGroupReadID = tsecGroupRead.getRequiredSecTentGrpId();
 			}
@@ -1333,6 +1343,7 @@ public class CFSecJpaSchemaService {
 				tsecGroupUpdate.setUpdatedByUserId(auth.getSecUserId());
 				tsecGroupUpdate.setRequiredName(updatePermName);
 				tsecGroupUpdate.setRequiredSecTentGrpId(tsecGroupUpdateID);
+				tsecGroupUpdate.setRequiredOwnerTenant(secSysTentGroupSysAdmin.getRequiredOwnerTenant());
 				tsecGroupUpdate = ICFSecSchema.getBackingCFSec().getTableSecTentGrp().createSecTentGrp(auth, tsecGroupUpdate);
 				tsecGroupUpdateID = tsecGroupUpdate.getRequiredSecTentGrpId();
 			}
@@ -1358,6 +1369,7 @@ public class CFSecJpaSchemaService {
 				tsecGroupDelete.setUpdatedByUserId(auth.getSecUserId());
 				tsecGroupDelete.setRequiredName(deletePermName);
 				tsecGroupDelete.setRequiredSecTentGrpId(tsecGroupDeleteID);
+				tsecGroupDelete.setRequiredOwnerTenant(secSysTentGroupSysAdmin.getRequiredOwnerTenant());
 				tsecGroupDelete = ICFSecSchema.getBackingCFSec().getTableSecTentGrp().createSecTentGrp(auth, tsecGroupDelete);
 				tsecGroupDeleteID = tsecGroupDelete.getRequiredSecTentGrpId();
 			}
@@ -1384,6 +1396,7 @@ public class CFSecJpaSchemaService {
 					tsecGroupRestore.setUpdatedByUserId(auth.getSecUserId());
 					tsecGroupRestore.setRequiredName(restorePermName);
 					tsecGroupRestore.setRequiredSecTentGrpId(tsecGroupRestoreID);
+					tsecGroupRestore.setRequiredOwnerTenant(secSysTentGroupSysAdmin.getRequiredOwnerTenant());
 					tsecGroupRestore = ICFSecSchema.getBackingCFSec().getTableSecTentGrp().createSecTentGrp(auth, tsecGroupRestore);
 					tsecGroupRestoreID = tsecGroupRestore.getRequiredSecTentGrpId();
 				}
@@ -1411,6 +1424,7 @@ public class CFSecJpaSchemaService {
 					tsecGroupMutate.setUpdatedByUserId(auth.getSecUserId());
 					tsecGroupMutate.setRequiredName(mutatePermName);
 					tsecGroupMutate.setRequiredSecTentGrpId(tsecGroupMutateID);
+					tsecGroupMutate.setRequiredOwnerTenant(secSysTentGroupSysAdmin.getRequiredOwnerTenant());
 					tsecGroupMutate = ICFSecSchema.getBackingCFSec().getTableSecTentGrp().createSecTentGrp(auth, tsecGroupMutate);
 					tsecGroupMutateID = tsecGroupMutate.getRequiredSecTentGrpId();
 				}
@@ -1430,18 +1444,19 @@ public class CFSecJpaSchemaService {
 		}
 	}		
 
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secschemadbname$TransactionManager")
 	public void bootstrapAllTablesSecurity(CFSecTableInfo tableInfo[]) {
 		bootstrapAllTablesSecurity(ICFSecSchema.getSysClusterId(), ICFSecSchema.getSysTenantId(), tableInfo);
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secschemadbname$TransactionManager")
 	public void bootstrapAllTablesSecurity(CFLibDbKeyHash256 clusterId, CFLibDbKeyHash256 tenantId, CFSecTableInfo tableInfo[]) {
 		LocalDateTime now = LocalDateTime.now();
 		ICFSecSecSession bootstrapSession;
 		CFLibDbKeyHash256 bootstrapSessionID = new CFLibDbKeyHash256(0);
 
 		ICFSecAuthorization auth = new CFSecAuthorization();
+		auth.setSecUserId(ICFSecSchema.getSysAdminId());
 		auth.setAuthUuid6(CFLibUuid6.generateUuid6());
 		auth.setSecClusterId(clusterId);
 		auth.setSecTenantId(tenantId);
@@ -1488,7 +1503,7 @@ public class CFSecJpaSchemaService {
 		}
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secdbschemaname$TransactionManager")
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "$secschemadbname$TransactionManager")
 	public void bootstrapAllTablesSecurity(ICFSecAuthorization auth,
 		CFLibDbKeyHash256 sysAdminUID,
 		ICFSecSecSession bootstrapSession,

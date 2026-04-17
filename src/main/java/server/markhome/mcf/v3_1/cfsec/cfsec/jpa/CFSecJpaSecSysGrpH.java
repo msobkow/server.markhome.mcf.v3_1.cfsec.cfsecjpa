@@ -49,8 +49,7 @@ import server.markhome.mcf.v3_1.cfsec.cfsec.*;
     indexes = {
         @Index(name = "SecSysGrpIdIdx_h", columnList = "auditClusterId, auditStamp, auditAction, requiredRevision, auditSessionId, SecSysGrpId", unique = true),
         @Index(name = "SecSysGrpUNameIdx_h", columnList = "safe_name", unique = true),
-        @Index(name = "SecSysGrpLevelIdx_h", columnList = "sec_level", unique = true),
-        @Index(name = "SecSysGrpLevelNameIdx_h", columnList = "sec_level, safe_name", unique = true)
+        @Index(name = "SecSysGrpLevelIdx_h", columnList = "sec_level", unique = false)
     }
 )
 @Transactional(Transactional.TxType.SUPPORTS)
@@ -427,40 +426,6 @@ public class CFSecJpaSecSysGrpH
 			}
             return( true );
         }
-        else if (obj instanceof ICFSecSecSysGrpBySecLevelNmIdxKey) {
-            ICFSecSecSysGrpBySecLevelNmIdxKey rhs = (ICFSecSecSysGrpBySecLevelNmIdxKey)obj;
-			if( getRequiredSecLevel() != null ) {
-				if( rhs.getRequiredSecLevel() != null ) {
-					if( ! getRequiredSecLevel().equals( rhs.getRequiredSecLevel() ) ) {
-						return( false );
-					}
-				}
-				else {
-					return( false );
-				}
-			}
-			else {
-				if( rhs.getRequiredSecLevel() != null ) {
-					return( false );
-				}
-			}
-			if( getRequiredName() != null ) {
-				if( rhs.getRequiredName() != null ) {
-					if( ! getRequiredName().equals( rhs.getRequiredName() ) ) {
-						return( false );
-					}
-				}
-				else {
-					return( false );
-				}
-			}
-			else {
-				if( rhs.getRequiredName() != null ) {
-					return( false );
-				}
-			}
-            return( true );
-        }
         else {
 			return( false );
         }
@@ -618,38 +583,6 @@ public class CFSecJpaSecSysGrpH
 				}
 			}
 			else if (rhs.getRequiredSecLevel() != null) {
-				return( -1 );
-			}
-            return( 0 );
-        }
-        else if (obj instanceof ICFSecSecSysGrpBySecLevelNmIdxKey ) {
-            ICFSecSecSysGrpBySecLevelNmIdxKey rhs = (ICFSecSecSysGrpBySecLevelNmIdxKey)obj;
-			if (getRequiredSecLevel() != null) {
-				if (rhs.getRequiredSecLevel() != null) {
-					cmp = getRequiredSecLevel().compareTo( rhs.getRequiredSecLevel() );
-					if( cmp != 0 ) {
-						return( cmp );
-					}
-				}
-				else {
-					return( 1 );
-				}
-			}
-			else if (rhs.getRequiredSecLevel() != null) {
-				return( -1 );
-			}
-			if (getRequiredName() != null) {
-				if (rhs.getRequiredName() != null) {
-					cmp = getRequiredName().compareTo( rhs.getRequiredName() );
-					if( cmp != 0 ) {
-						return( cmp );
-					}
-				}
-				else {
-					return( 1 );
-				}
-			}
-			else if (rhs.getRequiredName() != null) {
 				return( -1 );
 			}
             return( 0 );

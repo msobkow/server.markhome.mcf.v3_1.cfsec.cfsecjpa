@@ -99,6 +99,8 @@ public class CFSecJpaSecUser
 	protected LocalDateTime updatedAt = LocalDateTime.now();
 	@Column( name="login_id", nullable=false, length=32 )
 	protected String requiredLoginId;
+	@Column( name="acct_status", nullable=false )
+	protected ICFSecSchema.SecAccountStatusEnum requiredAccountStatus;
 	@Column( name="dflt_sysgrp_nm", nullable=true, length=64 )
 	protected String optionalDfltSysGrpName;
 	@Column( name="dflt_clusgrp_nm", nullable=true, length=64 )
@@ -111,6 +113,7 @@ public class CFSecJpaSecUser
 	public CFSecJpaSecUser() {
 		requiredSecUserId = CFLibDbKeyHash256.fromHex( ICFSecSecUser.SECUSERID_INIT_VALUE.toString() );
 		requiredLoginId = ICFSecSecUser.LOGINID_INIT_VALUE;
+		requiredAccountStatus = ICFSecSecUser.ACCOUNTSTATUS_INIT_VALUE;
 		optionalDfltSysGrpName = null;
 		optionalDfltClusGrpName = null;
 		optionalDfltTentGrpName = null;
@@ -272,6 +275,22 @@ public class CFSecJpaSecUser
 	}
 
 	@Override
+	public ICFSecSchema.SecAccountStatusEnum getRequiredAccountStatus() {
+		return( requiredAccountStatus );
+	}
+
+	@Override
+	public void setRequiredAccountStatus( ICFSecSchema.SecAccountStatusEnum value ) {
+		if( value == null ) {
+			throw new CFLibNullArgumentException( getClass(),
+				"setRequiredAccountStatus",
+				1,
+				"value" );
+		}
+		requiredAccountStatus = value;
+	}
+
+	@Override
 	public String getOptionalDfltSysGrpName() {
 		return( optionalDfltSysGrpName );
 	}
@@ -398,6 +417,21 @@ public class CFSecJpaSecUser
 					return( false );
 				}
 			}
+			if( getRequiredAccountStatus() != null ) {
+				if( rhs.getRequiredAccountStatus() != null ) {
+					if( ! getRequiredAccountStatus().equals( rhs.getRequiredAccountStatus() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredAccountStatus() != null ) {
+					return( false );
+				}
+			}
 			if( getOptionalDfltSysGrpName() != null ) {
 				if( rhs.getOptionalDfltSysGrpName() != null ) {
 					if( ! getOptionalDfltSysGrpName().equals( rhs.getOptionalDfltSysGrpName() ) ) {
@@ -501,6 +535,21 @@ public class CFSecJpaSecUser
 			}
 			else {
 				if( rhs.getRequiredLoginId() != null ) {
+					return( false );
+				}
+			}
+			if( getRequiredAccountStatus() != null ) {
+				if( rhs.getRequiredAccountStatus() != null ) {
+					if( ! getRequiredAccountStatus().equals( rhs.getRequiredAccountStatus() ) ) {
+						return( false );
+					}
+				}
+				else {
+					return( false );
+				}
+			}
+			else {
+				if( rhs.getRequiredAccountStatus() != null ) {
 					return( false );
 				}
 			}
@@ -639,6 +688,7 @@ public class CFSecJpaSecUser
 		if( getRequiredLoginId() != null ) {
 			hashCode = hashCode + getRequiredLoginId().hashCode();
 		}
+		hashCode = ( hashCode * 0x10000 ) + getRequiredAccountStatus().ordinal();
 		if( getOptionalDfltSysGrpName() != null ) {
 			hashCode = hashCode + getOptionalDfltSysGrpName().hashCode();
 		}
@@ -706,6 +756,20 @@ public class CFSecJpaSecUser
 				}
 			}
 			else if (rhs.getRequiredLoginId() != null) {
+				return( -1 );
+			}
+			if (getRequiredAccountStatus() != null) {
+				if (rhs.getRequiredAccountStatus() != null) {
+					cmp = getRequiredAccountStatus().compareTo( rhs.getRequiredAccountStatus() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredAccountStatus() != null) {
 				return( -1 );
 			}
 			if( getOptionalDfltSysGrpName() != null ) {
@@ -836,6 +900,20 @@ public class CFSecJpaSecUser
 			else if (rhs.getRequiredLoginId() != null) {
 				return( -1 );
 			}
+			if (getRequiredAccountStatus() != null) {
+				if (rhs.getRequiredAccountStatus() != null) {
+					cmp = getRequiredAccountStatus().compareTo( rhs.getRequiredAccountStatus() );
+					if( cmp != 0 ) {
+						return( cmp );
+					}
+				}
+				else {
+					return( 1 );
+				}
+			}
+			else if (rhs.getRequiredAccountStatus() != null) {
+				return( -1 );
+			}
 			if( getOptionalDfltSysGrpName() != null ) {
 				if( rhs.getOptionalDfltSysGrpName() != null ) {
 					cmp = getOptionalDfltSysGrpName().compareTo( rhs.getOptionalDfltSysGrpName() );
@@ -959,6 +1037,7 @@ public class CFSecJpaSecUser
 		setUpdatedByUserId( src.getUpdatedByUserId() );
 		setUpdatedAt( src.getUpdatedAt() );
 		setRequiredLoginId(src.getRequiredLoginId());
+		setRequiredAccountStatus(src.getRequiredAccountStatus());
 		setOptionalDfltSysGrpName(src.getOptionalDfltSysGrpName());
 		setOptionalDfltClusGrpName(src.getOptionalDfltClusGrpName());
 		setOptionalDfltTentGrpName(src.getOptionalDfltTentGrpName());
@@ -974,6 +1053,7 @@ public class CFSecJpaSecUser
 	public void setSecUser( ICFSecSecUserH src ) {
 		setRequiredSecUserId(src.getRequiredSecUserId());
 		setRequiredLoginId(src.getRequiredLoginId());
+		setRequiredAccountStatus(src.getRequiredAccountStatus());
 		setOptionalDfltSysGrpName(src.getOptionalDfltSysGrpName());
 		setOptionalDfltClusGrpName(src.getOptionalDfltClusGrpName());
 		setOptionalDfltTentGrpName(src.getOptionalDfltTentGrpName());
@@ -987,6 +1067,7 @@ public class CFSecJpaSecUser
 			+ " RequiredRevision=\"" + Integer.toString( getRequiredRevision() ) + "\""
 			+ " RequiredSecUserId=" + "\"" + getRequiredSecUserId().toString() + "\""
 			+ " RequiredLoginId=" + "\"" + StringEscapeUtils.escapeXml11( getRequiredLoginId() ) + "\""
+			+ " RequiredAccountStatus=" + "\"" + getRequiredAccountStatus().toString() + "\""
 			+ " OptionalDfltSysGrpName=" + ( ( getOptionalDfltSysGrpName() == null ) ? "null" : "\"" + StringEscapeUtils.escapeXml11( getOptionalDfltSysGrpName() ) + "\"" )
 			+ " OptionalDfltClusGrpName=" + ( ( getOptionalDfltClusGrpName() == null ) ? "null" : "\"" + StringEscapeUtils.escapeXml11( getOptionalDfltClusGrpName() ) + "\"" )
 			+ " OptionalDfltTentGrpName=" + ( ( getOptionalDfltTentGrpName() == null ) ? "null" : "\"" + StringEscapeUtils.escapeXml11( getOptionalDfltTentGrpName() ) + "\"" )

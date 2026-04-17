@@ -206,54 +206,27 @@ public class CFSecJpaSecSysGrpService {
 	}
 
 	/**
-	 *	Find an entity using the columns of the ICFSecSecSysGrpBySecLevelIdxKey as arguments.
+	 *	Find zero or more entities into a List using the columns of the ICFSecSecSysGrpBySecLevelIdxKey as arguments.
 	 *
 	 *		@param requiredSecLevel
 	 *
-	 *		@return The found entity, or null if no such entity exists.
+	 *		@return List&lt;CFSecJpaSecSysGrp&gt; of the found entities, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp findBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel) {
+	public List<CFSecJpaSecSysGrp> findBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel) {
 		return( cfsec31SecSysGrpRepository.findBySecLevelIdx(requiredSecLevel));
 	}
 
 	/**
-	 *	ICFSecSecSysGrpBySecLevelIdxKey entity finder convenience method for object-based access.
+	 *	ICFSecSecSysGrpBySecLevelIdxKey entity list finder convenience method for object-based access.
 	 *
 	 *		@param key The ICFSecSecSysGrpBySecLevelIdxKey instance to use for the query arguments.
 	 *
-	 *		@return The found entity, or null if no such entity exists.
+	 *		@return The found entity list, which may be empty.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp findBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
+	public List<CFSecJpaSecSysGrp> findBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
 		return( cfsec31SecSysGrpRepository.findBySecLevelIdx(key.getRequiredSecLevel()));
-	}
-
-	/**
-	 *	Find an entity using the columns of the ICFSecSecSysGrpBySecLevelNmIdxKey as arguments.
-	 *
-	 *		@param requiredSecLevel
-	 *		@param requiredName
-	 *
-	 *		@return The found entity, or null if no such entity exists.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp findBySecLevelNmIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel,
-		@Param("name") String requiredName) {
-		return( cfsec31SecSysGrpRepository.findBySecLevelNmIdx(requiredSecLevel,
-			requiredName));
-	}
-
-	/**
-	 *	ICFSecSecSysGrpBySecLevelNmIdxKey entity finder convenience method for object-based access.
-	 *
-	 *		@param key The ICFSecSecSysGrpBySecLevelNmIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity, or null if no such entity exists.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp findBySecLevelNmIdx(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
-		return( cfsec31SecSysGrpRepository.findBySecLevelNmIdx(key.getRequiredSecLevel(), key.getRequiredName()));
 	}
 
 	// CFSecSecSysGrp specified lock-by-index methods
@@ -295,14 +268,14 @@ public class CFSecJpaSecSysGrpService {
 	}
 
 	/**
-	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
+	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecLevel
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp lockBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel) {
+	public List<CFSecJpaSecSysGrp> lockBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel) {
 		return( cfsec31SecSysGrpRepository.lockBySecLevelIdx(requiredSecLevel));
 	}
 
@@ -311,38 +284,11 @@ public class CFSecJpaSecSysGrpService {
 	 *
 	 *		@param key The key of the entity to be locked.
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp lockBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
+	public List<CFSecJpaSecSysGrp> lockBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
 		return( cfsec31SecSysGrpRepository.lockBySecLevelIdx(key.getRequiredSecLevel()));
-	}
-
-	/**
-	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecLevel
-	 *		@param requiredName
-	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp lockBySecLevelNmIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel,
-		@Param("name") String requiredName) {
-		return( cfsec31SecSysGrpRepository.lockBySecLevelNmIdx(requiredSecLevel,
-			requiredName));
-	}
-
-	/**
-	 *	ICFSecSecSysGrpBySecLevelNmIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public CFSecJpaSecSysGrp lockBySecLevelNmIdx(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
-		return( cfsec31SecSysGrpRepository.lockBySecLevelNmIdx(key.getRequiredSecLevel(), key.getRequiredName()));
 	}
 
 	// CFSecSecSysGrp specified delete-by-index methods
@@ -395,29 +341,6 @@ public class CFSecJpaSecSysGrpService {
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
 	public void deleteBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
 		cfsec31SecSysGrpRepository.deleteBySecLevelIdx(key.getRequiredSecLevel());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecLevel
-	 *		@param requiredName
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteBySecLevelNmIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel,
-		@Param("name") String requiredName) {
-		cfsec31SecSysGrpRepository.deleteBySecLevelNmIdx(requiredSecLevel,
-			requiredName);
-	}
-
-	/**
-	 *	ICFSecSecSysGrpBySecLevelNmIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The ICFSecSecSysGrpBySecLevelNmIdxKey of the entity to be locked.
-	 */
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = NoResultException.class, transactionManager = "cfsec31TransactionManager")
-	public void deleteBySecLevelNmIdx(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
-		cfsec31SecSysGrpRepository.deleteBySecLevelNmIdx(key.getRequiredSecLevel(), key.getRequiredName());
 	}
 
 }

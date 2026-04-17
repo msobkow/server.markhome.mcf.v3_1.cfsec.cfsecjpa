@@ -117,28 +117,6 @@ public class CFSecJpaSecSysGrpDefaultFactory
 	}
 
     @Override
-    public ICFSecSecSysGrpBySecLevelNmIdxKey newBySecLevelNmIdxKey() {
-	ICFSecSecSysGrpBySecLevelNmIdxKey key =
-            new CFSecJpaSecSysGrpBySecLevelNmIdxKey();
-	return( key );
-    }
-
-	public CFSecJpaSecSysGrpBySecLevelNmIdxKey ensureBySecLevelNmIdxKey(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
-		if (key == null) {
-			return( null );
-		}
-		else if (key instanceof CFSecJpaSecSysGrpBySecLevelNmIdxKey) {
-			return( (CFSecJpaSecSysGrpBySecLevelNmIdxKey)key );
-		}
-		else {
-			CFSecJpaSecSysGrpBySecLevelNmIdxKey mapped = new CFSecJpaSecSysGrpBySecLevelNmIdxKey();
-			mapped.setRequiredSecLevel( key.getRequiredSecLevel() );
-			mapped.setRequiredName( key.getRequiredName() );
-			return( mapped );
-		}
-	}
-
-    @Override
     public ICFSecSecSysGrp newRec() {
         ICFSecSecSysGrp rec =
             new CFSecJpaSecSysGrp();

@@ -81,6 +81,12 @@ public class CFSecJpaSecUserService {
 				0,
 				"data.requiredLoginId");
 		}
+		if(data.getRequiredAccountStatus() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredAccountStatus");
+		}
 		if(data.getRequiredEMailAddress() == null) {
 			throw new CFLibNullArgumentException(getClass(),
 				S_ProcName,
@@ -135,6 +141,12 @@ public class CFSecJpaSecUserService {
 				0,
 				"data.requiredLoginId");
 		}
+		if(data.getRequiredAccountStatus() == null) {
+			throw new CFLibNullArgumentException(getClass(),
+				S_ProcName,
+				0,
+				"data.requiredAccountStatus");
+		}
 		if(data.getRequiredEMailAddress() == null) {
 			throw new CFLibNullArgumentException(getClass(),
 				S_ProcName,
@@ -150,6 +162,7 @@ public class CFSecJpaSecUserService {
 		// Apply superior data relationships of CFSecSecUser to existing object
 		// Apply data columns of CFSecSecUser to existing object
 		existing.setRequiredLoginId(data.getRequiredLoginId());
+		existing.setRequiredAccountStatus(data.getRequiredAccountStatus());
 		existing.setOptionalDfltSysGrpName(data.getOptionalDfltSysGrpName());
 		existing.setOptionalDfltClusGrpName(data.getOptionalDfltClusGrpName());
 		existing.setOptionalDfltTentGrpName(data.getOptionalDfltTentGrpName());

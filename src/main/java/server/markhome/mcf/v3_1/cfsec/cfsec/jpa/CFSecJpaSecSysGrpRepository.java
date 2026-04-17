@@ -86,47 +86,24 @@ public interface CFSecJpaSecSysGrpRepository extends JpaRepository<CFSecJpaSecSy
 	}
 
 	/**
-	 *	Read an entity using the columns of the CFSecSecSysGrpBySecLevelIdxKey as arguments.
+	 *	Read zero or more entities into a List using the columns of the CFSecSecSysGrpBySecLevelIdxKey as arguments.
 	 *
 	 *		@param requiredSecLevel
 	 *
-	 *		@return The found entity, typically from the JPA cache, or null if no such entity exists.
+	 *		@return List&lt;CFSecJpaSecSysGrp&gt; of the found entities, typically from the JPA cache, or an empty list if no such entities exist.
 	 */
 	@Query("select r from CFSecJpaSecSysGrp r where r.requiredSecLevel = :secLevel")
-	CFSecJpaSecSysGrp findBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel);
+	List<CFSecJpaSecSysGrp> findBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel);
 
 	/**
-	 *	CFSecSecSysGrpBySecLevelIdxKey entity reader convenience method for object-based access.
+	 *	CFSecSecSysGrpBySecLevelIdxKey entity list reader convenience method for object-based access.
 	 *
 	 *		@param key The CFSecSecSysGrpBySecLevelIdxKey instance to use for the query arguments.
 	 *
-	 *		@return The found entity, typically from the JPA cache, or null if no such entity exists.
+	 *		@return The found entity list, which may be empty, typically populated from the JPA cache.
 	 */
-	default CFSecJpaSecSysGrp findBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
+	default List<CFSecJpaSecSysGrp> findBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
 		return( findBySecLevelIdx(key.getRequiredSecLevel()));
-	}
-
-	/**
-	 *	Read an entity using the columns of the CFSecSecSysGrpBySecLevelNmIdxKey as arguments.
-	 *
-	 *		@param requiredSecLevel
-	 *		@param requiredName
-	 *
-	 *		@return The found entity, typically from the JPA cache, or null if no such entity exists.
-	 */
-	@Query("select r from CFSecJpaSecSysGrp r where r.requiredSecLevel = :secLevel and r.requiredName = :name")
-	CFSecJpaSecSysGrp findBySecLevelNmIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel,
-		@Param("name") String requiredName);
-
-	/**
-	 *	CFSecSecSysGrpBySecLevelNmIdxKey entity reader convenience method for object-based access.
-	 *
-	 *		@param key The CFSecSecSysGrpBySecLevelNmIdxKey instance to use for the query arguments.
-	 *
-	 *		@return The found entity, typically from the JPA cache, or null if no such entity exists.
-	 */
-	default CFSecJpaSecSysGrp findBySecLevelNmIdx(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
-		return( findBySecLevelNmIdx(key.getRequiredSecLevel(), key.getRequiredName()));
 	}
 
 	// CFSecJpaSecSysGrp specified delete-by-index methods
@@ -167,51 +144,26 @@ public interface CFSecJpaSecSysGrpRepository extends JpaRepository<CFSecJpaSecSy
 	}
 
 	/**
-	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
+	 *	Argument-based lock database instance for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
 	 *
 	 *		@param requiredSecLevel
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
 	@Transactional
 	@Lock(LockModeType.WRITE)
 	@Query("select r from CFSecJpaSecSysGrp r where r.requiredSecLevel = :secLevel")
-	CFSecJpaSecSysGrp lockBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel);
+	List<CFSecJpaSecSysGrp> lockBySecLevelIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel);
 
 	/**
 	 *	CFSecSecSysGrpBySecLevelIdxKey based lock method for object-based access.
 	 *
 	 *		@param key The key of the entity to be locked.
 	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
+	 *		@return A list of locked entities, refreshed from the data store, or an empty list if no such entities exist.
 	 */
-	default CFSecJpaSecSysGrp lockBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
+	default List<CFSecJpaSecSysGrp> lockBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
 		return( lockBySecLevelIdx(key.getRequiredSecLevel()));
-	}
-
-	/**
-	 *	Argument-based lock database entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity locks, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecLevel
-	 *		@param requiredName
-	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
-	 */
-	@Transactional
-	@Lock(LockModeType.WRITE)
-	@Query("select r from CFSecJpaSecSysGrp r where r.requiredSecLevel = :secLevel and r.requiredName = :name")
-	CFSecJpaSecSysGrp lockBySecLevelNmIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel,
-		@Param("name") String requiredName);
-
-	/**
-	 *	CFSecSecSysGrpBySecLevelNmIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The key of the entity to be locked.
-	 *
-	 *		@return The locked entity, refreshed from the data store, or null if no such entity exists.
-	 */
-	default CFSecJpaSecSysGrp lockBySecLevelNmIdx(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
-		return( lockBySecLevelNmIdx(key.getRequiredSecLevel(), key.getRequiredName()));
 	}
 
 	// CFSecJpaSecSysGrp specified delete-by-index methods
@@ -262,27 +214,6 @@ public interface CFSecJpaSecSysGrpRepository extends JpaRepository<CFSecJpaSecSy
 	 */
 	default void deleteBySecLevelIdx(ICFSecSecSysGrpBySecLevelIdxKey key) {
 		deleteBySecLevelIdx(key.getRequiredSecLevel());
-	}
-
-	/**
-	 *	Argument-based delete entity for compatibility with the current MSS code factory code base, uses @Transactional to acquire a JPA entity lock, which may or may not imply an actual database lock during the transaction.
-	 *
-	 *		@param requiredSecLevel
-	 *		@param requiredName
-	 */
-	@Transactional
-	@Modifying
-	@Query("delete from CFSecJpaSecSysGrp r where r.requiredSecLevel = :secLevel and r.requiredName = :name")
-	void deleteBySecLevelNmIdx(@Param("secLevel") ICFSecSchema.SecLevelEnum requiredSecLevel,
-		@Param("name") String requiredName);
-
-	/**
-	 *	CFSecSecSysGrpBySecLevelNmIdxKey based lock method for object-based access.
-	 *
-	 *		@param key The CFSecSecSysGrpBySecLevelNmIdxKey of the entity to be locked.
-	 */
-	default void deleteBySecLevelNmIdx(ICFSecSecSysGrpBySecLevelNmIdxKey key) {
-		deleteBySecLevelNmIdx(key.getRequiredSecLevel(), key.getRequiredName());
 	}
 
 }
